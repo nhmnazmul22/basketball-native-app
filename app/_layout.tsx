@@ -1,71 +1,25 @@
-import { Drawer } from "expo-router/drawer";
-import {
-  ArrowLeftRight,
-  BookA,
-  LayoutDashboard,
-  Megaphone,
-  Settings,
-  Users,
-} from "lucide-react-native";
-import { GestureHandlerRootView } from "react-native-gesture-handler";
-import { SafeAreaView } from "react-native-safe-area-context";
+import Splash from "@/components/Splash";
+import { useFonts } from "expo-font";
+import { Slot } from "expo-router";
+import { StatusBar } from "expo-status-bar";
 import "../global.css";
 
 export default function RootLayout() {
+  const [loaded] = useFonts({
+    BebasNeue: require("../assets/fonts/BebasNeue-Regular.ttf"),
+    RobotoRegular: require("../assets/fonts/Roboto-Regular.ttf"),
+    RobotoMedium: require("../assets/fonts/Roboto-Medium.ttf"),
+    RobotoSemibold: require("../assets/fonts/Roboto-SemiBold.ttf"),
+  });
+
+  if (!loaded) {
+    return <Splash />;
+  }
+
   return (
-    <SafeAreaView style={{ flex: 1 }}>
-      <GestureHandlerRootView style={{ flex: 1 }}>
-        <Drawer>
-          <Drawer.Screen
-            name="admin/dashboard"
-            options={{
-              title: "Admin Dashboard",
-              drawerLabel: "Dashboard",
-              drawerIcon: (color) => <LayoutDashboard color={color.color} />,
-            }}
-          />
-          <Drawer.Screen
-            name="admin/attendance"
-            options={{
-              title: "Attendance",
-              drawerLabel: "Attendance",
-              drawerIcon: (color) => <BookA color={color.color} />,
-            }}
-          />
-          <Drawer.Screen
-            name="admin/transaction"
-            options={{
-              title: "Transactions",
-              drawerLabel: "Transactions",
-              drawerIcon: (color) => <ArrowLeftRight color={color.color} />,
-            }}
-          />
-          <Drawer.Screen
-            name="admin/user-management"
-            options={{
-              title: "User Management",
-              drawerLabel: "User Management",
-              drawerIcon: (color) => <Users color={color.color} />,
-            }}
-          />
-          <Drawer.Screen
-            name="admin/announcement"
-            options={{
-              title: "Announcements",
-              drawerLabel: "Announcements",
-              drawerIcon: (color) => <Megaphone color={color.color} />,
-            }}
-          />
-          <Drawer.Screen
-            name="admin/setting"
-            options={{
-              title: "Settings",
-              drawerLabel: "Settings",
-              drawerIcon: (color) => <Settings color={color.color} />,
-            }}
-          />
-        </Drawer>
-      </GestureHandlerRootView>
-    </SafeAreaView>
+    <>
+      <Slot />
+      <StatusBar style="auto" />
+    </>
   );
 }
