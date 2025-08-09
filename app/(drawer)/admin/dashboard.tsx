@@ -1,9 +1,10 @@
 import { Link } from "expo-router";
 import { Eye } from "lucide-react-native";
-import React from "react";
+import React, { useCallback, useState } from "react";
 import {
   Image,
   Pressable,
+  RefreshControl,
   ScrollView,
   StyleSheet,
   Text,
@@ -12,8 +13,23 @@ import {
 
 const avatarImg = require("@/assets/images/avater.jpg");
 export default function Dashboard() {
+  const [refreshing, setRefreshing] = useState(false);
+
+  // Page Refresh Function
+  const onRefresh = useCallback(() => {
+    setRefreshing(true);
+    setTimeout(() => {
+      setRefreshing(false);
+    }, 1500);
+  }, []);
+
   return (
-    <ScrollView className="flex-1 p-8 bg-slate-50">
+    <ScrollView
+      refreshControl={
+        <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+      }
+      className="flex-1 p-8 bg-slate-50"
+    >
       <Text className="text-2xl font-[BebasNeue] mb-2 tracking-wider">
         Today's Stats,
       </Text>
@@ -54,7 +70,7 @@ export default function Dashboard() {
 
       <View className="mt-10">
         <Text className="text-2xl font-[BebasNeue] mb-3 tracking-wider">
-          Today's Joined Users,
+          Latest Users,
         </Text>
         <View className="gap-3 pb-20">
           <View className="bg-white elevation-sm p-3 rounded-lg border border-orange-50 flex-row justify-between items-center">
@@ -64,7 +80,15 @@ export default function Dashboard() {
                 <Text className="text-2xl font-[BebasNeue] tracking-widest">
                   Nhm Nazmul
                 </Text>
-                <Text className="text-lg font-[RobotoRegular]">Member</Text>
+                <View className="flex-row items-center gap-2">
+                  <Text className="text-lg text-gray-500 font-[RobotoRegular]">
+                    Role: Student
+                  </Text>
+                  <Text className="text-gray-500">|</Text>
+                  <Text className="text-lg text-gray-500 font-[RobotoRegular]">
+                    Team: U12
+                  </Text>
+                </View>
               </View>
             </View>
             <View>
@@ -80,7 +104,15 @@ export default function Dashboard() {
                 <Text className="text-2xl font-[BebasNeue] tracking-widest">
                   Rakib Khan
                 </Text>
-                <Text className="text-lg font-[RobotoRegular]">Couch</Text>
+                <View className="flex-row items-center gap-2">
+                  <Text className="text-lg text-gray-500 font-[RobotoRegular]">
+                    Role: Couch
+                  </Text>
+                  <Text className="text-gray-500">|</Text>
+                  <Text className="text-lg text-gray-500 font-[RobotoRegular]">
+                    Team: U12
+                  </Text>
+                </View>
               </View>
             </View>
             <View>
@@ -96,7 +128,15 @@ export default function Dashboard() {
                 <Text className="text-2xl font-[BebasNeue] tracking-widest">
                   Abdur Rahim
                 </Text>
-                <Text className="text-lg font-[RobotoRegular]">Member</Text>
+                <View className="flex-row items-center gap-2">
+                  <Text className="text-lg text-gray-500 font-[RobotoRegular]">
+                    Role: Student
+                  </Text>
+                  <Text className="text-gray-500">|</Text>
+                  <Text className="text-lg text-gray-500 font-[RobotoRegular]">
+                    Team: U15
+                  </Text>
+                </View>
               </View>
             </View>
             <View>
@@ -112,7 +152,15 @@ export default function Dashboard() {
                 <Text className="text-2xl font-[BebasNeue] tracking-widest">
                   Abdur Rahim
                 </Text>
-                <Text className="text-lg font-[RobotoRegular]">Member</Text>
+                <View className="flex-row items-center gap-2">
+                  <Text className="text-lg text-gray-500 font-[RobotoRegular]">
+                    Role: Student
+                  </Text>
+                  <Text className="text-gray-500">|</Text>
+                  <Text className="text-lg text-gray-500 font-[RobotoRegular]">
+                    Team: U15
+                  </Text>
+                </View>
               </View>
             </View>
             <View>
@@ -128,7 +176,15 @@ export default function Dashboard() {
                 <Text className="text-2xl font-[BebasNeue] tracking-widest">
                   Abdur Rahim
                 </Text>
-                <Text className="text-lg font-[RobotoRegular]">Member</Text>
+                <View className="flex-row items-center gap-2">
+                  <Text className="text-lg text-gray-500 font-[RobotoRegular]">
+                    Role: Student
+                  </Text>
+                  <Text className="text-gray-500">|</Text>
+                  <Text className="text-lg text-gray-500 font-[RobotoRegular]">
+                    Team: Core
+                  </Text>
+                </View>
               </View>
             </View>
             <View>
