@@ -6,7 +6,7 @@ interface AttendanceItemProps {
   item: any;
 }
 
-const AttendanceItem = ({item}: AttendanceItemProps) => {
+const AttendanceItem = ({ item }: AttendanceItemProps) => {
   return (
     <View className="flex-row gap-2 border-b border-gray-200 px-2 py-4">
       <Text className="w-28 text-md text-center font-[RobotoRegular]">
@@ -36,12 +36,9 @@ const AttendanceItem = ({item}: AttendanceItemProps) => {
         )}
       </Text>
       <View className="w-24 flex-row justify-center items-start gap-3">
-        <Pressable>
-          <Bell size={22} />
+        <Pressable className="bg-orange-500 p-2 rounded">
+          <Bell size={22} color="#ffffff" />
         </Pressable>
-        {/* <Pressable>
-                      <Edit size={22} />
-                    </Pressable> */}
       </View>
     </View>
   );
