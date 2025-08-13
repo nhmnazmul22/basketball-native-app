@@ -29,6 +29,11 @@ export default function Dashboard() {
         <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
       }
       className="flex-1 p-8 bg-slate-50"
+      showsVerticalScrollIndicator={false}
+      contentContainerStyle={{
+        minHeight: "100%",
+        paddingBottom: 40,
+      }}
     >
       <Text className="text-2xl font-[BebasNeue] mb-2 tracking-wider">
         Today's Stats,

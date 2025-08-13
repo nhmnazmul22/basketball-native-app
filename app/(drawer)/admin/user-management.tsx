@@ -30,6 +30,11 @@ export default function UserManagementPage() {
         <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
       }
       className="flex-1 p-5 bg-white"
+      showsVerticalScrollIndicator={false}
+      contentContainerStyle={{
+        minHeight: "100%",
+        paddingBottom: 40,
+      }}
     >
       <View className=" mt-3">
         <View className="flex-row justify-between items-center ">

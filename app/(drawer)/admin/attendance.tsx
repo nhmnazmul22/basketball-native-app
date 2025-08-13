@@ -23,6 +23,11 @@ export default function AttendancePage() {
         <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
       }
       className="flex-1 p-4 bg-white"
+      showsVerticalScrollIndicator={false}
+      contentContainerStyle={{
+        minHeight: "100%",
+        paddingBottom: 40,
+      }}
     >
       <View className="">
         <Text className=" font-[BebasNeue] text-2xl tracking-wider">
