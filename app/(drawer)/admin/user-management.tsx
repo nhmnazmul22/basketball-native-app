@@ -6,6 +6,12 @@ import { Dimensions, Pressable, ScrollView, Text, View } from "react-native";
 import { RefreshControl } from "react-native-gesture-handler";
 import { Input } from "tamagui";
 
+const filterData = [
+  { id: 9789, name: "Daily" },
+  { id: 6895, name: "Monthly" },
+  { id: 7896, name: "Yearly" },
+];
+
 const width = Dimensions.get("window").width;
 export default function UserManagementPage() {
   const [refreshing, setRefreshing] = useState(false);
@@ -40,10 +46,9 @@ export default function UserManagementPage() {
             <Input placeholder="UserId, name, email..." />
           </View>
           <View style={{ width: width * 0.4 }}>
-            <SelectOptions />
+            <SelectOptions data={filterData} />
           </View>
         </View>
-
         <UserList />
       </View>
     </ScrollView>

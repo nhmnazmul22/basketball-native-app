@@ -1,22 +1,36 @@
 import DateTimePicker from "@react-native-community/datetimepicker";
 import { CircleX, Save } from "lucide-react-native";
-import React, { Dispatch, SetStateAction, useState } from "react";
+import React, { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { Image, Pressable, Text, View } from "react-native";
 import { Input, Label } from "tamagui";
-import { SelectOptions } from "./SelectItems";
+import SimpleSelectOption from "./SimpleSelectOption";
 
 interface Props {
   item: any;
   setVisibleModal: Dispatch<SetStateAction<boolean>>;
 }
 
+const teamData = [
+  { id: 18254, name: "U12" },
+  { id: 55288, name: "U15" },
+  { id: 98566, name: "U30" },
+  { id: 86868, name: "U30" },
+];
+
+const roleData = [
+  { id: 89845, name: "Student" },
+  { id: 54877, name: "Couch" },
+  { id: 65825, name: "Admin" },
+];
+
 const profilePicture = require("@/assets/images/profile-picture.jpg");
 const UserDateUpdateModal = ({ item, setVisibleModal }: Props) => {
   const [name, setName] = useState("");
+  const [date, setDate] = useState(new Date());
+  const [team, setTeam] = useState("");
   const [role, setRole] = useState("");
   const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
-  const [date, setDate] = useState(new Date(1598051730000));
   const [show, setShow] = useState(false);
 
   const onChange = (event: any, selectedDate: any) => {
@@ -24,6 +38,15 @@ const UserDateUpdateModal = ({ item, setVisibleModal }: Props) => {
     setShow(false);
     setDate(currentDate);
   };
+
+  useEffect(() => {
+    setName(item.name || "");
+    setDate(new Date(item.dob) || new Date());
+    setTeam(item.team);
+    setRole(item.role || "");
+    setEmail(item.email || "");
+    setPhone(item.phone || "");
+  }, []);
 
   return (
     <View className="flex-1 justify-center items-center bg-[#000000d2] py-16">
@@ -67,11 +90,10 @@ const UserDateUpdateModal = ({ item, setVisibleModal }: Props) => {
               </Label>
               <Pressable onPress={() => setShow(true)}>
                 <Input
+                  readOnly
                   className="text-lg font-[RobotoRegular]"
                   placeholder="Enter your name"
-                  readOnly
                   value={date.toLocaleDateString()}
-                  onChangeText={(text) => setName(text)}
                 />
               </Pressable>
               {show && (
@@ -92,7 +114,12 @@ const UserDateUpdateModal = ({ item, setVisibleModal }: Props) => {
               >
                 Team
               </Label>
-              <SelectOptions />
+              <SimpleSelectOption
+                data={teamData}
+                label="Choose the team"
+                value={team}
+                setValue={setTeam}
+              />
             </View>
             <View className="flex-col">
               <Label
@@ -102,12 +129,11 @@ const UserDateUpdateModal = ({ item, setVisibleModal }: Props) => {
               >
                 Role:
               </Label>
-              <Input
-                id="role"
-                className="text-lg font-[RobotoRegular]"
-                placeholder="Enter Role"
+              <SimpleSelectOption
+                data={roleData}
+                label="Choose the role"
                 value={role}
-                onChangeText={(text) => setRole(text)}
+                setValue={setRole}
               />
             </View>
             <View className="flex-col">
