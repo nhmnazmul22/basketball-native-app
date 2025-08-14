@@ -1,13 +1,7 @@
+import AnnounceMentItem from "@/components/AnnounceMentItem";
 import SimpleSelectOption from "@/components/SimpleSelectOption";
-import { shortText } from "@/lib/utils";
 import React, { useCallback, useState } from "react";
-import {
-  Pressable,
-  RefreshControl,
-  ScrollView,
-  Text,
-  View,
-} from "react-native";
+import { RefreshControl, ScrollView, View } from "react-native";
 import { Label } from "tamagui";
 
 const announcementData = [
@@ -64,7 +58,7 @@ const filterData = [
 export default function AnnouncementPage() {
   const [refreshing, setRefreshing] = useState(false);
   const [filterType, setFilterType] = useState("Active");
-  const [visibleModal, seVisibleModal] = useState(false);
+
 
   // Page Refresh Function
   const onRefresh = useCallback(() => {
@@ -87,52 +81,20 @@ export default function AnnouncementPage() {
       }}
     >
       <View className="mt-3 flex-1">
-        <View className="flex-row gap-2 justify-between items-center">
-          <View className="w-[48%]">
-            <Label unstyled className="font-[RobotoRegular]">
-              Select Filter Type:
-            </Label>
-            <SimpleSelectOption
-              data={filterData}
-              label="Select Filter Type"
-              value={filterType}
-              setValue={setFilterType}
-            />
-          </View>
-          <View className="w-[48%]">
-            <Label unstyled className="font-[RobotoRegular]">
-              Select Filter Type:
-            </Label>
-            <SimpleSelectOption
-              data={filterData}
-              label="Select Filter Type"
-              value={filterType}
-              setValue={setFilterType}
-            />
-          </View>
+        <View className="flex-col gap-2 justify-center">
+          <Label unstyled className="font-[RobotoRegular]">
+            Select Filter Type:
+          </Label>
+          <SimpleSelectOption
+            data={filterData}
+            label="Select Filter Type"
+            value={filterType}
+            setValue={setFilterType}
+          />
         </View>
         <View className="flex-col gap-5 mt-5">
           {announcementData.map((item, index) => (
-            <Pressable key={item.Aid}>
-              <View className="bg-slate-200 p-5 rounded-lg shadow-md elevation-md">
-                <Text className="text-xl text-blue-900 font-bold font-[RobotoRegular] flex-row gap-2 items-center">
-                  {item.title}
-                </Text>
-
-                <Text className="text-base mt-2 font-thin font-[RobotoRegular]">
-                  {shortText(item.message, 140)}
-                </Text>
-                <View className="mt-3 flex-row gap-5 justify-between items-center">
-                  <Text className="text-base font-[RobotoRegular]">
-                    <Text className="font-bold">Date:</Text> {item.date}
-                  </Text>
-                  <Text className="text-base font-[RobotoRegular]">
-                    <Text className="font-bold">Create By:</Text>{" "}
-                    {item.createdBy}
-                  </Text>
-                </View>
-              </View>
-            </Pressable>
+            <AnnounceMentItem item={item} />
           ))}
         </View>
       </View>
