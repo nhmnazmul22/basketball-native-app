@@ -137,7 +137,6 @@ const NewAnnouncement = ({ setVisibleModal }: Props) => {
                 />
               )}
             </View>
-
             <View className="flex-col">
               <Label
                 unstyled
@@ -157,7 +156,7 @@ const NewAnnouncement = ({ setVisibleModal }: Props) => {
                 unstyled
                 className="text-xl font-bold font-[RobotoRegular]"
               >
-                Role:
+                Status:
               </Label>
               <SimpleSelectOption
                 data={statusData}
