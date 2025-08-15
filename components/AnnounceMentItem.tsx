@@ -1,5 +1,5 @@
 import { shortText } from "@/lib/utils";
-import { Pin } from "lucide-react-native";
+import { Calendar, Pin, User } from "lucide-react-native";
 import React, { useState } from "react";
 import { Modal, Pressable, Text, View } from "react-native";
 import AnnouncementDetails from "./AnnouncementDetails";
@@ -12,40 +12,50 @@ interface Props {
 const AnnounceMentItem = ({ item }: Props) => {
   const [visibleModal, seVisibleModal] = useState(false);
   const [visibleEditModal, seVisibleEditModal] = useState(false);
-  return (
-    <View key={item.Aid}>
-      <View className="">
-        <View className="bg-slate-200 p-5 rounded-lg shadow-md elevation-md">
-          {item.isPin && (
-            <View className="-rotate-45 w-[25px] h-[25px] absolute left-[-6px] top-[-6px] bg-orange-600 justify-center items-center rounded-full">
-              <Text>
-                <Pin size={16} color="white" />
-              </Text>
-            </View>
-          )}
-          <Text className="text-xl text-blue-900 font-bold font-[RobotoRegular] flex-row gap-2 items-center">
-            {item.title}
-          </Text>
 
-          <Text className="text-base mt-2 font-thin font-[RobotoRegular]">
-            {shortText(item.message, 140)}
-          </Text>
-          <View className="mt-3 flex-row gap-5 justify-between items-center">
-            <Text className="text-base font-[RobotoRegular]">
-              <Text className="font-bold">Date:</Text> {item.date}
-            </Text>
-            <Text className="text-base font-[RobotoRegular]">
-              <Text className="font-bold">Create By: </Text>
-              {item.createdBy}
-            </Text>
-            <Pressable onPress={() => seVisibleModal(true)}>
-              <Text className="text-base font-semibold font-[RobotoRegular] underline text-blue-800">
-                More
-              </Text>
-            </Pressable>
+  return (
+    <View key={item.Aid} className="mb-4">
+      <View className="bg-white p-5 rounded-xl shadow-lg elevation-md">
+        {/* Pin Badge */}
+        {item.isPin && (
+          <View className="-rotate-45 w-7 h-7 absolute left-[-8px] top-[-8px] bg-orange-600 justify-center items-center rounded-full shadow-md">
+            <Pin size={16} color="white" />
           </View>
+        )}
+
+        {/* Title */}
+        <Text className="text-xl text-blue-900 font-bold font-[RobotoRegular] mb-2">
+          {item.title}
+        </Text>
+
+        {/* Message Preview */}
+        <Text className="text-base text-slate-700 font-[RobotoRegular] leading-5">
+          {shortText(item.message, 140)}
+        </Text>
+
+        {/* Info Section */}
+        <View className="mt-4 flex-row justify-between flex-wrap">
+          <View className="flex-row gap-2 items-center mb-2">
+            <Calendar size={20} />
+            <Text className="text-base text-slate-800">{item.date}</Text>
+          </View>
+
+          <View className="flex-row gap-2 items-center mb-2">
+            <User size={20} />
+            <Text className="text-base text-slate-800">{item.createdBy}</Text>
+          </View>
+
+          <Pressable
+            onPress={() => seVisibleModal(true)}
+            className="px-3 py-1 bg-blue-100 rounded-md"
+          >
+            <Text className="text-sm font-semibold text-blue-700">
+              View Details
+            </Text>
+          </Pressable>
         </View>
       </View>
+
       {/* Details Modal */}
       <Modal
         animationType="slide"
@@ -62,7 +72,7 @@ const AnnounceMentItem = ({ item }: Props) => {
         />
       </Modal>
 
-      {/* Announcement Edit Modal */}
+      {/* Edit Modal */}
       <Modal
         animationType="slide"
         transparent={true}

@@ -1,6 +1,6 @@
 import Splash from "@/components/Splash";
 import { useFonts } from "expo-font";
-import { Slot } from "expo-router";
+import {  Slot } from "expo-router";
 import { StatusBar } from "expo-status-bar";
 import { TamaguiProvider } from "tamagui";
 import "../global.css";
