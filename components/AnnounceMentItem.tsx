@@ -1,4 +1,5 @@
 import { shortText } from "@/lib/utils";
+import { Pin } from "lucide-react-native";
 import React, { useState } from "react";
 import { Modal, Pressable, Text, View } from "react-native";
 import AnnouncementDetails from "./AnnouncementDetails";
@@ -13,8 +14,15 @@ const AnnounceMentItem = ({ item }: Props) => {
   const [visibleEditModal, seVisibleEditModal] = useState(false);
   return (
     <View key={item.Aid}>
-      <View>
+      <View className="">
         <View className="bg-slate-200 p-5 rounded-lg shadow-md elevation-md">
+          {item.isPin && (
+            <View className="-rotate-45 w-[25px] h-[25px] absolute left-[-6px] top-[-6px] bg-orange-600 justify-center items-center rounded-full">
+              <Text>
+                <Pin size={16} color="white" />
+              </Text>
+            </View>
+          )}
           <Text className="text-xl text-blue-900 font-bold font-[RobotoRegular] flex-row gap-2 items-center">
             {item.title}
           </Text>
@@ -27,7 +35,7 @@ const AnnounceMentItem = ({ item }: Props) => {
               <Text className="font-bold">Date:</Text> {item.date}
             </Text>
             <Text className="text-base font-[RobotoRegular]">
-              <Text className="font-bold">Create By:</Text>
+              <Text className="font-bold">Create By: </Text>
               {item.createdBy}
             </Text>
             <Pressable onPress={() => seVisibleModal(true)}>
@@ -65,7 +73,6 @@ const AnnounceMentItem = ({ item }: Props) => {
       >
         <AnnouncementEditModal
           item={item}
-          setVisibleModal={seVisibleModal}
           setVisibleEditModal={seVisibleEditModal}
         />
       </Modal>

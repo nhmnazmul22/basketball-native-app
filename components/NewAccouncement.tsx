@@ -6,8 +6,7 @@ import { Input, Label, Switch, TextArea } from "tamagui";
 import SimpleSelectOption from "./SimpleSelectOption";
 
 interface Props {
-  item: any;
-  setVisibleEditModal: Dispatch<SetStateAction<boolean>>;
+  setVisibleModal: Dispatch<SetStateAction<boolean>>;
 }
 
 const teamData = [
@@ -22,7 +21,7 @@ const statusData = [
   { id: 89865, name: "Archive" },
 ];
 
-const AnnouncementDetails = ({ item, setVisibleEditModal }: Props) => {
+const NewAnnouncement = ({ setVisibleModal }: Props) => {
   const [title, setTitle] = useState("");
   const [message, setMessage] = useState("");
   const [team, setTeam] = useState("");
@@ -66,15 +65,6 @@ const AnnouncementDetails = ({ item, setVisibleEditModal }: Props) => {
   };
 
   useEffect(() => {
-    setTitle(item.title || "");
-    setMessage(item.message || "");
-    setDate(new Date(item.date) || new Date());
-    setTeam(item.team);
-    setStatus(item.status);
-    setIsPin(item.isPin);
-  }, []);
-
-  useEffect(() => {
     if (isDateSelected) {
       showTimepicker();
       setIsTimeSelected(true);
@@ -106,14 +96,13 @@ const AnnouncementDetails = ({ item, setVisibleEditModal }: Props) => {
             <View className="flex-col">
               <Label
                 unstyled
-              
                 className="text-xl font-bold font-[RobotoRegular]"
               >
                 Message:
               </Label>
               <TextArea
                 className="text-lg font-[RobotoRegular]"
-                placeholder="Enter title"
+                placeholder="Enter message"
                 value={message}
                 onChangeText={(text) => setMessage(text)}
               />
@@ -121,7 +110,6 @@ const AnnouncementDetails = ({ item, setVisibleEditModal }: Props) => {
             <View className="flex-col">
               <Label
                 unstyled
-              
                 className="text-xl font-bold font-[RobotoRegular]"
               >
                 Date:
@@ -153,7 +141,6 @@ const AnnouncementDetails = ({ item, setVisibleEditModal }: Props) => {
             <View className="flex-col">
               <Label
                 unstyled
-               
                 className="text-xl font-bold font-[RobotoRegular]"
               >
                 Team
@@ -203,12 +190,12 @@ const AnnouncementDetails = ({ item, setVisibleEditModal }: Props) => {
           >
             <Edit size={18} color="#ffffff" />
             <Text className="text-white font-[RobotoRegular]text-base font-bold text-center">
-              Update
+              Create
             </Text>
           </Pressable>
           <Pressable
             className="bg-red-600 px-3 py-2 rounded-lg mt-5 flex-row gap-1 items-center justify-center"
-            onPress={() => setVisibleEditModal(false)}
+            onPress={() => setVisibleModal(false)}
           >
             <CircleX size={18} color="#ffffff" />
             <Text className="text-white font-[RobotoRegular]text-base font-bold text-center">
@@ -221,4 +208,4 @@ const AnnouncementDetails = ({ item, setVisibleEditModal }: Props) => {
   );
 };
 
-export default AnnouncementDetails;
+export default NewAnnouncement;
