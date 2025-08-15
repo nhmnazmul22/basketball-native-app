@@ -19,16 +19,9 @@ const logo = require("@/assets/images/logo.png");
 const RegisterPage = () => {
   const [name, setName] = useState("");
   const [phone, setPhone] = useState("");
-  const [dob, setDob] = useState(new Date());
-  const [show, setShow] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  const onChange = (event: any, selectedDate: any) => {
-    const currentDate = selectedDate;
-    setShow(false);
-    setDob(currentDate);
-  };
 
   return (
     <KeyboardAvoidingView
