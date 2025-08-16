@@ -33,7 +33,7 @@ const SimpleSelectOption = ({ data, label, value, setValue }: Props) => {
         <Select.Content>
           <Select.Viewport unstyled>
             <View
-              className={`absolute w-full z-30 top-[60px] border border-gray-300 rounded elevation-md shadow-md ${start ? "block" : "hidden"}`}
+              className={`absolute bg-white w-full z-30 top-[60px] border border-gray-300 rounded shadow-md ${start ? "block" : "hidden"}`}
             >
               {data &&
                 data.map((item: any, index: number) => (

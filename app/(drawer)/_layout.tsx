@@ -2,10 +2,11 @@ import { Drawer } from "expo-router/drawer";
 import {
   ArrowLeftRight,
   BookA,
+  ChartArea,
   LayoutDashboard,
   LogOut,
   Megaphone,
-  Settings,
+  User,
   Users,
 } from "lucide-react-native";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
@@ -13,17 +14,18 @@ import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function RootLayout() {
   return (
-    <SafeAreaView className="flex-1 ">
-      <GestureHandlerRootView className="flex-1">
+    <SafeAreaView className="flex-1">
+      <GestureHandlerRootView className="flex-1 bg-red-500">
         <Drawer
           screenOptions={{
             headerTitleStyle: {
               fontFamily: "BebasNeue",
               fontSize: 24,
-              letterSpacing: 2,
+              letterSpacing: 1.2,
             },
             headerStyle: {
               backgroundColor: "#ffffff",
+              height: 80,
             },
             headerTintColor: "#111823",
             drawerStyle: {
@@ -32,7 +34,7 @@ export default function RootLayout() {
             drawerLabelStyle: {
               fontFamily: "BebasNeue",
               fontSize: 18,
-              letterSpacing: 1.5,
+              letterSpacing: 1.2,
             },
             drawerActiveTintColor: "#F97316",
             drawerInactiveTintColor: "#111823",
@@ -42,7 +44,7 @@ export default function RootLayout() {
           <Drawer.Screen
             name="admin/dashboard"
             options={{
-              title: "Admin Dashboard",
+              title: "Dashboard",
               drawerLabel: "Dashboard",
               drawerIcon: (color) => <LayoutDashboard color={color.color} />,
             }}
@@ -80,11 +82,28 @@ export default function RootLayout() {
             }}
           />
           <Drawer.Screen
-            name="admin/setting"
+            name="admin/reports"
             options={{
-              title: "Settings",
-              drawerLabel: "Settings",
-              drawerIcon: (color) => <Settings color={color.color} />,
+              title: "Reports & Statistics",
+              drawerLabel: "Reports & Statistics",
+              drawerIcon: (color) => <ChartArea color={color.color} />,
+            }}
+          />
+          <Drawer.Screen
+            name="admin/profile"
+            options={{
+              title: "Profile",
+              drawerLabel: "Profile",
+              drawerIcon: (color) => <User color={color.color} />,
+            }}
+          />
+          <Drawer.Screen
+            name="admin/createStudent"
+            options={{
+              title: "Create Student",
+              drawerItemStyle: {
+                display: "none",
+              },
             }}
           />
         </Drawer>

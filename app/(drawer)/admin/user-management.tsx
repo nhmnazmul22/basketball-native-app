@@ -1,6 +1,7 @@
 import { SelectOptions } from "@/components/SelectItems";
 import UserList from "@/components/UserList";
-import { Download } from "lucide-react-native";
+import { useRouter } from "expo-router";
+import { PenIcon, Plus } from "lucide-react-native";
 import React, { useCallback, useState } from "react";
 import { Dimensions, Pressable, ScrollView, Text, View } from "react-native";
 import { RefreshControl } from "react-native-gesture-handler";
@@ -15,6 +16,7 @@ const filterData = [
 const width = Dimensions.get("window").width;
 export default function UserManagementPage() {
   const [refreshing, setRefreshing] = useState(false);
+  const router = useRouter();
 
   // Page Refresh Function
   const onRefresh = useCallback(() => {
@@ -41,9 +43,12 @@ export default function UserManagementPage() {
           <Text className=" font-[BebasNeue] text-2xl tracking-wider">
             Users stats,
           </Text>
-          <Pressable className="bg-orange-500 px-4 py-2 rounded-lg flex-row gap-2 items-center">
-            <Download size={18} color="#ffffff" />
-            <Text className="text-base text-white ">Export PDF</Text>
+          <Pressable
+            className="bg-orange-500 px-4 py-2 rounded-lg flex-row gap-2 items-center"
+            onPress={() => router.push("/admin/createStudent")}
+          >
+            <Plus size={18} color="#ffffff" />
+            <Text className="text-base text-white ">Add Student</Text>
           </Pressable>
         </View>
         <View className="mb-5 mt-8 flex-row items-center justify-between">

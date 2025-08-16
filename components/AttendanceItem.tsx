@@ -28,7 +28,7 @@ const AttendanceItem = ({ item }: AttendanceItemProps) => {
           <CircleX color="red" size={22} />
         )}
       </Text>
-      <Text className="w-24 text-md text-center font-[RobotoRegular]">
+      <Text className="w-28 text-md text-center font-[RobotoRegular]">
         {item.faceMatch ? (
           `${Math.round(item.faceMatch * 100)}%`
         ) : (

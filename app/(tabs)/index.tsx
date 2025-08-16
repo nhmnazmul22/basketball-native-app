@@ -4,16 +4,15 @@ import { CreditCard, Megaphone } from "lucide-react-native";
 import { Pressable, Text, View } from "react-native";
 
 export default function Home() {
-  const isAuthentication = true;
+  const isAuthentication = false;
 
   if (!isAuthentication) {
-    return <Redirect href="/register" />;
+    return <Redirect href="/admin/dashboard" />;
   }
 
   return (
     <View className="flex-1 p-5 bg-white flex-col gap-3">
       <View className="bg-white rounded-xl shadow-md p-4 mb-5">
-        {/* Title */}
         <View className="flex-row justify-between items-center mb-3">
           <Text className="text-lg font-bold text-slate-800">Attendance</Text>
           <Pressable>
@@ -23,7 +22,6 @@ export default function Home() {
           </Pressable>
         </View>
 
-        {/* Today’s Status */}
         <View className="flex-row items-center justify-between mb-4">
           <Text className="text-base text-slate-600">Today</Text>
           <Text className="px-3 py-1 rounded-full text-sm font-bold bg-green-100 text-green-700">
@@ -31,7 +29,6 @@ export default function Home() {
           </Text>
         </View>
 
-        {/* Summary */}
         <View className="flex-row justify-between">
           <View className="flex-1 mx-1 bg-green-50 rounded-lg p-3 items-center">
             <Text className="text-lg font-bold text-green-700">18</Text>
@@ -47,9 +44,10 @@ export default function Home() {
           </View>
         </View>
       </View>
+
       <View style={{ height: 200 }} className="flex-col gap-2">
         <View className="flex-row gap-2 items-center">
-          <Megaphone size={20} />{" "}
+          <Megaphone size={20} />
           <Text className="text-lg font-bold font-[RobotoRegular]">
             Latest's Announcements,
           </Text>
@@ -60,15 +58,13 @@ export default function Home() {
         </View>
       </View>
       <View className="flex-col gap-3">
-        {/* Header */}
         <View className="flex-row gap-2 items-center">
-          <CreditCard size={20} />{" "}
+          <CreditCard size={20} />
           <Text className="text-lg font-bold font-[RobotoRegular]">
             Payment Status
           </Text>
         </View>
 
-        {/* Card */}
         <View
           style={{
             shadowColor: "#000",
@@ -79,7 +75,6 @@ export default function Home() {
           }}
           className="bg-white rounded-2xl p-4"
         >
-          {/* Status Row */}
           <View className="flex-row items-center justify-between mb-2">
             <Text className="text-base font-bold font-[RobotoRegular]">
               Status
@@ -89,7 +84,6 @@ export default function Home() {
             </Text>
           </View>
 
-          {/* Amount Row */}
           <View className="flex-row items-center justify-between mb-2">
             <Text className="text-base font-bold font-[RobotoRegular]">
               Amount
@@ -99,7 +93,6 @@ export default function Home() {
             </Text>
           </View>
 
-          {/* Due Date Row */}
           <View className="flex-row items-center justify-between mb-4">
             <Text className="text-base font-bold font-[RobotoRegular]">
               Due Date
@@ -109,7 +102,6 @@ export default function Home() {
             </Text>
           </View>
 
-          {/* Buttons */}
           <View className="flex-row justify-between gap-3">
             <Pressable className="flex-1 bg-orange-600 py-3 rounded-xl items-center">
               <Text className="text-base font-bold font-[RobotoRegular] text-white">

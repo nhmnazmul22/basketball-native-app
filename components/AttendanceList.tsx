@@ -53,7 +53,7 @@ const AttendanceList = () => {
           <Text className="w-20 font-bold text-lg text-center font-[RobotoRegular]">
             GPS
           </Text>
-          <Text className="w-24 font-bold text-lg text-center font-[RobotoRegular]">
+          <Text className="w-28 font-bold text-lg text-center font-[RobotoRegular]">
             Face Match
           </Text>
           <Text className="w-24 font-bold text-lg text-center font-[RobotoRegular]">

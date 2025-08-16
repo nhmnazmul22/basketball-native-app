@@ -1,17 +1,21 @@
-import { Link } from "expo-router";
-import { Eye } from "lucide-react-native";
+import AnnounceMentItem from "@/components/AnnounceMentItem";
 import React, { useCallback, useState } from "react";
-import {
-  Image,
-  Pressable,
-  RefreshControl,
-  ScrollView,
-  StyleSheet,
-  Text,
-  View,
-} from "react-native";
+import { RefreshControl, ScrollView, Text, View } from "react-native";
 
-const avatarImg = require("@/assets/images/avater.jpg");
+const announcementData = [
+  {
+    Aid: "ANN001",
+    title: "Training Session Reminder",
+    message:
+      "U15 team training tomorrow at 5:00 PM, Court 2. Bring your own water bottle.",
+    team: "U15",
+    date: "2025-08-12",
+    createdBy: "Admin",
+    isPin: true,
+    status: "Active",
+  },
+];
+
 export default function Dashboard() {
   const [refreshing, setRefreshing] = useState(false);
 
@@ -28,185 +32,77 @@ export default function Dashboard() {
       refreshControl={
         <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
       }
-      className="flex-1 p-8 bg-slate-50"
+      className="flex-1 bg-slate-50"
       showsVerticalScrollIndicator={false}
-      contentContainerStyle={{
-        minHeight: "100%",
-        paddingBottom: 40,
-      }}
+      contentContainerStyle={{ minHeight: "100%", paddingBottom: 60 }}
     >
-      <Text className="text-2xl font-[BebasNeue] mb-2 tracking-wider">
-        Today's Stats,
-      </Text>
-      <View className="flex gap-3">
-        <View className="bg-orange-600 w-full p-5 rounded-lg flex-row justify-between items-center">
-          <Text className="font-[BebasNeue] tracking-wider text-3xl text-white">
-            Attendance:
+      <View className="flex-row flex-wrap gap-4 px-6 mt-10">
+        <View className="bg-orange-600 flex-1 min-w-[150px] p-4 rounded-lg">
+          <Text className="text-lg text-white font-[RobotoRegular]">
+            Total Student
           </Text>
-          <Text className="font-[BebasNeue] tracking-wider text-4xl text-white">
-            20
-          </Text>
+          <Text className="text-3xl text-white font-[BebasNeue]">20</Text>
         </View>
-        <View className="bg-indigo-600  w-full p-5 rounded-lg flex-row justify-between items-center">
-          <Text className="font-[BebasNeue] tracking-wider text-3xl text-white">
-            Payments:
+        <View className="bg-indigo-600 flex-1 min-w-[150px] p-4 rounded-lg">
+          <Text className="text-lg text-white font-[RobotoRegular]">
+            Total Couch
           </Text>
-          <Text className="font-[BebasNeue] text-4xl text-white">
+          <Text className="text-3xl text-white font-[BebasNeue]">5</Text>
+        </View>
+        <View className="bg-amber-500 flex-1 min-w-[150px] p-4 rounded-lg">
+          <Text className="text-lg text-white font-[RobotoRegular]">
+            Payments Pending
+          </Text>
+          <Text className="text-3xl text-white font-[BebasNeue]">
             20,000 Rp
           </Text>
         </View>
-        <View className="bg-green-600  w-full p-5 rounded-lg flex-row justify-between items-center">
-          <Text className="font-[BebasNeue] tracking-wider text-3xl text-white">
-            Income:
+        <View className="bg-green-600 flex-1 min-w-[150px] p-4 rounded-lg">
+          <Text className="text-lg text-white font-[RobotoRegular]">
+            Net Income
           </Text>
-          <Text className="font-[BebasNeue] text-4xl text-white">
-            200,000 Rp
-          </Text>
-        </View>
-        <View className="bg-red-600  w-full p-5 rounded-lg flex-row justify-between items-center">
-          <Text className="font-[BebasNeue] tracking-wider text-3xl text-white">
-            Expenses:
-          </Text>
-          <Text className="font-[BebasNeue] text-4xl text-white">
-            75,000 Rp
+          <Text className="text-3xl text-white font-[BebasNeue]">
+            200.000 Rp
           </Text>
         </View>
       </View>
 
-      <View className="mt-10">
+      <View className="px-6 mt-10">
         <Text className="text-2xl font-[BebasNeue] mb-3 tracking-wider">
-          Latest Users,
+          Attendance Overview
         </Text>
-        <View className="gap-3 pb-20">
-          <View className="bg-white elevation-sm p-3 rounded-lg border border-orange-50 flex-row justify-between items-center">
-            <View className=" flex-row items-center gap-5">
-              <Image source={avatarImg} className="w-[60px] h-[60px]" />
-              <View>
-                <Text className="text-2xl font-[BebasNeue] tracking-widest">
-                  Nhm Nazmul
-                </Text>
-                <View className="flex-row items-center gap-2">
-                  <Text className="text-lg text-gray-500 font-[RobotoRegular]">
-                    Role: Student
-                  </Text>
-                  <Text className="text-gray-500">|</Text>
-                  <Text className="text-lg text-gray-500 font-[RobotoRegular]">
-                    Team: U12
-                  </Text>
-                </View>
-              </View>
+        <View className="bg-white rounded-lg p-5 border border-slate-200 items-center">
+          <Text className="text-5xl font-[BebasNeue] text-green-600">85%</Text>
+          <Text className="text-gray-500 font-[RobotoRegular] mt-1">
+            This Month
+          </Text>
+          <View className="flex-row justify-between w-full mt-5">
+            <View className="items-center flex-1">
+              <Text className="text-lg font-bold">20</Text>
+              <Text className="text-gray-500">Present</Text>
             </View>
-            <View>
-              <Link href="/admin/user-management">
-                <Eye />
-              </Link>
+            <View className="items-center flex-1">
+              <Text className="text-lg font-bold">2</Text>
+              <Text className="text-gray-500">Absent</Text>
+            </View>
+            <View className="items-center flex-1">
+              <Text className="text-lg font-bold">3</Text>
+              <Text className="text-gray-500">Late</Text>
             </View>
           </View>
-          <View className="bg-white elevation-sm p-3 rounded-lg border border-orange-50 flex-row justify-between items-center">
-            <View className=" flex-row items-center gap-5">
-              <Image source={avatarImg} className="w-[60px] h-[60px]" />
-              <View>
-                <Text className="text-2xl font-[BebasNeue] tracking-widest">
-                  Rakib Khan
-                </Text>
-                <View className="flex-row items-center gap-2">
-                  <Text className="text-lg text-gray-500 font-[RobotoRegular]">
-                    Role: Couch
-                  </Text>
-                  <Text className="text-gray-500">|</Text>
-                  <Text className="text-lg text-gray-500 font-[RobotoRegular]">
-                    Team: U12
-                  </Text>
-                </View>
-              </View>
-            </View>
-            <View>
-              <Link href="/admin/user-management">
-                <Eye />
-              </Link>
-            </View>
-          </View>
-          <View className="bg-white elevation-sm p-3 rounded-lg border border-orange-50 flex-row justify-between items-center">
-            <View className=" flex-row items-center gap-5">
-              <Image source={avatarImg} className="w-[60px] h-[60px]" />
-              <View>
-                <Text className="text-2xl font-[BebasNeue] tracking-widest">
-                  Abdur Rahim
-                </Text>
-                <View className="flex-row items-center gap-2">
-                  <Text className="text-lg text-gray-500 font-[RobotoRegular]">
-                    Role: Student
-                  </Text>
-                  <Text className="text-gray-500">|</Text>
-                  <Text className="text-lg text-gray-500 font-[RobotoRegular]">
-                    Team: U15
-                  </Text>
-                </View>
-              </View>
-            </View>
-            <View>
-              <Link href="/admin/user-management">
-                <Eye />
-              </Link>
-            </View>
-          </View>
-          <View className="bg-white elevation-sm p-3 rounded-lg border border-orange-50 flex-row justify-between items-center">
-            <View className=" flex-row items-center gap-5">
-              <Image source={avatarImg} className="w-[60px] h-[60px]" />
-              <View>
-                <Text className="text-2xl font-[BebasNeue] tracking-widest">
-                  Abdur Rahim
-                </Text>
-                <View className="flex-row items-center gap-2">
-                  <Text className="text-lg text-gray-500 font-[RobotoRegular]">
-                    Role: Student
-                  </Text>
-                  <Text className="text-gray-500">|</Text>
-                  <Text className="text-lg text-gray-500 font-[RobotoRegular]">
-                    Team: U15
-                  </Text>
-                </View>
-              </View>
-            </View>
-            <View>
-              <Link href="/admin/user-management">
-                <Eye />
-              </Link>
-            </View>
-          </View>
-          <View className="bg-white elevation-sm p-3 rounded-lg border border-orange-50 flex-row justify-between items-center">
-            <View className=" flex-row items-center gap-5">
-              <Image source={avatarImg} className="w-[60px] h-[60px]" />
-              <View>
-                <Text className="text-2xl font-[BebasNeue] tracking-widest">
-                  Abdur Rahim
-                </Text>
-                <View className="flex-row items-center gap-2">
-                  <Text className="text-lg text-gray-500 font-[RobotoRegular]">
-                    Role: Student
-                  </Text>
-                  <Text className="text-gray-500">|</Text>
-                  <Text className="text-lg text-gray-500 font-[RobotoRegular]">
-                    Team: Core
-                  </Text>
-                </View>
-              </View>
-            </View>
-            <View>
-              <Link href="/admin/user-management">
-                <Eye />
-              </Link>
-            </View>
-          </View>
-          <Pressable className="bg-orange-600 w-32 px-5 py-3 rounded-md mx-auto">
-            <Text className="text-white text-xl text-center font-[BebasNeue] tracking-wider">
-              See More
-            </Text>
-          </Pressable>
+        </View>
+      </View>
+
+      <View className="px-6 mt-10">
+        <Text className="text-2xl font-[BebasNeue] mb-3 tracking-wider">
+          Latest Announcement
+        </Text>
+        <View className="flex-col gap-5 mt-5">
+          {announcementData.map((item, index) => (
+            <AnnounceMentItem key={item.Aid} item={item} />
+          ))}
         </View>
       </View>
     </ScrollView>
   );
 }
-
-const styles = StyleSheet.create({});

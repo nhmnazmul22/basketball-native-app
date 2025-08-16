@@ -46,12 +46,18 @@ const CommunityTabs = () => {
             className="flex-row items-center justify-between bg-white rounded-lg p-3 border border-gray-200 shadow-lg"
           >
             <View>
-              <Text className="font-bold">{user.name}</Text>
-              <Text className="text-sm text-slate-500">{user.role}</Text>
+              <Text className="font-bold font-[RobotoRegular]">
+                {user.name}
+              </Text>
+              <Text className="text-sm text-slate-500 font-[RobotoRegular]">
+                {user.role}
+              </Text>
             </View>
 
             <Pressable className="bg-orange-600 px-3 py-1 rounded-lg">
-              <Text className="text-white font-bold">Message</Text>
+              <Text className="text-white font-bold font-[RobotoRegular]">
+                Message
+              </Text>
             </Pressable>
           </View>
         ))}
@@ -70,7 +76,7 @@ const CommunityTabs = () => {
             className="p-4"
           >
             <Text
-              className={`font-bold ${activeTab === tab ? "text-blue-600" : "text-slate-600"}`}
+              className={`font-bold font-[RobotoRegular] ${activeTab === tab ? "text-blue-600" : "text-slate-600"}`}
             >
               {tab}
             </Text>
