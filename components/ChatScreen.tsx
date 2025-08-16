@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import {
-  Dimensions,
   FlatList,
   KeyboardAvoidingView,
   Pressable,
@@ -30,20 +29,24 @@ const ChatScreen = () => {
     <KeyboardAvoidingView
       className="flex-1 bg-white"
       behavior={"padding"}
-      keyboardVerticalOffset={80}
+      keyboardVerticalOffset={120}
     >
       <FlatList
         data={messages}
         scrollEnabled
         keyExtractor={(item) => item.id.toString()}
         renderItem={({ item }) => (
-          <View className={`my-2 ${item.me ? "items-end" : "items-start"}`}>
+          <View
+            className={`my-2 ${item.me ? "items-end" : "items-start"} font-[RobotoRegular]`}
+          >
             <View
-              className={`px-4 py-2 rounded-xl max-w-[70%] ${
+              className={`px-4 py-2 rounded-xl max-w-[70%] font-[RobotoRegular] ${
                 item.me ? "bg-blue-500" : "bg-gray-300"
               }`}
             >
-              <Text className={item.me ? "text-white" : "text-black"}>
+              <Text
+                className={`${item.me ? "text-white" : "text-black"} font-[RobotoRegular]`}
+              >
                 {item.text}
               </Text>
             </View>
@@ -55,18 +58,20 @@ const ChatScreen = () => {
         }}
       />
 
-      <View className="flex-row items-center border-t border-slate-200 p-2 bg-white">
+      <View className="flex-row items-center mb-5 border-t border-slate-200 p-2 bg-white">
         <TextInput
           placeholder="Type a message..."
           value={newMessage}
           onChangeText={setNewMessage}
-          className="flex-1 border border-slate-300 rounded-full px-4 py-2 mr-2"
+          className="flex-1 border border-slate-300 rounded-full px-4 py-2 mr-2 font-[RobotoRegular]"
         />
         <Pressable
           onPress={sendMessage}
-          className="bg-blue-600 px-4 py-2 rounded-full"
+          className="bg-orange-600 px-4 py-2 rounded-full"
         >
-          <Text className="text-white font-bold">Send</Text>
+          <Text className="text-white font-bold font-[RobotoRegular]">
+            Send
+          </Text>
         </Pressable>
       </View>
     </KeyboardAvoidingView>

@@ -1,4 +1,5 @@
 import ChatScreen from "@/components/ChatScreen";
+import { Plus } from "lucide-react-native";
 import React, { useState } from "react";
 import { Pressable, ScrollView, Text, View } from "react-native";
 
@@ -14,19 +15,23 @@ const CommunityTabs = () => {
 
   const renderPosts = () => (
     <ScrollView className="p-4">
-      <Text className="text-xl font-bold mb-3">Community Posts</Text>
-      <View className="bg-white rounded-xl shadow p-4 mb-4">
-        <Text className="font-bold">Student A</Text>
-        <Text className="text-xs text-slate-500">2h ago</Text>
-        <Text className="mt-2">Scored 95% in Math 🎉</Text>
-        <View className="flex-row mt-3 gap-5">
-          <Pressable>
-            <Text className="text-blue-600">Like</Text>
-          </Pressable>
-          <Pressable>
-            <Text className="text-blue-600">Comment</Text>
-          </Pressable>
-        </View>
+      <View className="flex-row gap-3 justify-between items-center mb-5">
+        <Text className="text-xl font-bold mb-3 font-[RobotoRegular]">
+          Community Posts
+        </Text>
+        <Pressable className="bg-orange-600 flex-row gap-2 justify-center items-center py-2 px-4 rounded-lg">
+          <Plus size={20} color="#ffffff" />
+          <Text className="text-white font-[RobotoRegular]">Add Post</Text>
+        </Pressable>
+      </View>
+      <View className="bg-white rounded-xl shadow-lg border border-gray-200 p-4 mb-4">
+        <Text className="font-bold text-base font-[RobotoRegular]">
+          Student A
+        </Text>
+        <Text className="text-xs text-slate-500 font-[RobotoRegular]">
+          2h ago
+        </Text>
+        <Text className="mt-2 font-[RobotoRegular]">Scored 95% in Math 🎉</Text>
       </View>
     </ScrollView>
   );
@@ -34,25 +39,28 @@ const CommunityTabs = () => {
   const renderFriends = () => (
     <ScrollView className="p-4">
       <Text className="text-xl font-bold mb-3">Friends</Text>
-      {users.map((user) => (
-        <View
-          key={user.id}
-          className="flex-row items-center justify-between bg-white rounded-lg p-3 shadow mb-2"
-        >
-          <View>
-            <Text className="font-bold">{user.name}</Text>
-            <Text className="text-sm text-slate-500">{user.role}</Text>
+      <View className="flex-col gap-4">
+        {users.map((user) => (
+          <View
+            key={user.id}
+            className="flex-row items-center justify-between bg-white rounded-lg p-3 border border-gray-200 shadow-lg"
+          >
+            <View>
+              <Text className="font-bold">{user.name}</Text>
+              <Text className="text-sm text-slate-500">{user.role}</Text>
+            </View>
+
+            <Pressable className="bg-orange-600 px-3 py-1 rounded-lg">
+              <Text className="text-white font-bold">Message</Text>
+            </Pressable>
           </View>
-          <Pressable className="bg-blue-600 px-3 py-1 rounded-lg">
-            <Text className="text-white font-bold">Add Friend</Text>
-          </Pressable>
-        </View>
-      ))}
+        ))}
+      </View>
     </ScrollView>
   );
 
   return (
-    <View className="flex-1 bg-slate-100">
+    <View className="flex-1 bg-white">
       {/* Tabs */}
       <View className="flex-row justify-around bg-white border-b border-slate-200">
         {["Posts", "Messages", "Friends"].map((tab) => (

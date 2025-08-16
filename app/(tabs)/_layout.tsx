@@ -1,4 +1,4 @@
-import { Tabs, useRouter } from "expo-router";
+import { Tabs, usePathname, useRouter } from "expo-router";
 import {
   BookUser,
   CreditCard,
@@ -41,6 +41,8 @@ const HeaderRight = () => {
 };
 
 const Layout = () => {
+  const pathname = usePathname();
+
   return (
     <SafeAreaView className="flex-1">
       <Tabs
@@ -54,6 +56,7 @@ const Layout = () => {
             alignItems: "center",
           },
           tabBarStyle: {
+            display: pathname === "/community" ? "none" : "flex",
             backgroundColor:
               "linear-gradient(90deg,rgba(245, 91, 2, 1) 0%, rgba(255, 164, 84, 1) 100%)",
             borderRadius: 50,
