@@ -1,6 +1,14 @@
 import AnnounceMentItem from "@/components/AnnounceMentItem";
+import { useRouter } from "expo-router";
+import { Plus } from "lucide-react-native";
 import React, { useCallback, useState } from "react";
-import { RefreshControl, ScrollView, Text, View } from "react-native";
+import {
+  Pressable,
+  RefreshControl,
+  ScrollView,
+  Text,
+  View,
+} from "react-native";
 
 const announcementData = [
   {
@@ -19,6 +27,7 @@ const announcementData = [
 export default function Dashboard() {
   const [refreshing, setRefreshing] = useState(false);
 
+  const router = useRouter();
   // Page Refresh Function
   const onRefresh = useCallback(() => {
     setRefreshing(true);
@@ -32,11 +41,11 @@ export default function Dashboard() {
       refreshControl={
         <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
       }
-      className="flex-1 bg-slate-50"
+      className="flex-1 bg-slate-50 px-6"
       showsVerticalScrollIndicator={false}
       contentContainerStyle={{ minHeight: "100%", paddingBottom: 60 }}
     >
-      <View className="flex-row flex-wrap gap-4 px-6 mt-10">
+      <View className="flex-row flex-wrap gap-4  mt-10">
         <View className="bg-orange-600 flex-1 min-w-[150px] p-4 rounded-lg">
           <Text className="text-lg text-white font-[RobotoRegular]">
             Total Student
@@ -67,7 +76,34 @@ export default function Dashboard() {
         </View>
       </View>
 
-      <View className="px-6 mt-10">
+      <View className="flex-row gap-3 items-center justify-between my-10">
+        <Pressable className="flex-row gap-1 bg-orange-600 p-2 rounded-lg">
+          <Plus size={20} color="#ffffff" />
+          <Text className="text-base font-[RobotoRegular]  text-white">
+            New Post
+          </Text>
+        </Pressable>
+        <Pressable
+          className="flex-row gap-1 bg-green-600 p-2 rounded-lg"
+          onPress={() => router.push("/admin/createAttendance")}
+        >
+          <Plus size={20} color="#ffffff" />
+          <Text className="text-base font-[RobotoRegular]  text-white">
+            New Attendance
+          </Text>
+        </Pressable>
+        <Pressable
+          className="flex-row gap-1 bg-indigo-600 p-2 rounded-lg"
+          onPress={() => router.push("/admin/createUsers")}
+        >
+          <Plus size={20} color="#ffffff" />
+          <Text className="text-base font-[RobotoRegular]  text-white">
+            Add User
+          </Text>
+        </Pressable>
+      </View>
+
+      <View>
         <Text className="text-2xl font-[BebasNeue] mb-3 tracking-wider">
           Attendance Overview
         </Text>
@@ -78,22 +114,28 @@ export default function Dashboard() {
           </Text>
           <View className="flex-row justify-between w-full mt-5">
             <View className="items-center flex-1">
-              <Text className="text-lg font-bold">20</Text>
-              <Text className="text-gray-500">Present</Text>
+              <Text className="text-lg font-bold font-[RobotoRegular] ">
+                20
+              </Text>
+              <Text className="text-gray-500 font-[RobotoRegular] ">
+                Present
+              </Text>
             </View>
             <View className="items-center flex-1">
-              <Text className="text-lg font-bold">2</Text>
-              <Text className="text-gray-500">Absent</Text>
+              <Text className="text-lg font-bold font-[RobotoRegular] ">2</Text>
+              <Text className="text-gray-500 font-[RobotoRegular] ">
+                Absent
+              </Text>
             </View>
             <View className="items-center flex-1">
-              <Text className="text-lg font-bold">3</Text>
-              <Text className="text-gray-500">Late</Text>
+              <Text className="text-lg font-bold font-[RobotoRegular] ">3</Text>
+              <Text className="text-gray-500 font-[RobotoRegular] ">Late</Text>
             </View>
           </View>
         </View>
       </View>
 
-      <View className="px-6 mt-10">
+      <View className="mt-10">
         <Text className="text-2xl font-[BebasNeue] mb-3 tracking-wider">
           Latest Announcement
         </Text>

@@ -98,9 +98,27 @@ export default function RootLayout() {
             }}
           />
           <Drawer.Screen
-            name="admin/createStudent"
+            name="admin/createUsers"
             options={{
-              title: "Create Student",
+              title: "Create User",
+              drawerItemStyle: {
+                display: "none",
+              },
+            }}
+          />
+          <Drawer.Screen
+            name="admin/createAttendance"
+            options={{
+              title: "New Attendance",
+              drawerItemStyle: {
+                display: "none",
+              },
+            }}
+          />
+          <Drawer.Screen
+            name="admin/scanFace"
+            options={{
+              title: "Scan Face",
               drawerItemStyle: {
                 display: "none",
               },
