@@ -39,7 +39,7 @@ export default function ScanFace() {
       device={device}
       isActive={true}
       frameProcessor={frameProcessor}
-      //   frameProcessorFps={5}
+    //   frameProcessorFps={5}
     />
   ) : null;
 }
