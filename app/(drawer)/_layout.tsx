@@ -115,15 +115,6 @@ export default function RootLayout() {
               },
             }}
           />
-          <Drawer.Screen
-            name="admin/scanFace"
-            options={{
-              title: "Scan Face",
-              drawerItemStyle: {
-                display: "none",
-              },
-            }}
-          />
         </Drawer>
       </GestureHandlerRootView>
     </SafeAreaView>

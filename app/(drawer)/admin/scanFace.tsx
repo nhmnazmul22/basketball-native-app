@@ -3,13 +3,13 @@ import { runOnJS } from "react-native-reanimated";
 
 import { StyleSheet } from "react-native";
 import {
+  Camera,
   useCameraDevices,
   useFrameProcessor,
 } from "react-native-vision-camera";
-
-import { Camera } from "react-native-vision-camera";
 import { Face, scanFaces } from "vision-camera-face-detector";
-const ScanFace = () => {
+
+export default function ScanFace() {
   const [hasPermission, setHasPermission] = React.useState(false);
   const [faces, setFaces] = React.useState<Face[]>();
   const devices = useCameraDevices();
@@ -42,6 +42,4 @@ const ScanFace = () => {
       //   frameProcessorFps={5}
     />
   ) : null;
-};
-
-export default ScanFace;
+}
