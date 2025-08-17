@@ -6,14 +6,13 @@ import { BarChart } from "react-native-chart-kit";
 import { Input } from "tamagui";
 
 const screenWidth = Dimensions.get("window").width;
-
 const data = {
-  labels: ["Jan", "Feb", "Mar", "Apr"],
+  labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun"],
   datasets: [
-    { data: [40, 30, 50, 60], color: () => "#4f46e5" }, // Indigo
-    { data: [55, 60, 70, 45], color: () => "#10b981" }, // Green
+    { data: [44, 30, 50, 60, 50, 60], color: () => "#4f46e5" }, // Indigo
   ],
 };
+
 export default function ReportsPage() {
   const [showStart, setShowStart] = useState(false);
   const [showEnd, setShowEnd] = useState(false);
@@ -175,11 +174,11 @@ export default function ReportsPage() {
               backgroundGradientFrom: "#fff",
               backgroundGradientTo: "#fff",
               decimalPlaces: 0,
-              color: (opacity = 1) => `rgba(0, 0, 0, ${opacity})`,
+              color: (opacity = 1) => `#4f46e5`,
               labelColor: (opacity = 1) => `rgba(0, 0, 0, ${opacity})`,
             }}
             style={{
-              marginVertical: 8,
+              marginVertical: 4,
               borderRadius: 12,
             }}
             showBarTops
@@ -203,7 +202,7 @@ export default function ReportsPage() {
               backgroundGradientFrom: "#fff",
               backgroundGradientTo: "#fff",
               decimalPlaces: 0,
-              color: (opacity = 1) => `rgba(0, 0, 0, ${opacity})`,
+              color: (opacity = 1) => `#4f46e5`,
               labelColor: (opacity = 1) => `rgba(0, 0, 0, ${opacity})`,
             }}
             style={{
