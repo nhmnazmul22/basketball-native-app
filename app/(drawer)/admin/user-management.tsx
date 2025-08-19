@@ -45,10 +45,10 @@ export default function UserManagementPage() {
           </Text>
           <Pressable
             className="bg-orange-500 px-4 py-2 rounded-lg flex-row gap-2 items-center"
-            onPress={() => router.push("/admin/createStudent")}
+            onPress={() => router.push("/admin/createUsers")}
           >
             <Plus size={18} color="#ffffff" />
-            <Text className="text-base text-white ">Add Student</Text>
+            <Text className="text-base text-white ">Add Users</Text>
           </Pressable>
         </View>
         <View className="mb-5 mt-8 flex-row items-center justify-between">

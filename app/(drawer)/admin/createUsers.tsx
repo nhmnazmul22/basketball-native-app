@@ -1,3 +1,5 @@
+import SimpleSelectOption from "@/components/SimpleSelectOption";
+import TakePicture from "@/components/TakePicture";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import React, { useState } from "react";
 import {
@@ -16,6 +18,18 @@ import { Input } from "tamagui";
 const profilePicture = require("@/assets/images/profile-picture.jpg");
 const width = Dimensions.get("window").width;
 
+const teamData = [
+  { id: 18254, name: "U12" },
+  { id: 55288, name: "U15" },
+  { id: 98566, name: "U30" },
+];
+
+const roleData = [
+  { id: 89845, name: "Student" },
+  { id: 54877, name: "Couch" },
+  { id: 65825, name: "Admin" },
+];
+
 const CreateStudent = () => {
   const [name, setName] = useState("");
   const [phone, setPhone] = useState("");
@@ -23,12 +37,21 @@ const CreateStudent = () => {
   const [password, setPassword] = useState("");
   const [show, setShow] = useState(false);
   const [date, setDate] = useState(new Date());
+  const [team, setTeam] = useState("");
+  const [role, setRole] = useState("");
+  const [photo, setPhoto] = useState<any>(null);
+  const [capturePic, setCapturePic] = useState<Boolean>(false);
 
   const onChange = (event: any, selectedDate: any) => {
     const currentDate = selectedDate;
     setShow(false);
     setDate(currentDate);
   };
+  
+  if (capturePic && !photo) {
+    return <TakePicture photo={photo} setPhoto={setPhoto} />;
+  }
+
   return (
     <KeyboardAvoidingView
       style={{ flex: 1 }}
@@ -46,16 +69,33 @@ const CreateStudent = () => {
         >
           <View style={{ width: width * 0.9 }} className="w-full mx-auto">
             <View className="flex-col w-full gap-3 mt-5">
-              <View className="flex-col gap-3 p-2 w-36">
+              <View className="flex-col gap-3 p-2 w-40">
                 <Image
-                  source={profilePicture}
-                  className="w-36 h-36 object-cover rounded-lg border border-slate-200"
+                  source={photo !== null ? { uri: photo.uri } : profilePicture}
+                  className="w-40 h-40 object-cover rounded-lg border border-slate-200"
                 />
-                <Pressable className="bg-orange-600 px-4 py-2 rounded-md">
-                  <Text className="text-white font-bold text-center">
-                    Add Photo
-                  </Text>
-                </Pressable>
+                {photo ? (
+                  <Pressable
+                    className="bg-orange-600 px-4 py-2 rounded-md"
+                    onPress={() => {
+                      setCapturePic(true);
+                      setPhoto(null);
+                    }}
+                  >
+                    <Text className="text-white font-bold text-center">
+                      Retake Photo
+                    </Text>
+                  </Pressable>
+                ) : (
+                  <Pressable
+                    className="bg-orange-600 px-4 py-2 rounded-md"
+                    onPress={() => setCapturePic(true)}
+                  >
+                    <Text className="text-white font-bold text-center">
+                      Add Photo
+                    </Text>
+                  </Pressable>
+                )}
               </View>
               <View className="flex-col gap-1">
                 <Text className="text-lg font-[RobotoRegular] text-black">
@@ -79,7 +119,8 @@ const CreateStudent = () => {
               </View>
               <View className="flex-col">
                 <Text className="text-lg font-[RobotoRegular] text-black">
-                  Date of Birth (DOB):
+                  Date of Birth (DOB):{" "}
+                  <Text className="text-orange-600">*</Text>
                 </Text>
                 <Pressable onPress={() => setShow(true)}>
                   <Input
@@ -98,6 +139,28 @@ const CreateStudent = () => {
                     onChange={onChange}
                   />
                 )}
+              </View>
+              <View className="flex-col">
+                <Text className="text-lg font-[RobotoRegular]">
+                  Team <Text className="text-orange-600">*</Text>
+                </Text>
+                <SimpleSelectOption
+                  data={teamData}
+                  label="Choose the team"
+                  value={team}
+                  setValue={setTeam}
+                />
+              </View>
+              <View className="flex-col">
+                <Text className="text-lg  font-[RobotoRegular]">
+                  Role: <Text className="text-orange-600">*</Text>
+                </Text>
+                <SimpleSelectOption
+                  data={roleData}
+                  label="Choose the role"
+                  value={role}
+                  setValue={setRole}
+                />
               </View>
               <View className="flex-col gap-1">
                 <Text className="text-lg font-[RobotoRegular] text-black">

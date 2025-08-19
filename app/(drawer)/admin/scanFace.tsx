@@ -1,45 +1,60 @@
-import * as React from "react";
-import { runOnJS } from "react-native-reanimated";
+import TakePicture from "@/components/TakePicture";
+import { useState } from "react";
+import { Image, Pressable, ScrollView, Text, View } from "react-native";
 
-import { StyleSheet } from "react-native";
-import {
-  Camera,
-  useCameraDevices,
-  useFrameProcessor,
-} from "react-native-vision-camera";
-import { Face, scanFaces } from "vision-camera-face-detector";
+const ScanFace = () => {
+  const [photo, setPhoto] = useState<any>(null);
 
-export default function ScanFace() {
-  const [hasPermission, setHasPermission] = React.useState(false);
-  const [faces, setFaces] = React.useState<Face[]>();
-  const devices = useCameraDevices();
-  //@ts-ignore
-  const device = devices.front;
+  return (
+    <View className="flex-1 bg-white">
+      {!photo ? (
+        <TakePicture photo={photo} setPhoto={setPhoto} />
+      ) : (
+        <ScrollView
+          className="flex-1 p-5 bg-white"
+          showsVerticalScrollIndicator={false}
+          contentContainerStyle={{
+            minHeight: "100%",
+            paddingBottom: 80,
+          }}
+        >
+          <View className="mt-5">
+            <Text className="font-[BebasNeue] text-4xl tracking-wider text-center">
+              Picture take successful
+            </Text>
+            <Text className="font-[RobotoRegular] text-gray-600 text-base text-center">
+              Now Verify your face or retake new picture
+            </Text>
+          </View>
+          <View className="w-[300px] h-[300px] mx-auto mt-16 rounded-lg">
+            <Image
+              source={{ uri: photo.uri }}
+              resizeMode="cover"
+              className="w-full h-full rounded-lg"
+            />
+          </View>
 
-  React.useEffect(() => {
-    console.log(faces);
-  }, [faces]);
+          <View className="mt-24 flex-row gap-3 justify-center items-center">
+            <Pressable
+              className="bg-indigo-600 px-5 py-3 rounded-lg"
+              onPress={() => {
+                setPhoto(null);
+              }}
+            >
+              <Text className="font-[RobotoRegular] text-white text-center text-lg">
+                Retake
+              </Text>
+            </Pressable>
+            <Pressable className="bg-orange-600 px-5 py-3 rounded-lg">
+              <Text className="font-[RobotoRegular] text-white text-center text-lg">
+                Scan Face
+              </Text>
+            </Pressable>
+          </View>
+        </ScrollView>
+      )}
+    </View>
+  );
+};
 
-  React.useEffect(() => {
-    (async () => {
-      const status = await Camera.requestCameraPermission();
-      //@ts-ignore
-      setHasPermission(status === "authorized");
-    })();
-  }, []);
-
-  const frameProcessor = useFrameProcessor((frame) => {
-    "worklet";
-    const scannedFaces = scanFaces(frame);
-    runOnJS(setFaces)(scannedFaces);
-  }, []);
-  return device != null && hasPermission ? (
-    <Camera
-      style={StyleSheet.absoluteFill}
-      device={device}
-      isActive={true}
-      frameProcessor={frameProcessor}
-    //   frameProcessorFps={5}
-    />
-  ) : null;
-}
+export default ScanFace;

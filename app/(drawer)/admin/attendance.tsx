@@ -1,15 +1,15 @@
 import AttendanceList from "@/components/AttendanceList";
 import SimpleSelectOption from "@/components/SimpleSelectOption";
-import { monthlyFilter, YearlyFilter } from "@/constants/FilterOptions";
+import { monthlyFilter } from "@/constants/FilterOptions";
 import React, { useCallback, useState } from "react";
 import { Dimensions, Pressable, ScrollView, Text, View } from "react-native";
 import { RefreshControl } from "react-native-gesture-handler";
 import { Input } from "tamagui";
 
 const filterData = [
-  { id: 9789, name: "Daily" },
-  { id: 6895, name: "Monthly" },
-  { id: 7896, name: "Yearly" },
+  { id: 9655, name: "Daily" },
+  { id: 2836, name: "Monthly" },
+  { id: 4852, name: "Yearly" },
 ];
 
 const width = Dimensions.get("window").width;

@@ -1,5 +1,5 @@
 import React, { Dispatch, SetStateAction, useState } from "react";
-import { View } from "react-native";
+import { ScrollView, View } from "react-native";
 import { Select, YStack } from "tamagui";
 
 interface Props {
@@ -10,38 +10,51 @@ interface Props {
 }
 
 const SimpleSelectOption = ({ data, label, value, setValue }: Props) => {
-  const [start, setStart] = useState(false);
-
+  const [open, setOpen] = useState(false);
+  console.log(value);
+  console.log(data);
   return (
     <YStack className="relative">
       <Select
-        value={value || ""}
+        value={value}
         onValueChange={(val) => {
           setValue(val);
-          setStart(false);
+          setOpen(false);
         }}
         onOpenChange={(isOpen) => {
           if (isOpen) {
-            setStart(true);
+            setOpen(true);
+          } else {
+            setOpen(false);
           }
         }}
       >
         <Select.Trigger>
-          <Select.Value placeholder={label || "Choose options..."} />
+          <Select.Value key={value} placeholder={label || "Choose options..."}>
+            {value ? value : null}
+          </Select.Value>
         </Select.Trigger>
 
         <Select.Content>
           <Select.Viewport unstyled>
-            <View
-              className={`absolute bg-white w-full z-30 top-[60px] border border-gray-300 rounded shadow-md ${start ? "block" : "hidden"}`}
-            >
-              {data &&
-                data.map((item: any, index: number) => (
-                  <Select.Item key={item.id} index={index} value={item.name}>
-                    <Select.ItemText>{item.name}</Select.ItemText>
-                  </Select.Item>
-                ))}
-            </View>
+            {open && (
+              <View
+                className={`absolute bg-white w-full z-30 top-[60px] border border-gray-300 rounded shadow-md max-h-[250px] `}
+              >
+                <ScrollView nestedScrollEnabled>
+                  {data &&
+                    data.map((item: any, index: number) => (
+                      <Select.Item
+                        key={item.id}
+                        index={index}
+                        value={item.name}
+                      >
+                        <Select.ItemText>{item.name}</Select.ItemText>
+                      </Select.Item>
+                    ))}
+                </ScrollView>
+              </View>
+            )}
           </Select.Viewport>
         </Select.Content>
       </Select>
