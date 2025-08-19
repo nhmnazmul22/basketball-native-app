@@ -31,7 +31,7 @@ const UserDateModalContent = ({
             <View className="w-36 h-36 rounded-lg border p-2 mb-3">
               <Image
                 source={profilePicture}
-                className="w-full h-full object-cover rounded-lgrounded-lg"
+                className="w-full h-full object-cover rounded-lg"
               />
             </View>
             <View className="flex-row gap-3 ">
@@ -80,82 +80,6 @@ const UserDateModalContent = ({
             </View>
           </View>
         </View>
-        {item.lastPayment && (
-          <View className="mt-5 flex flex-col gap-2">
-            <Text className="text-lg font-bold font-[RobotoRegular] border-b">
-              Last Payment Info:
-            </Text>
-            <View className="flex-row justify-between items-center">
-              <View>
-                <View className="flex-row gap-3 ">
-                  <Text className="text-lg font-[RobotoRegular] w-20 font-bold">
-                    Amount
-                  </Text>
-                  <Text className="text-lg font-[RobotoRegular]">:</Text>
-                  <Text className="text-lg font-[RobotoRegular]">
-                    {item.lastPayment.amount} Rp
-                  </Text>
-                </View>
-                <View className="flex-row gap-3 ">
-                  <Text className="text-lg font-[RobotoRegular] w-20 font-bold ">
-                    Method
-                  </Text>
-                  <Text className="text-lg font-[RobotoRegular]">:</Text>
-                  <Text className="text-lg font-[RobotoRegular]">
-                    {item.lastPayment.method}
-                  </Text>
-                </View>
-                <View className="flex-row gap-3 ">
-                  <Text className="text-lg font-[RobotoRegular] w-20 font-bold ">
-                    Remark
-                  </Text>
-                  <Text className="text-lg font-[RobotoRegular]">:</Text>
-                  <Text className="text-lg font-[RobotoRegular]">
-                    {item.lastPayment.remark}
-                  </Text>
-                </View>
-              </View>
-            </View>
-          </View>
-        )}
-        {item.lastAttendance && (
-          <View className="mt-5 flex flex-col gap-2">
-            <Text className="text-lg font-bold font-[RobotoRegular] border-b">
-              Last Attendance Info:
-            </Text>
-            <View className="flex-row justify-between items-center">
-              <View>
-                <View className="flex-row gap-3 ">
-                  <Text className="text-lg font-[RobotoRegular] w-20 font-bold">
-                    Date
-                  </Text>
-                  <Text className="text-lg font-[RobotoRegular]">:</Text>
-                  <Text className="text-lg font-[RobotoRegular]">
-                    {item.lastAttendance.date}
-                  </Text>
-                </View>
-                <View className="flex-row gap-3 ">
-                  <Text className="text-lg font-[RobotoRegular] w-20 font-bold ">
-                    Location
-                  </Text>
-                  <Text className="text-lg font-[RobotoRegular]">:</Text>
-                  <Text className="text-lg font-[RobotoRegular]">
-                    {item.lastAttendance.location}
-                  </Text>
-                </View>
-                <View className="flex-row gap-3 ">
-                  <Text className="text-lg font-[RobotoRegular] w-20 font-bold ">
-                    Status
-                  </Text>
-                  <Text className="text-lg font-[RobotoRegular]">:</Text>
-                  <Text className="text-lg font-[RobotoRegular]">
-                    {item.lastAttendance.status}
-                  </Text>
-                </View>
-              </View>
-            </View>
-          </View>
-        )}
         <View className="flex-row gap-5 justify-end items-center">
           <Pressable
             className="bg-orange-600 w-24 py-2 rounded-lg mt-5 flex-row gap-2 items-center justify-center"

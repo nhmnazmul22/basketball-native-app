@@ -124,6 +124,15 @@ export default function RootLayout() {
               },
             }}
           />
+          {/* <Drawer.Screen
+            name="admin/createTeam"
+            options={{
+              title: "Create Team",
+              drawerItemStyle: {
+                display: "none",
+              },
+            }}
+          /> */}
         </Drawer>
       </GestureHandlerRootView>
     </SafeAreaView>
