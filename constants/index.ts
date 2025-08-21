@@ -9,3 +9,8 @@ export const userStatus = [
   { id: 2, name: "inactive" },
   { id: 3, name: "on leave" },
 ];
+
+export const teamStatus = [
+  { id: 1, name: "active" },
+  { id: 2, name: "inactive" },
+];

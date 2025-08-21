@@ -1,18 +1,23 @@
 import TeamList from "@/components/TeamList";
+import { AppDispatch } from "@/store";
+import { fetchTeams } from "@/store/teamsSlice";
 import { useRouter } from "expo-router";
 import { Plus } from "lucide-react-native";
 import React, { useCallback, useState } from "react";
 import { Pressable, ScrollView, Text, View } from "react-native";
 import { RefreshControl } from "react-native-gesture-handler";
+import { useDispatch } from "react-redux";
 
 export default function TeamManagementPage() {
   const [refreshing, setRefreshing] = useState(false);
+  const dispatch = useDispatch<AppDispatch>();
 
   const router = useRouter();
 
   // Page Refresh Function
   const onRefresh = useCallback(() => {
     setRefreshing(true);
+    dispatch(fetchTeams());
     setTimeout(() => {
       setRefreshing(false);
     }, 1500);

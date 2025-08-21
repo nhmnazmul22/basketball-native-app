@@ -10,9 +10,16 @@ export const shortText = (text: String, length: number) => {
   return newText;
 };
 
+export const firstWordUpper = (text: string) => {
+  if (!text) return "";
+  return text.charAt(0).toUpperCase() + text.slice(1);
+}
+
 export const generateFileName = (uri: string) => {
   const parts = uri.split("/");
-  return parts[parts.length - 1] || "upload.jpg";
+  const fileName = parts[parts.length - 1];
+  const newFileName = fileName.split(" ").join("-");
+  return newFileName;
 };
 
 export const formateDate = (date: string) => {

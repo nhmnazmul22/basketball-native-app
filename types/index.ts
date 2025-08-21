@@ -17,4 +17,16 @@ export interface User {
   faceDescriptor?: Number[];
   teamDetails?: any;
   teamId?: string;
+  createAt?: string;
+  updatedAt?: string;
+}
+
+export interface Team {
+  _id: string;
+  logo: string;
+  name: string;
+  description: string;
+  status: string;
+  createAt?: string;
+  updatedAt?: string;
 }

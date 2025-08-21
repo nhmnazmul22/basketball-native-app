@@ -1,9 +1,10 @@
+import { Team } from "@/types";
 import { CircleX, Save } from "lucide-react-native";
 import React, { Dispatch, SetStateAction } from "react";
 import { Image, Pressable, Text, View } from "react-native";
 
 interface Props {
-  item: any;
+  item: Team;
   setVisibleModal: Dispatch<SetStateAction<boolean>>;
   setVisibleEditModal: Dispatch<SetStateAction<boolean>>;
 }
@@ -21,19 +22,20 @@ const TeamDataModal = ({
           Update Team Data
         </Text>
         <Text className="font-[RobotoRegular] text-gray-600 text-center text-lg font-medium">
-          ID: {item.teamId}
+          ID: {item._id}
         </Text>
         <View className="mt-5 flex flex-col gap-2">
-          <View className="w-40 h-40 rounded-lg border p-2 mb-3 mx-auto">
+          <View className="w-40 h-40 rounded-lg border border-gray-300 p-2 mb-3 mx-auto">
             <Image
-              source={profilePicture}
+              source={(item.logo && { uri: item.logo }) || profilePicture}
               className="w-full h-full object-cover rounded-lg"
             />
           </View>
           <Text className="text-xl font-bold font-[RobotoRegular] text-center">
-            {item.name}
+            {item.name} -{" "}
+            <Text className="text-lg text-gray-800 font-normal">{`(${item.status})`}</Text>
           </Text>
-          <Text className="text-lg text-gray-600 font-[RobotoRegular] text-center">
+          <Text className="text-lg text-gray-800 font-[RobotoRegular] text-center">
             {item.description}
           </Text>
         </View>
