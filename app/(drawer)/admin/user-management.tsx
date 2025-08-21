@@ -7,7 +7,6 @@ import React, { useCallback, useState } from "react";
 import { Pressable, ScrollView, Text, View } from "react-native";
 import { RefreshControl } from "react-native-gesture-handler";
 import { useDispatch } from "react-redux";
-import { Input } from "tamagui";
 
 export default function UserManagementPage() {
   const [refreshing, setRefreshing] = useState(false);
@@ -47,11 +46,6 @@ export default function UserManagementPage() {
             <Plus size={18} color="#ffffff" />
             <Text className="text-base text-white ">Add Users</Text>
           </Pressable>
-        </View>
-        <View className="mb-5 mt-8 flex-row items-center justify-between">
-          <View style={{ width: "100%" }}>
-            <Input placeholder="UserId, name, email..." />
-          </View>
         </View>
         <UserList />
       </View>

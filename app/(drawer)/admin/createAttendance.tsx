@@ -6,6 +6,18 @@ import { Image, Pressable, ScrollView, Text, View } from "react-native";
 const faceScanImg = require("@/assets/images/face-scan.png");
 const CreateAttendance = () => {
   const router = useRouter();
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
   return (
     <ScrollView
       className="flex-1 p-5 bg-white"

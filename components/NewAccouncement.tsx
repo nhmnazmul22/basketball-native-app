@@ -1,7 +1,14 @@
+import announcementApi from "@/lib/apis/announcement";
+import { AppDispatch, RootState } from "@/store";
+import { fetchTeams } from "@/store/teamsSlice";
+import { Announcement } from "@/types";
 import DateTimePicker from "@react-native-community/datetimepicker";
+import { useRouter } from "expo-router";
 import { CircleX, Edit } from "lucide-react-native";
 import React, { Dispatch, SetStateAction, useEffect, useState } from "react";
-import { Pressable, Text, View } from "react-native";
+import { ActivityIndicator, Pressable, Text, View } from "react-native";
+import Toast from "react-native-toast-message";
+import { useDispatch, useSelector } from "react-redux";
 import { Input, Label, Switch, TextArea } from "tamagui";
 import SimpleSelectOption from "./SimpleSelectOption";
 
@@ -9,22 +16,17 @@ interface Props {
   setVisibleModal: Dispatch<SetStateAction<boolean>>;
 }
 
-const teamData = [
-  { id: 18254, name: "U12" },
-  { id: 55288, name: "U15" },
-  { id: 98566, name: "U30" },
-  { id: 86868, name: "U30" },
-];
-
 const statusData = [
-  { id: 85885, name: "Active" },
-  { id: 89865, name: "Archive" },
+  { id: 85885, name: "active" },
+  { id: 89865, name: "archive" },
 ];
 
 const NewAnnouncement = ({ setVisibleModal }: Props) => {
+  const router = useRouter();
   const [title, setTitle] = useState("");
   const [message, setMessage] = useState("");
   const [team, setTeam] = useState("");
+  const [teamId, setTeamId] = useState("");
   const [date, setDate] = useState(new Date());
   const [status, setStatus] = useState("");
   const [isPin, setIsPin] = useState(false);
@@ -32,6 +34,9 @@ const NewAnnouncement = ({ setVisibleModal }: Props) => {
   const [show, setShow] = useState(false);
   const [isDateSelected, setIsDateSelected] = useState(false);
   const [isTimeSelected, setIsTimeSelected] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const dispatch = useDispatch<AppDispatch>();
+  const { items } = useSelector((state: RootState) => state.teams);
 
   const onChange = (event: any, selectedDate: Date | undefined) => {
     if (event.type === "dismissed") {
@@ -60,8 +65,56 @@ const NewAnnouncement = ({ setVisibleModal }: Props) => {
     setMode("date");
     setShow(true);
   };
+
   const showTimepicker = () => {
     showMode("time");
+  };
+
+  const reset = () => {
+    setTitle("");
+    setMessage("");
+    setTeam("");
+    setTeamId("");
+    setDate(new Date());
+    setStatus("");
+    setIsPin(false);
+    setIsDateSelected(false);
+    setIsTimeSelected(false);
+  };
+
+  const handleCreateAnnouncement = async () => {
+    try {
+      setLoading(true);
+      const announcementData = {
+        title,
+        message,
+        teamId,
+        date: date.toISOString(),
+        status,
+        isPinned: isPin,
+      } as Announcement;
+
+      const response =
+        await announcementApi.createAnnouncement(announcementData);
+
+      if (!response.success) {
+        Toast.show({
+          type: "error",
+          text1: response.message,
+        });
+        return;
+      }
+
+      reset();
+      setVisibleModal(false);
+      Toast.show({
+        type: "success",
+        text1: response.message,
+      });
+      router.push("/admin/announcement");
+    } finally {
+      setLoading(false);
+    }
   };
 
   useEffect(() => {
@@ -70,6 +123,21 @@ const NewAnnouncement = ({ setVisibleModal }: Props) => {
       setIsTimeSelected(true);
     }
   }, [isDateSelected]);
+
+  useEffect(() => {
+    dispatch(fetchTeams());
+  }, [dispatch]);
+
+  useEffect(() => {
+    if (team) {
+      const selectedTeam = items?.data.find((item) => item.name === team);
+      if (selectedTeam) {
+        setTeamId(selectedTeam._id);
+      } else {
+        setTeamId("");
+      }
+    }
+  }, [team]);
 
   return (
     <View className="flex-1 justify-center items-center bg-[#00000051] py-16">
@@ -145,7 +213,7 @@ const NewAnnouncement = ({ setVisibleModal }: Props) => {
                 Team
               </Label>
               <SimpleSelectOption
-                data={teamData}
+                data={items?.data}
                 label="Choose the team"
                 value={team}
                 setValue={setTeam}
@@ -185,12 +253,18 @@ const NewAnnouncement = ({ setVisibleModal }: Props) => {
         <View className="flex-row gap-5 justify-end items-center">
           <Pressable
             className="bg-orange-600  px-3 py-2 rounded-lg mt-5 flex-row gap-2 items-center justify-center"
-            onPress={() => {}}
+            onPress={() => handleCreateAnnouncement()}
           >
-            <Edit size={18} color="#ffffff" />
-            <Text className="text-white font-[RobotoRegular]text-base font-bold text-center">
-              Create
-            </Text>
+            {loading ? (
+              <ActivityIndicator color="#ffffff" />
+            ) : (
+              <>
+                <Edit size={18} color="#ffffff" />
+                <Text className="text-white font-[RobotoRegular]text-base font-bold text-center">
+                  Create
+                </Text>
+              </>
+            )}
           </Pressable>
           <Pressable
             className="bg-red-600 px-3 py-2 rounded-lg mt-5 flex-row gap-1 items-center justify-center"

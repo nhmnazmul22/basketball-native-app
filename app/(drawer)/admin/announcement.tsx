@@ -1,8 +1,12 @@
 import AnnounceMentItem from "@/components/AnnounceMentItem";
 import NewAnnouncement from "@/components/NewAccouncement";
 import SimpleSelectOption from "@/components/SimpleSelectOption";
+import TableError from "@/components/TableError";
+import TableLoading from "@/components/TableLoading";
+import { AppDispatch, RootState } from "@/store";
+import { fetchAnnouncement } from "@/store/AnnouncementSlice";
 import { Plus } from "lucide-react-native";
-import React, { useCallback, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import {
   Modal,
   Pressable,
@@ -11,6 +15,7 @@ import {
   Text,
   View,
 } from "react-native";
+import { useDispatch, useSelector } from "react-redux";
 import { Label } from "tamagui";
 
 const announcementData = [
@@ -60,22 +65,47 @@ const announcementData = [
 ];
 
 const filterData = [
-  { id: 23543, name: "Active" },
-  { id: 23343, name: "Archived" },
+  { id: 23543, name: "active" },
+  { id: 23343, name: "archived" },
 ];
 
 export default function AnnouncementPage() {
   const [refreshing, setRefreshing] = useState(false);
-  const [filterType, setFilterType] = useState("Active");
+  const [filterType, setFilterType] = useState("active");
   const [visibleModal, setVisibleModal] = useState(false);
+  const dispatch = useDispatch<AppDispatch>();
+  const { items, error, loading } = useSelector(
+    (state: RootState) => state.announcements
+  );
 
   // Page Refresh Function
   const onRefresh = useCallback(() => {
     setRefreshing(true);
+    dispatch(fetchAnnouncement());
     setTimeout(() => {
       setRefreshing(false);
     }, 1500);
-  }, []);
+  }, [dispatch]);
+
+  useEffect(() => {
+    dispatch(fetchAnnouncement());
+  }, [dispatch]);
+
+  const filteredAnnouncement = items?.data.filter((item) => {
+    if (filterType) {
+      return item.status.toLowerCase() === filterType.toLowerCase();
+    } else {
+      return item.status.toLowerCase() === "active";
+    }
+  });
+
+  if (loading) {
+    return <TableLoading />;
+  }
+
+  if (error) {
+    return <TableError error={error} />;
+  }
 
   return (
     <>
@@ -103,9 +133,10 @@ export default function AnnouncementPage() {
             />
           </View>
           <View className="flex-col gap-5 mt-5">
-            {announcementData.map((item, index) => (
-              <AnnounceMentItem key={item.Aid} item={item} />
-            ))}
+            {filteredAnnouncement &&
+              filteredAnnouncement.map((item, index) => (
+                <AnnounceMentItem key={item._id} item={item} />
+              ))}
           </View>
         </View>
       </ScrollView>

@@ -1,9 +1,11 @@
+import { firstWordUpper, formateDateTime } from "@/lib/utils";
+import { Announcement } from "@/types";
 import { CircleX, Edit } from "lucide-react-native";
 import React, { Dispatch, SetStateAction } from "react";
 import { Pressable, ScrollView, Text, View } from "react-native";
 
 interface Props {
-  item: any;
+  item: Announcement;
   setVisibleModal: Dispatch<SetStateAction<boolean>>;
   setVisibleEditModal: Dispatch<SetStateAction<boolean>>;
 }
@@ -22,7 +24,7 @@ const AnnouncementDetails = ({
             Announcement Details
           </Text>
           <Text className="font-[RobotoRegular] text-center text-base text-slate-500 mb-4">
-            ID: {item.Aid}
+            ID: {item._id}
           </Text>
 
           {/* Main content */}
@@ -42,10 +44,9 @@ const AnnouncementDetails = ({
             </Text>
 
             {[
-              { label: "Team", value: item.team },
-              { label: "Date", value: item.date },
-              { label: "Status", value: item.status },
-              { label: "Created By", value: item.createdBy },
+              { label: "Team", value: item.teamDetails.name },
+              { label: "Date", value: formateDateTime(item.date) },
+              { label: "Status", value: firstWordUpper(item.status) },
             ].map((info, idx) => (
               <View key={idx} className="flex-row mb-2">
                 <Text className="w-28 text-base font-bold font-[RobotoRegular] text-slate-700">

@@ -17,7 +17,7 @@ export interface User {
   faceDescriptor?: Number[];
   teamDetails?: any;
   teamId?: string;
-  createAt?: string;
+  createdAt?: string;
   updatedAt?: string;
 }
 
@@ -27,6 +27,33 @@ export interface Team {
   name: string;
   description: string;
   status: string;
-  createAt?: string;
+  createdAt?: string;
+  updatedAt?: string;
+}
+
+export interface Attendance {
+  _id: string;
+  studentId: string;
+  teamId: string;
+  status: "present" | "absent" | "late";
+  gps: boolean;
+  faceMatch: boolean;
+  studentName: string;
+  studentEmail: string;
+  teamName: string;
+  createdAt?: string;
+  updatedAt?: string;
+}
+
+export interface Announcement {
+  _id?: string;
+  title: string;
+  message: string;
+  date: string;
+  teamId: string;
+  teamDetails: Team;
+  status: string;
+  isPinned: boolean;
+  createdAt?: string;
   updatedAt?: string;
 }

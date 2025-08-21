@@ -1,5 +1,9 @@
-import React from "react";
+import { AppDispatch, RootState } from "@/store";
+import { fetchAttendance } from "@/store/AttendanceSlice";
+import React, { useEffect, useState } from "react";
 import { FlatList, ScrollView, Text, View } from "react-native";
+import { useDispatch, useSelector } from "react-redux";
+import { Input } from "tamagui";
 import AttendanceItem from "./AttendanceItem";
 
 const attendanceData = [
@@ -33,41 +37,78 @@ const attendanceData = [
 ];
 
 const AttendanceList = () => {
+  const [searchParams, setSearchParams] = useState("");
+  const dispatch = useDispatch<AppDispatch>();
+  const { items, error, loading } = useSelector(
+    (state: RootState) => state.attendances
+  );
+
+  useEffect(() => {
+    dispatch(fetchAttendance());
+  }, []);
+
+  const filteredAttendance = items?.data.filter((attendance) => {
+    const search = searchParams.toLowerCase();
+
+    if (searchParams) {
+      return (
+        //@ts-ignore
+        attendance._id.toLowerCase().includes(search) ||
+        attendance.studentName.toLowerCase().includes(search) ||
+        attendance.teamName.toLowerCase().includes(search) ||
+        attendance.status?.toLowerCase().includes(search)
+      );
+    } else {
+      return true;
+    }
+  });
+
   return (
-    <ScrollView horizontal className="pb-4">
-      <View>
-        {/* Table Header */}
-        <View className="flex-row gap-2 bg-gray-100 p-2 rounded-t">
-          <Text className="w-28 font-bold text-lg text-center font-[RobotoRegular]">
-            Name
-          </Text>
-          <Text className="w-20 font-bold text-lg text-center font-[RobotoRegular]">
-            Team
-          </Text>
-          <Text className="w-20 font-bold text-lg text-center font-[RobotoRegular]">
-            Time
-          </Text>
-          <Text className="w-20 font-bold text-lg text-center font-[RobotoRegular]">
-            Status
-          </Text>
-          <Text className="w-20 font-bold text-lg text-center font-[RobotoRegular]">
-            GPS
-          </Text>
-          <Text className="w-28 font-bold text-lg text-center font-[RobotoRegular]">
-            Face Match
-          </Text>
-          <Text className="w-24 font-bold text-lg text-center font-[RobotoRegular]">
-            Actions
-          </Text>
+    <>
+      <View className="my-5 flex-col gap-2 items-center justify-between">
+        <View className="w-full">
+          <Input
+            placeholder="Name or Team or Status"
+            value={searchParams}
+            onChangeText={setSearchParams}
+          />
         </View>
-        {/* Table Rows */}
-        <FlatList
-          data={attendanceData}
-          keyExtractor={(item, index) => index.toString()}
-          renderItem={({ item }) => <AttendanceItem item={item} />}
-        />
       </View>
-    </ScrollView>
+      <ScrollView horizontal className="pb-4">
+        <View>
+          {/* Table Header */}
+          <View className="flex-row gap-2 bg-gray-100 p-2 rounded-t">
+            <Text className="w-36 font-bold text-lg text-center font-[RobotoRegular]">
+              Name
+            </Text>
+            <Text className="w-28 font-bold text-lg text-center font-[RobotoRegular]">
+              Team
+            </Text>
+            <Text className="w-28 font-bold text-lg text-center font-[RobotoRegular]">
+              Time
+            </Text>
+            <Text className="w-28 font-bold text-lg text-center font-[RobotoRegular]">
+              Status
+            </Text>
+            <Text className="w-28 font-bold text-lg text-center font-[RobotoRegular]">
+              GPS
+            </Text>
+            <Text className="w-28 font-bold text-lg text-center font-[RobotoRegular]">
+              Face Match
+            </Text>
+            <Text className="w-24 font-bold text-lg text-center font-[RobotoRegular]">
+              Actions
+            </Text>
+          </View>
+          {/* Table Rows */}
+          <FlatList
+            data={filteredAttendance}
+            keyExtractor={(item, index) => index.toString()}
+            renderItem={({ item }) => <AttendanceItem item={item} />}
+          />
+        </View>
+      </ScrollView>
+    </>
   );
 };
 

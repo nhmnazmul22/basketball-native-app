@@ -4,9 +4,10 @@ import React, { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { Pressable, ScrollView, Text, View } from "react-native";
 import { Input, Label, Switch, TextArea } from "tamagui";
 import SimpleSelectOption from "./SimpleSelectOption";
+import { Announcement } from "@/types";
 
 interface Props {
-  item: any;
+  item: Announcement;
   setVisibleEditModal: Dispatch<SetStateAction<boolean>>;
 }
 
@@ -37,9 +38,9 @@ const AnnouncementEditModal = ({ item, setVisibleEditModal }: Props) => {
       setTitle(item.title || "");
       setMessage(item.message || "");
       setDate(item.date ? new Date(item.date) : new Date());
-      setTeam(item.team || "");
+      setTeam(item.teamDetails.name || "");
       setStatus(item.status || "");
-      setIsPin(item.isPin || false);
+      setIsPin(item.isPinned || false);
     }
   }, [item]);
 

@@ -13,7 +13,7 @@ export const shortText = (text: String, length: number) => {
 export const firstWordUpper = (text: string) => {
   if (!text) return "";
   return text.charAt(0).toUpperCase() + text.slice(1);
-}
+};
 
 export const generateFileName = (uri: string) => {
   const parts = uri.split("/");
@@ -30,6 +30,28 @@ export const formateDate = (date: string) => {
   };
   const formattedDate = new Date(date).toLocaleDateString("en-US", options);
   return formattedDate;
+};
+
+export const formatTime = (date: string) => {
+  const options: Intl.DateTimeFormatOptions = {
+    hour: "2-digit",
+    minute: "2-digit",
+    second: "2-digit",
+  };
+  const formattedTime = new Date(date).toLocaleTimeString("en-US", options);
+  return formattedTime;
+};
+
+export const formateDateTime = (date: string) => {
+  const options: Intl.DateTimeFormatOptions = {
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+    hour: "2-digit",
+    minute: "2-digit",
+  };
+  const formattedDateTime = new Date(date).toLocaleString("en-US", options);
+  return formattedDateTime;
 };
 
 export const saveData = async (value: { token: string }) => {

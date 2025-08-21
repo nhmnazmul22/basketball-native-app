@@ -1,12 +1,13 @@
-import { shortText } from "@/lib/utils";
-import { Calendar, Pin, User } from "lucide-react-native";
+import { formateDateTime, shortText } from "@/lib/utils";
+import { Announcement } from "@/types";
+import { Calendar, Pin } from "lucide-react-native";
 import React, { useState } from "react";
 import { Modal, Pressable, Text, View } from "react-native";
 import AnnouncementDetails from "./AnnouncementDetails";
 import AnnouncementEditModal from "./AnnouncementEditModal";
 
 interface Props {
-  item: any;
+  item: Announcement;
 }
 
 const AnnounceMentItem = ({ item }: Props) => {
@@ -14,10 +15,10 @@ const AnnounceMentItem = ({ item }: Props) => {
   const [visibleEditModal, seVisibleEditModal] = useState(false);
 
   return (
-    <View key={item.Aid} className="mb-4">
+    <View className="mb-4">
       <View className="bg-white p-5 rounded-xl shadow-lg elevation-md">
         {/* Pin Badge */}
-        {item.isPin && (
+        {item.isPinned && (
           <View className="-rotate-45 w-7 h-7 absolute left-[-8px] top-[-8px] bg-orange-600 justify-center items-center rounded-full shadow-md">
             <Pin size={16} color="white" />
           </View>
@@ -37,13 +38,15 @@ const AnnounceMentItem = ({ item }: Props) => {
         <View className="mt-4 flex-row justify-between flex-wrap">
           <View className="flex-row gap-2 items-center mb-2">
             <Calendar size={20} />
-            <Text className="text-base text-slate-800">{item.date}</Text>
+            <Text className="text-base text-slate-800">
+              {formateDateTime(item.date)}
+            </Text>
           </View>
 
-          <View className="flex-row gap-2 items-center mb-2">
+          {/* <View className="flex-row gap-2 items-center mb-2">
             <User size={20} />
             <Text className="text-base text-slate-800">{item.createdBy}</Text>
-          </View>
+          </View> */}
 
           <Pressable
             onPress={() => seVisibleModal(true)}
