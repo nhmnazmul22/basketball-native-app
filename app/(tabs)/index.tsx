@@ -1,13 +1,14 @@
 import AnnouncementSlider from "@/components/AnnouncementSlider";
+import { useAuth } from "@/context/AuthContext";
 import { Redirect } from "expo-router";
 import { CreditCard, Megaphone } from "lucide-react-native";
 import { Pressable, Text, View } from "react-native";
 
 export default function Home() {
-  const isAuthentication = false;
+  const { session } = useAuth();
 
-  if (!isAuthentication) {
-    return <Redirect href="/admin/dashboard" />;
+  if (!session) {
+    return <Redirect href="/login" />;
   }
 
   return (

@@ -1,3 +1,6 @@
+import { useAuth } from "@/context/AuthContext";
+import { removeData } from "@/lib/utils";
+import { useRouter } from "expo-router";
 import { Drawer } from "expo-router/drawer";
 import {
   ArrowLeftRight,
@@ -6,16 +9,48 @@ import {
   LayoutDashboard,
   LogOut,
   Megaphone,
+  Settings,
   User,
   Users,
 } from "lucide-react-native";
+import { Pressable } from "react-native";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { SafeAreaView } from "react-native-safe-area-context";
+import Toast from "react-native-toast-message";
+
+const LogOutComponent = () => {
+  const { setSession } = useAuth();
+  const router = useRouter();
+  const handleLogout = async () => {
+    try {
+      await removeData();
+      setSession(null);
+      router.replace("/login");
+      Toast.show({
+        type: "success",
+        text1: "Logout successful",
+      });
+    } catch (err: any) {
+      console.log(err);
+      Toast.show({
+        type: "error",
+        text1: "Login Failed",
+        text2: err.message && err.message,
+      });
+    }
+  };
+
+  return (
+    <Pressable onPress={handleLogout}>
+      <LogOut style={{ marginRight: 16 }} />
+    </Pressable>
+  );
+};
 
 export default function RootLayout() {
   return (
     <SafeAreaView className="flex-1">
-      <GestureHandlerRootView className="flex-1 bg-red-500">
+      <GestureHandlerRootView className="flex-1">
         <Drawer
           screenOptions={{
             headerTitleStyle: {
@@ -38,7 +73,7 @@ export default function RootLayout() {
             },
             drawerActiveTintColor: "#F97316",
             drawerInactiveTintColor: "#111823",
-            headerRight: () => <LogOut style={{ marginRight: 16 }} />,
+            headerRight: () => <LogOutComponent />,
           }}
         >
           <Drawer.Screen
@@ -58,6 +93,22 @@ export default function RootLayout() {
             }}
           />
           <Drawer.Screen
+            name="admin/user-management"
+            options={{
+              title: "User Management",
+              drawerLabel: "User Management",
+              drawerIcon: (color) => <User color={color.color} />,
+            }}
+          />
+          <Drawer.Screen
+            name="admin/team-management"
+            options={{
+              title: "Team Management",
+              drawerLabel: "Team Management",
+              drawerIcon: (color) => <Users color={color.color} />,
+            }}
+          />
+          <Drawer.Screen
             name="admin/transaction"
             options={{
               title: "Transactions",
@@ -65,14 +116,7 @@ export default function RootLayout() {
               drawerIcon: (color) => <ArrowLeftRight color={color.color} />,
             }}
           />
-          <Drawer.Screen
-            name="admin/user-management"
-            options={{
-              title: "User Management",
-              drawerLabel: "User Management",
-              drawerIcon: (color) => <Users color={color.color} />,
-            }}
-          />
+
           <Drawer.Screen
             name="admin/announcement"
             options={{
@@ -92,9 +136,9 @@ export default function RootLayout() {
           <Drawer.Screen
             name="admin/profile"
             options={{
-              title: "Profile",
-              drawerLabel: "Profile",
-              drawerIcon: (color) => <User color={color.color} />,
+              title: "Setting",
+              drawerLabel: "Setting",
+              drawerIcon: (color) => <Settings color={color.color} />,
             }}
           />
           <Drawer.Screen
@@ -124,7 +168,7 @@ export default function RootLayout() {
               },
             }}
           />
-          {/* <Drawer.Screen
+          <Drawer.Screen
             name="admin/createTeam"
             options={{
               title: "Create Team",
@@ -132,7 +176,7 @@ export default function RootLayout() {
                 display: "none",
               },
             }}
-          /> */}
+          />
         </Drawer>
       </GestureHandlerRootView>
     </SafeAreaView>

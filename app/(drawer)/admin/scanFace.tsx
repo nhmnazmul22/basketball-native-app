@@ -5,6 +5,7 @@ import { Image, Pressable, ScrollView, Text, View } from "react-native";
 const ScanFace = () => {
   const [photo, setPhoto] = useState<any>(null);
 
+  console.log(photo);
   return (
     <View className="flex-1 bg-white">
       {!photo ? (
@@ -47,7 +48,7 @@ const ScanFace = () => {
             </Pressable>
             <Pressable className="bg-orange-600 px-5 py-3 rounded-lg">
               <Text className="font-[RobotoRegular] text-white text-center text-lg">
-                Scan Face
+                Verify Face
               </Text>
             </Pressable>
           </View>

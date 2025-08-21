@@ -5,6 +5,9 @@ import { StatusBar } from "expo-status-bar";
 import { TamaguiProvider } from "tamagui";
 import "../global.css";
 import { tamaguiConfig } from "../tamagui.config";
+import Toast from "react-native-toast-message";
+import AuthProvider from "@/context/AuthContext";
+
 
 export default function RootLayout() {
   const [loaded] = useFonts({
@@ -19,9 +22,12 @@ export default function RootLayout() {
   }
 
   return (
-    <TamaguiProvider config={tamaguiConfig}>
-      <Slot />
-      <StatusBar style="auto" />
-    </TamaguiProvider>
+    <AuthProvider>
+      <TamaguiProvider config={tamaguiConfig}>
+        <Slot />
+        <StatusBar style="auto" />
+        <Toast />
+      </TamaguiProvider>
+    </AuthProvider>
   );
 }

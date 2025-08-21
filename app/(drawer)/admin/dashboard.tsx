@@ -1,5 +1,6 @@
 import AnnounceMentItem from "@/components/AnnounceMentItem";
-import { useRouter } from "expo-router";
+import { useAuth } from "@/context/AuthContext";
+import { Redirect, useRouter } from "expo-router";
 import { Plus } from "lucide-react-native";
 import React, { useCallback, useState } from "react";
 import {
@@ -25,6 +26,7 @@ const announcementData = [
 ];
 
 export default function Dashboard() {
+  const { session } = useAuth();
   const [refreshing, setRefreshing] = useState(false);
 
   const router = useRouter();
@@ -36,6 +38,9 @@ export default function Dashboard() {
     }, 1500);
   }, []);
 
+  if (!session) {
+    return <Redirect href="/login" />;
+  }
   return (
     <ScrollView
       refreshControl={
