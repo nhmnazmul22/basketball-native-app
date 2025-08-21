@@ -1,10 +1,13 @@
 import UserApi from "@/lib/apis/userApi";
 import { formateDate, shortText } from "@/lib/utils";
+import { AppDispatch, RootState } from "@/store";
+import { fetchTeams } from "@/store/teamsSlice";
 import { User } from "@/types";
 import { CircleCheck, CircleX, Eye, Trash } from "lucide-react-native";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { ActivityIndicator, Modal, Pressable, Text, View } from "react-native";
 import Toast from "react-native-toast-message";
+import { useDispatch, useSelector } from "react-redux";
 import UserDataModalContent from "./UserDataModalContent";
 import UserDataUpdateModal from "./UserDataUpdateModal";
 
@@ -16,6 +19,8 @@ const UserItem = ({ item }: Props) => {
   const [visibleModal, setVisibleModal] = useState(false);
   const [visibleEditModal, setVisibleEditModal] = useState(false);
   const [loading, setLoading] = useState(false);
+  const dispatch = useDispatch<AppDispatch>();
+  const { items } = useSelector((state: RootState) => state.teams);
 
   const handleDelete = async () => {
     try {
@@ -41,6 +46,12 @@ const UserItem = ({ item }: Props) => {
     }
   };
 
+  useEffect(() => {
+    dispatch(fetchTeams());
+  }, []);
+
+  const selectedTeam = items?.data.find((team) => team._id === item.teamId);
+
   return (
     <View className="flex-row gap-5 border-b border-gray-200 px-2 py-4">
       <Text className="w-28 text-md text-center font-[RobotoRegular]">
@@ -53,7 +64,7 @@ const UserItem = ({ item }: Props) => {
         {(item.dob && formateDate(item.dob)) || "N/A"}
       </Text>
       <Text className="w-20 text-md capitalize text-center font-[RobotoRegular]">
-        {item?.team || "N/A"}
+        {selectedTeam?.name || "N/A"}
       </Text>
       <Text className="w-20 text-md text-center font-[RobotoRegular]">
         {item?.role[0].toUpperCase() + item?.role.slice(1) || "N/A"}

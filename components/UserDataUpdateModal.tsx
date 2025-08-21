@@ -1,8 +1,12 @@
 import { roles, userStatus } from "@/constants";
 import UserApi from "@/lib/apis/userApi";
 import { generateFileName } from "@/lib/utils";
+import { AppDispatch, RootState } from "@/store";
+import { fetchTeams } from "@/store/teamsSlice";
+import { fetchUsers } from "@/store/usersSlice";
 import { User } from "@/types";
 import DateTimePicker from "@react-native-community/datetimepicker";
+import { useRouter } from "expo-router";
 import { CircleX, Save } from "lucide-react-native";
 import React, { Dispatch, SetStateAction, useEffect, useState } from "react";
 import {
@@ -14,6 +18,7 @@ import {
   View,
 } from "react-native";
 import Toast from "react-native-toast-message";
+import { useDispatch, useSelector } from "react-redux";
 import { Input, Label } from "tamagui";
 import SimpleSelectOption from "./SimpleSelectOption";
 import TakePicture from "./TakePicture";
@@ -23,18 +28,13 @@ interface Props {
   setVisibleModal: Dispatch<SetStateAction<boolean>>;
 }
 
-const teamData = [
-  { id: 18254, name: "U12" },
-  { id: 55288, name: "U15" },
-  { id: 98566, name: "U30" },
-  { id: 86868, name: "U30" },
-];
-
 const profilePicture = require("@/assets/images/profile-picture.jpg");
 const UserDateUpdateModal = ({ item, setVisibleModal }: Props) => {
+  const router = useRouter();
   const [name, setName] = useState("");
   const [date, setDate] = useState(new Date());
   const [team, setTeam] = useState("");
+  const [teamId, setTeamId] = useState("");
   const [role, setRole] = useState("");
   const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
@@ -44,6 +44,8 @@ const UserDateUpdateModal = ({ item, setVisibleModal }: Props) => {
   const [capturePic, setCapturePic] = useState<Boolean>(false);
   const [status, setStatus] = useState("");
   const [loading, setLoading] = useState(false);
+  const dispatch = useDispatch<AppDispatch>();
+  const { items } = useSelector((state: RootState) => state.teams);
 
   const onChange = (event: any, selectedDate: any) => {
     const currentDate = selectedDate;
@@ -68,16 +70,18 @@ const UserDateUpdateModal = ({ item, setVisibleModal }: Props) => {
       const formData = new FormData();
       formData.append("fullName", name);
       formData.append("dob", date.toISOString());
-      formData.append("team", team);
+      formData.append("teamId", teamId);
       formData.append("role", role);
       formData.append("email", email);
       formData.append("phone", phone);
       formData.append("status", status);
-      formData.append("image", {
-        uri: photo.uri,
-        name: generateFileName(photo.uri) || "upload.jpg",
-        type: "image/jpeg",
-      } as any);
+      if (photo) {
+        formData.append("image", {
+          uri: photo.uri,
+          name: generateFileName(photo.uri) || `team-${Date.now()}.jpg`,
+          type: "image/jpeg",
+        } as any);
+      }
 
       const response = await UserApi.updateUser(item._id, formData);
 
@@ -87,6 +91,8 @@ const UserDateUpdateModal = ({ item, setVisibleModal }: Props) => {
           type: "success",
           text1: "User updated successfully",
         });
+        dispatch(fetchUsers());
+        router.push("/admin/user-management");
       } else {
         setVisibleModal(false);
         Toast.show({
@@ -103,18 +109,36 @@ const UserDateUpdateModal = ({ item, setVisibleModal }: Props) => {
   useEffect(() => {
     setName(item.fullName || "");
     setDate((item.dob && new Date(item.dob)) || new Date());
-    setTeam(item.team);
     setRole(item.role || "");
     setEmail(item.email || "");
     setPhone(item.phone || "");
     setStatus(item.status || "");
     setPhotoUri(item.profilePicture || "");
+    setTeamId(item.teamId || "");
+
+    const selectedTeam = items?.data.find((team) => team._id === item.teamId);
+    setTeam(selectedTeam?.name || "");
   }, []);
+
+  useEffect(() => {
+    dispatch(fetchTeams());
+  }, [dispatch]);
+
+  useEffect(() => {
+    if (team) {
+      const selectedTeam = items?.data.find((item) => item.name === team);
+      if (selectedTeam) {
+        setTeamId(selectedTeam._id);
+      } else {
+        setTeamId("");
+      }
+    }
+  }, [team]);
 
   if (capturePic && !photo) {
     return <TakePicture photo={photo} setPhoto={setPhoto} />;
   }
-  
+
   return (
     <ScrollView className="flex-1">
       <View className="flex-1 justify-center items-center bg-[#000000d2] py-16">
@@ -211,7 +235,7 @@ const UserDateUpdateModal = ({ item, setVisibleModal }: Props) => {
                   Team
                 </Label>
                 <SimpleSelectOption
-                  data={teamData}
+                  data={items?.data}
                   label="Choose the team"
                   value={team}
                   setValue={setTeam}

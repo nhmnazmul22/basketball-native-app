@@ -60,10 +60,16 @@ const UserApi = {
       });
 
       const data = await res.json();
+      console.log(data);
       if (res.ok) {
         return {
           success: true,
           message: "User created successfully",
+        };
+      } else {
+        return {
+          success: false,
+          message: data.message || "Failed to create user",
         };
       }
     } catch (err: any) {

@@ -3,8 +3,12 @@ import TakePicture from "@/components/TakePicture";
 import { roles, userStatus } from "@/constants";
 import UserApi from "@/lib/apis/userApi";
 import { generateFileName } from "@/lib/utils";
+import { AppDispatch, RootState } from "@/store";
+import { fetchTeams } from "@/store/teamsSlice";
+import { fetchUsers } from "@/store/usersSlice";
 import DateTimePicker from "@react-native-community/datetimepicker";
-import React, { useState } from "react";
+import { useRouter } from "expo-router";
+import React, { useEffect, useState } from "react";
 import {
   ActivityIndicator,
   Dimensions,
@@ -18,6 +22,7 @@ import {
   View,
 } from "react-native";
 import Toast from "react-native-toast-message";
+import { useDispatch, useSelector } from "react-redux";
 import { Input } from "tamagui";
 
 const profilePicture = require("@/assets/images/profile-picture.jpg");
@@ -37,11 +42,29 @@ const CreateStudent = () => {
   const [show, setShow] = useState(false);
   const [date, setDate] = useState(new Date());
   const [team, setTeam] = useState("");
+  const [teamId, setTeamId] = useState("");
   const [role, setRole] = useState("");
   const [status, setStatus] = useState("");
   const [photo, setPhoto] = useState<any>(null);
   const [capturePic, setCapturePic] = useState<Boolean>(false);
   const [loading, setLoading] = useState(false);
+  const dispatch = useDispatch<AppDispatch>();
+  const { items } = useSelector((state: RootState) => state.teams);
+  const router = useRouter();
+
+  const reset = () => {
+    setName("");
+    setPhone("");
+    setEmail("");
+    setPassword("");
+    setDate(new Date());
+    setTeam("");
+    setTeamId("");
+    setRole("");
+    setStatus("");
+    setPhoto(null);
+    setCapturePic(false);
+  };
 
   const onChange = (event: any, selectedDate: any) => {
     const currentDate = selectedDate;
@@ -56,17 +79,19 @@ const CreateStudent = () => {
       const formData = new FormData();
       formData.append("fullName", name);
       formData.append("dob", date.toISOString());
-      formData.append("team", team);
+      formData.append("teamId", teamId);
       formData.append("role", role);
       formData.append("email", email);
       formData.append("password", password);
       formData.append("phone", phone);
       formData.append("status", status);
-      formData.append("image", {
-        uri: photo.uri,
-        name: generateFileName(photo.uri) || "upload.jpg",
-        type: "image/jpeg",
-      } as any);
+      if (photo) {
+        formData.append("image", {
+          uri: photo.uri,
+          name: generateFileName(photo.uri) || `team-${Date.now()}.jpg`,
+          type: "image/jpeg",
+        } as any);
+      }
 
       if (role === "student" && !photo) {
         Toast.show({
@@ -83,17 +108,34 @@ const CreateStudent = () => {
           type: "success",
           text1: "User created successfully",
         });
+        reset();
+        router.push("/admin/user-management");
+        dispatch(fetchUsers());
       } else {
         Toast.show({
           type: "error",
-          text1: "User Create failed",
-          text2: response?.message || "Something went wrong",
+          text1: response?.message,
         });
       }
     } finally {
       setLoading(false);
     }
   };
+
+  useEffect(() => {
+    dispatch(fetchTeams());
+  }, [dispatch]);
+
+  useEffect(() => {
+    if (team) {
+      const selectedTeam = items?.data.find((item) => item.name === team);
+      if (selectedTeam) {
+        setTeamId(selectedTeam._id);
+      } else {
+        setTeamId("");
+      }
+    }
+  }, [team]);
 
   if (capturePic && !photo) {
     return <TakePicture photo={photo} setPhoto={setPhoto} />;
@@ -192,7 +234,7 @@ const CreateStudent = () => {
                   Team <Text className="text-orange-600">*</Text>
                 </Text>
                 <SimpleSelectOption
-                  data={teamData}
+                  data={items?.data}
                   label="Choose the team"
                   value={team}
                   setValue={setTeam}
@@ -247,7 +289,14 @@ const CreateStudent = () => {
                   className="bg-orange-600 px-2 py-3 rounded-lg"
                   onPress={() => handleCreateUser()}
                 >
-                  {loading && <ActivityIndicator size={24} color="white" />}
+                  {loading && (
+                    <View className="flex-row gap-2 items-center justify-center">
+                      <ActivityIndicator size={24} color="white" />{" "}
+                      <Text className="text-lg font-[RobotoRegular] text-white text-center">
+                        Creating User...
+                      </Text>
+                    </View>
+                  )}
                   {!loading && (
                     <Text className="text-lg font-[RobotoRegular] text-white text-center">
                       Create Student

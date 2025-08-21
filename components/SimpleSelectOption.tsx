@@ -44,7 +44,7 @@ const SimpleSelectOption = ({ data, label, value, setValue }: Props) => {
                   {data &&
                     data.map((item: any, index: number) => (
                       <Select.Item
-                        key={item.id}
+                        key={item.id || item._id}
                         index={index}
                         value={item.name}
                       >
