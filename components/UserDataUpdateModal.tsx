@@ -1,13 +1,25 @@
+import { roles, userStatus } from "@/constants";
+import UserApi from "@/lib/apis/userApi";
+import { generateFileName } from "@/lib/utils";
+import { User } from "@/types";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import { CircleX, Save } from "lucide-react-native";
 import React, { Dispatch, SetStateAction, useEffect, useState } from "react";
-import { Image, Pressable, ScrollView, Text, View } from "react-native";
+import {
+  ActivityIndicator,
+  Image,
+  Pressable,
+  ScrollView,
+  Text,
+  View,
+} from "react-native";
+import Toast from "react-native-toast-message";
 import { Input, Label } from "tamagui";
 import SimpleSelectOption from "./SimpleSelectOption";
 import TakePicture from "./TakePicture";
 
 interface Props {
-  item: any;
+  item: User;
   setVisibleModal: Dispatch<SetStateAction<boolean>>;
 }
 
@@ -16,12 +28,6 @@ const teamData = [
   { id: 55288, name: "U15" },
   { id: 98566, name: "U30" },
   { id: 86868, name: "U30" },
-];
-
-const roleData = [
-  { id: 89845, name: "Student" },
-  { id: 54877, name: "Couch" },
-  { id: 65825, name: "Admin" },
 ];
 
 const profilePicture = require("@/assets/images/profile-picture.jpg");
@@ -34,7 +40,10 @@ const UserDateUpdateModal = ({ item, setVisibleModal }: Props) => {
   const [phone, setPhone] = useState("");
   const [show, setShow] = useState(false);
   const [photo, setPhoto] = useState<any>(null);
+  const [photoUri, setPhotoUri] = useState<string>("");
   const [capturePic, setCapturePic] = useState<Boolean>(false);
+  const [status, setStatus] = useState("");
+  const [loading, setLoading] = useState(false);
 
   const onChange = (event: any, selectedDate: any) => {
     const currentDate = selectedDate;
@@ -42,19 +51,70 @@ const UserDateUpdateModal = ({ item, setVisibleModal }: Props) => {
     setDate(currentDate);
   };
 
+  const handleUpdateUser = async () => {
+    try {
+      setLoading(true);
+      console.log("Updating user:", item._id);
+
+      if (!item._id) {
+        Toast.show({
+          type: "error",
+          text1: "User ID is missing",
+          text2: "Please try again later.",
+        });
+        return;
+      }
+
+      const formData = new FormData();
+      formData.append("fullName", name);
+      formData.append("dob", date.toISOString());
+      formData.append("team", team);
+      formData.append("role", role);
+      formData.append("email", email);
+      formData.append("phone", phone);
+      formData.append("status", status);
+      formData.append("image", {
+        uri: photo.uri,
+        name: generateFileName(photo.uri) || "upload.jpg",
+        type: "image/jpeg",
+      } as any);
+
+      const response = await UserApi.updateUser(item._id, formData);
+
+      if (response?.success) {
+        setVisibleModal(false);
+        Toast.show({
+          type: "success",
+          text1: "User updated successfully",
+        });
+      } else {
+        setVisibleModal(false);
+        Toast.show({
+          type: "error",
+          text1: "Update failed",
+          text2: response?.message || "Something went wrong",
+        });
+      }
+    } finally {
+      setLoading(false);
+    }
+  };
+
   useEffect(() => {
-    setName(item.name || "");
-    setDate(new Date(item.dob) || new Date());
+    setName(item.fullName || "");
+    setDate((item.dob && new Date(item.dob)) || new Date());
     setTeam(item.team);
     setRole(item.role || "");
     setEmail(item.email || "");
     setPhone(item.phone || "");
+    setStatus(item.status || "");
+    setPhotoUri(item.profilePicture || "");
   }, []);
 
   if (capturePic && !photo) {
     return <TakePicture photo={photo} setPhoto={setPhoto} />;
   }
-
+  
   return (
     <ScrollView className="flex-1">
       <View className="flex-1 justify-center items-center bg-[#000000d2] py-16">
@@ -63,13 +123,19 @@ const UserDateUpdateModal = ({ item, setVisibleModal }: Props) => {
             Update User Data
           </Text>
           <Text className="font-[RobotoRegular] text-gray-600 text-center text-lg font-medium">
-            ID: {item.userId}
+            ID: {item._id}
           </Text>
           <View className="mt-5 flex flex-col gap-2">
             <View className="flex-col gap-2">
               <View className="w-40 rounded-lg p-2 mb-3">
                 <Image
-                  source={photo !== null ? { uri: photo.uri } : profilePicture}
+                  source={
+                    photo !== null
+                      ? { uri: photo.uri }
+                      : photoUri
+                        ? { uri: photoUri }
+                        : profilePicture
+                  }
                   className="w-full h-40 object-cover rounded-lg border border-gray-300 mb-3"
                 />
                 {photo ? (
@@ -160,10 +226,24 @@ const UserDateUpdateModal = ({ item, setVisibleModal }: Props) => {
                   Role:
                 </Label>
                 <SimpleSelectOption
-                  data={roleData}
+                  data={roles}
                   label="Choose the role"
                   value={role}
                   setValue={setRole}
+                />
+              </View>
+              <View className="flex-col">
+                <Label
+                  unstyled
+                  className="text-xl font-bold font-[RobotoRegular]"
+                >
+                  Status:
+                </Label>
+                <SimpleSelectOption
+                  data={userStatus}
+                  label="Choose the status"
+                  value={status}
+                  setValue={setStatus}
                 />
               </View>
               <View className="flex-col">
@@ -203,12 +283,17 @@ const UserDateUpdateModal = ({ item, setVisibleModal }: Props) => {
           <View className="flex-row gap-5 justify-end items-center">
             <Pressable
               className="bg-orange-600 py-2 px-3 rounded-lg mt-5 flex-row gap-2 items-center justify-center "
-              onPress={() => {}}
+              onPress={() => handleUpdateUser()}
             >
-              <Save size={18} color="#ffffff" />
-              <Text className="text-white font-[RobotoRegular]text-base font-bold text-center">
-                Update
-              </Text>
+              {loading && <ActivityIndicator size="small" color="#ffffff" />}
+              {!loading && (
+                <>
+                  <Save size={18} color="#ffffff" />
+                  <Text className="text-white font-[RobotoRegular]text-base font-bold text-center">
+                    Update
+                  </Text>
+                </>
+              )}
             </Pressable>
             <Pressable
               className="bg-red-600 py-2 px-3 rounded-lg mt-5 flex-row gap-1 items-center justify-center "

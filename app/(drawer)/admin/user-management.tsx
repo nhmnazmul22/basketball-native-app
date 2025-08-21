@@ -1,7 +1,6 @@
-import { SelectOptions } from "@/components/SelectItems";
 import UserList from "@/components/UserList";
 import { useRouter } from "expo-router";
-import { PenIcon, Plus } from "lucide-react-native";
+import { Plus } from "lucide-react-native";
 import React, { useCallback, useState } from "react";
 import { Dimensions, Pressable, ScrollView, Text, View } from "react-native";
 import { RefreshControl } from "react-native-gesture-handler";
@@ -52,11 +51,8 @@ export default function UserManagementPage() {
           </Pressable>
         </View>
         <View className="mb-5 mt-8 flex-row items-center justify-between">
-          <View style={{ width: width * 0.5 }}>
+          <View style={{ width: "100%" }}>
             <Input placeholder="UserId, name, email..." />
-          </View>
-          <View style={{ width: width * 0.4 }}>
-            <SelectOptions data={filterData} />
           </View>
         </View>
         <UserList />

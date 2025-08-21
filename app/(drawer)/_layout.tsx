@@ -1,3 +1,4 @@
+import { BASE_URL } from "@/config";
 import { useAuth } from "@/context/AuthContext";
 import { removeData } from "@/lib/utils";
 import { useRouter } from "expo-router";
@@ -13,36 +14,55 @@ import {
   User,
   Users,
 } from "lucide-react-native";
-import { Pressable } from "react-native";
+import { useState } from "react";
+import { ActivityIndicator, Pressable } from "react-native";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { SafeAreaView } from "react-native-safe-area-context";
 import Toast from "react-native-toast-message";
 
 const LogOutComponent = () => {
   const { setSession } = useAuth();
+  const [loading, setLoading] = useState(false);
   const router = useRouter();
+  
   const handleLogout = async () => {
     try {
-      await removeData();
-      setSession(null);
-      router.replace("/login");
-      Toast.show({
-        type: "success",
-        text1: "Logout successful",
+      setLoading(true);
+      const res = await fetch(`${BASE_URL}/logout`, {
+        method: "POST",
+        headers: {
+          "content-type": "application/json",
+        },
       });
+
+      if (res.ok) {
+        await removeData();
+        setSession(null);
+        router.replace("/login");
+        Toast.show({
+          type: "success",
+          text1: "Logout successful",
+        });
+      }
     } catch (err: any) {
       console.log(err);
       Toast.show({
         type: "error",
-        text1: "Login Failed",
+        text1: "Logout Failed",
         text2: err.message && err.message,
       });
+    } finally {
+      setLoading(false);
     }
   };
 
   return (
     <Pressable onPress={handleLogout}>
-      <LogOut style={{ marginRight: 16 }} />
+      {loading ? (
+        <ActivityIndicator size="small" />
+      ) : (
+        <LogOut style={{ marginRight: 16 }} />
+      )}
     </Pressable>
   );
 };

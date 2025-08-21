@@ -61,10 +61,7 @@ const TakePicture = ({ photo, setPhoto }: Props) => {
 
   const takePicture = async () => {
     if (cameraRef.current) {
-      const picture = await cameraRef.current.takePictureAsync({
-        base64: true, // so you can send it to backend
-      });
-      console.log("Captured picture:", picture.uri);
+      const picture = await cameraRef.current.takePictureAsync();
       setPhoto(picture);
     }
   };

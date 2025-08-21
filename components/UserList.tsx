@@ -1,5 +1,10 @@
-import React from "react";
+import { AppDispatch, RootState } from "@/store";
+import { fetchUsers } from "@/store/usersSlice";
+import React, { useEffect } from "react";
 import { FlatList, ScrollView, Text, View } from "react-native";
+import { useDispatch, useSelector } from "react-redux";
+import TableError from "./TableError";
+import TableLoading from "./TableLoading";
 import UserItem from "./UserItem";
 
 const userData = [
@@ -70,39 +75,61 @@ const userData = [
 ];
 
 const UserList = () => {
+  const dispatch = useDispatch<AppDispatch>();
+  const { items, error, loading } = useSelector(
+    (state: RootState) => state.users
+  );
+
+  useEffect(() => {
+    dispatch(fetchUsers());
+  }, []);
+
+  if (loading) {
+    return <TableLoading />;
+  }
+
+  if (error) {
+    return <TableError error={error} />;
+  }
+
   return (
-    <ScrollView horizontal className="pb-4">
-      <View>
-        {/* Table Header */}
-        <View className="flex-row gap-5 bg-gray-100 p-2 rounded-t">
-          <Text className="w-28 font-bold text-lg text-center font-[RobotoRegular]">
-            UserId
-          </Text>
-          <Text className="w-28 font-bold text-lg text-center font-[RobotoRegular]">
-            Name
-          </Text>
-          <Text className="w-20 font-bold text-lg text-center font-[RobotoRegular]">
-            DOB
-          </Text>
-          <Text className="w-20 font-bold text-lg text-center font-[RobotoRegular]">
-            Team
-          </Text>
-          <Text className="w-20 font-bold text-lg text-center font-[RobotoRegular]">
-            Role
-          </Text>
-          <Text className="w-28 font-bold text-lg text-center font-[RobotoRegular]">
-            Face Registered
-          </Text>
-          <Text className="w-28 font-bold text-lg text-center font-[RobotoRegular]">
-            Actions
-          </Text>
-        </View>
-        {/* Table Rows */}
-        <FlatList
-          data={userData}
-          keyExtractor={(item, index) => index.toString()}
-          renderItem={({ item }) => <UserItem item={item} />}
-        />
+    <ScrollView horizontal className="pb-4 ">
+      <View className="w-full">
+        {items?.data && items?.data.length > 0 && (
+          <>
+            {/* Table Header */}
+            <View className="flex-row gap-5 bg-gray-100 p-2 rounded-t">
+              <Text className="w-28 font-bold text-lg text-center font-[RobotoRegular]">
+                UserId
+              </Text>
+              <Text className="w-28 font-bold text-lg text-center font-[RobotoRegular]">
+                Name
+              </Text>
+              <Text className="w-20 font-bold text-lg text-center font-[RobotoRegular]">
+                DOB
+              </Text>
+              <Text className="w-20 font-bold text-lg text-center font-[RobotoRegular]">
+                Team
+              </Text>
+              <Text className="w-20 font-bold text-lg text-center font-[RobotoRegular]">
+                Role
+              </Text>
+              <Text className="w-28 font-bold text-lg text-center font-[RobotoRegular]">
+                Face Registered
+              </Text>
+              <Text className="w-28 font-bold text-lg text-center font-[RobotoRegular]">
+                Actions
+              </Text>
+            </View>
+            {/* Table Rows */}
+
+            <FlatList
+              data={items?.data}
+              keyExtractor={(item, index) => index.toString()}
+              renderItem={({ item }) => <UserItem item={item} />}
+            />
+          </>
+        )}
       </View>
     </ScrollView>
   );

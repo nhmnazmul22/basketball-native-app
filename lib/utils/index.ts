@@ -10,6 +10,21 @@ export const shortText = (text: String, length: number) => {
   return newText;
 };
 
+export const generateFileName = (uri: string) => {
+  const parts = uri.split("/");
+  return parts[parts.length - 1] || "upload.jpg";
+};
+
+export const formateDate = (date: string) => {
+  const options: Intl.DateTimeFormatOptions = {
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+  };
+  const formattedDate = new Date(date).toLocaleDateString("en-US", options);
+  return formattedDate;
+};
+
 export const saveData = async (value: { token: string }) => {
   try {
     const jsonValue = JSON.stringify(value);

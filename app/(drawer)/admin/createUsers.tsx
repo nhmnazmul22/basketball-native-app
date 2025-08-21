@@ -1,8 +1,12 @@
 import SimpleSelectOption from "@/components/SimpleSelectOption";
 import TakePicture from "@/components/TakePicture";
+import { roles, userStatus } from "@/constants";
+import UserApi from "@/lib/apis/userApi";
+import { generateFileName } from "@/lib/utils";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import React, { useState } from "react";
 import {
+  ActivityIndicator,
   Dimensions,
   Image,
   Keyboard,
@@ -13,6 +17,7 @@ import {
   TouchableWithoutFeedback,
   View,
 } from "react-native";
+import Toast from "react-native-toast-message";
 import { Input } from "tamagui";
 
 const profilePicture = require("@/assets/images/profile-picture.jpg");
@@ -24,12 +29,6 @@ const teamData = [
   { id: 98566, name: "U30" },
 ];
 
-const roleData = [
-  { id: 89845, name: "Student" },
-  { id: 54877, name: "Couch" },
-  { id: 65825, name: "Admin" },
-];
-
 const CreateStudent = () => {
   const [name, setName] = useState("");
   const [phone, setPhone] = useState("");
@@ -39,15 +38,63 @@ const CreateStudent = () => {
   const [date, setDate] = useState(new Date());
   const [team, setTeam] = useState("");
   const [role, setRole] = useState("");
+  const [status, setStatus] = useState("");
   const [photo, setPhoto] = useState<any>(null);
   const [capturePic, setCapturePic] = useState<Boolean>(false);
+  const [loading, setLoading] = useState(false);
 
   const onChange = (event: any, selectedDate: any) => {
     const currentDate = selectedDate;
     setShow(false);
     setDate(currentDate);
   };
-  
+
+  const handleCreateUser = async () => {
+    try {
+      setLoading(true);
+
+      const formData = new FormData();
+      formData.append("fullName", name);
+      formData.append("dob", date.toISOString());
+      formData.append("team", team);
+      formData.append("role", role);
+      formData.append("email", email);
+      formData.append("password", password);
+      formData.append("phone", phone);
+      formData.append("status", status);
+      formData.append("image", {
+        uri: photo.uri,
+        name: generateFileName(photo.uri) || "upload.jpg",
+        type: "image/jpeg",
+      } as any);
+
+      if (role === "student" && !photo) {
+        Toast.show({
+          type: "error",
+          text1: "For student, please add a profile picture",
+        });
+        return;
+      }
+
+      const response = await UserApi.createUser(formData);
+
+      if (response?.success) {
+        Toast.show({
+          type: "success",
+          text1: "User created successfully",
+        });
+      } else {
+        Toast.show({
+          type: "error",
+          text1: "User Create failed",
+          text2: response?.message || "Something went wrong",
+        });
+      }
+    } finally {
+      setLoading(false);
+    }
+  };
+
   if (capturePic && !photo) {
     return <TakePicture photo={photo} setPhoto={setPhoto} />;
   }
@@ -117,7 +164,7 @@ const CreateStudent = () => {
                   onChangeText={(text) => setPhone(text)}
                 />
               </View>
-              <View className="flex-col">
+              <View className="flex-col gap-1">
                 <Text className="text-lg font-[RobotoRegular] text-black">
                   Date of Birth (DOB):{" "}
                   <Text className="text-orange-600">*</Text>
@@ -140,7 +187,7 @@ const CreateStudent = () => {
                   />
                 )}
               </View>
-              <View className="flex-col">
+              <View className="flex-col gap-1">
                 <Text className="text-lg font-[RobotoRegular]">
                   Team <Text className="text-orange-600">*</Text>
                 </Text>
@@ -151,15 +198,26 @@ const CreateStudent = () => {
                   setValue={setTeam}
                 />
               </View>
-              <View className="flex-col">
+              <View className="flex-col gap-1">
                 <Text className="text-lg  font-[RobotoRegular]">
                   Role: <Text className="text-orange-600">*</Text>
                 </Text>
                 <SimpleSelectOption
-                  data={roleData}
+                  data={roles}
                   label="Choose the role"
                   value={role}
                   setValue={setRole}
+                />
+              </View>
+              <View className="flex-col gap-1">
+                <Text className="text-lg  font-[RobotoRegular]">
+                  Status: <Text className="text-orange-600">*</Text>
+                </Text>
+                <SimpleSelectOption
+                  data={userStatus}
+                  label="Choose the status"
+                  value={status}
+                  setValue={setStatus}
                 />
               </View>
               <View className="flex-col gap-1">
@@ -185,11 +243,16 @@ const CreateStudent = () => {
               </View>
 
               <View className="mt-5">
-                <Pressable className="bg-orange-600 px-2 py-3 rounded-lg">
-                  {/* <ActivityIndicator size={24} color="white"/> */}
-                  <Text className="text-lg font-[RobotoRegular] text-white text-center">
-                    Create Student
-                  </Text>
+                <Pressable
+                  className="bg-orange-600 px-2 py-3 rounded-lg"
+                  onPress={() => handleCreateUser()}
+                >
+                  {loading && <ActivityIndicator size={24} color="white" />}
+                  {!loading && (
+                    <Text className="text-lg font-[RobotoRegular] text-white text-center">
+                      Create Student
+                    </Text>
+                  )}
                 </Pressable>
               </View>
             </View>

@@ -1,6 +1,9 @@
 import { decodeToken, getData } from "@/lib/utils";
+import { AppDispatch } from "@/store";
+import { fetchUser } from "@/store/userByIdSlice";
 import React, { createContext, useContext, useEffect, useState } from "react";
 import Toast from "react-native-toast-message";
+import { useDispatch } from "react-redux";
 
 interface Session {
   userId: string;
@@ -17,6 +20,7 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [session, setSession] = useState<any>(null);
+  const dispatch = useDispatch<AppDispatch>();
 
   const checkAuth = async () => {
     try {
@@ -24,6 +28,7 @@ const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       if (session && session.token) {
         const data = decodeToken(session.token);
         setSession(data);
+        dispatch(fetchUser());
       }
     } catch (err: any) {
       console.log(err);

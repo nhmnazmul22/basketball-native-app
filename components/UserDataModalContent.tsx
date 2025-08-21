@@ -1,9 +1,11 @@
+import { formateDate } from "@/lib/utils";
+import { User } from "@/types";
 import { CircleX, Edit } from "lucide-react-native";
 import React, { Dispatch, SetStateAction } from "react";
 import { Image, Pressable, Text, View } from "react-native";
 
 interface Props {
-  item: any;
+  item: User;
   setVisibleModal: Dispatch<SetStateAction<boolean>>;
   setVisibleEditModal: Dispatch<SetStateAction<boolean>>;
 }
@@ -21,16 +23,20 @@ const UserDateModalContent = ({
           User Data
         </Text>
         <Text className="font-[RobotoRegular] text-center text-xl font-medium">
-          {item.userId}
+          {item?._id}
         </Text>
         <View className="mt-5 flex flex-col gap-2">
           <Text className="text-lg font-bold font-[RobotoRegular] border-b ">
             Student Info:
           </Text>
           <View>
-            <View className="w-36 h-36 rounded-lg border p-2 mb-3">
+            <View className="w-36 h-36 rounded-lg p-1 mb-3">
               <Image
-                source={profilePicture}
+                source={
+                  item?.profilePicture
+                    ? { uri: item?.profilePicture }
+                    : profilePicture
+                }
                 className="w-full h-full object-cover rounded-lg"
               />
             </View>
@@ -39,21 +45,27 @@ const UserDateModalContent = ({
                 Name
               </Text>
               <Text className="text-lg font-[RobotoRegular]">:</Text>
-              <Text className="text-lg font-[RobotoRegular]">{item.name}</Text>
+              <Text className="text-lg font-[RobotoRegular]">
+                {item.fullName || "N/A"}
+              </Text>
             </View>
             <View className="flex-row gap-3 ">
               <Text className="text-lg font-[RobotoRegular] w-20 font-bold">
                 DOB
               </Text>
               <Text className="text-lg font-[RobotoRegular]">:</Text>
-              <Text className="text-lg font-[RobotoRegular]">{item.dob}</Text>
+              <Text className="text-lg font-[RobotoRegular]">
+                {(item.dob && formateDate(item.dob)) || "N/A"}
+              </Text>
             </View>
             <View className="flex-row gap-3 ">
               <Text className="text-lg font-[RobotoRegular] w-20 font-bold ">
                 Team
               </Text>
               <Text className="text-lg font-[RobotoRegular]">:</Text>
-              <Text className="text-lg font-[RobotoRegular]">{item.team}</Text>
+              <Text className="text-lg font-[RobotoRegular]">
+                {item.team || "N/A"}
+              </Text>
             </View>
             <View className="flex-row gap-3 ">
               <Text className="text-lg font-[RobotoRegular] w-20 font-bold ">
@@ -61,7 +73,16 @@ const UserDateModalContent = ({
               </Text>
               <Text className="text-lg font-[RobotoRegular]">:</Text>
               <Text className="text-lg font-[RobotoRegular]">
-                {item.role[0].toUpperCase() + item.role.slice(1)}
+                {item.role[0].toUpperCase() + item.role.slice(1) || "N/A"}
+              </Text>
+            </View>
+            <View className="flex-row gap-3 ">
+              <Text className="text-lg font-[RobotoRegular] w-20 font-bold ">
+                Status
+              </Text>
+              <Text className="text-lg font-[RobotoRegular]">:</Text>
+              <Text className="text-lg font-[RobotoRegular]">
+                {item.status[0].toUpperCase() + item.status.slice(1) || "N/A"}
               </Text>
             </View>
             <View className="flex-row gap-3 ">
@@ -69,14 +90,18 @@ const UserDateModalContent = ({
                 Email
               </Text>
               <Text className="text-lg font-[RobotoRegular]">:</Text>
-              <Text className="text-lg font-[RobotoRegular]">{item.email}</Text>
+              <Text className="text-lg font-[RobotoRegular]">
+                {item.email || "N/A"}
+              </Text>
             </View>
             <View className="flex-row gap-3 ">
               <Text className="text-lg font-[RobotoRegular] w-20 font-bold ">
                 Phone
               </Text>
               <Text className="text-lg font-[RobotoRegular]">:</Text>
-              <Text className="text-lg font-[RobotoRegular]">{item.phone}</Text>
+              <Text className="text-lg font-[RobotoRegular]">
+                {item.phone || "N/A"}
+              </Text>
             </View>
           </View>
         </View>

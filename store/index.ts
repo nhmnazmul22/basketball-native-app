@@ -1,7 +1,13 @@
+import userReducer from "@/store/userByIdSlice";
+import usersReducer from "@/store/usersSlice";
 import { configureStore } from "@reduxjs/toolkit";
 
+
 export const store = configureStore({
-  reducer: {},
+  reducer: {
+    user: userReducer,
+    users: usersReducer,
+  }
 });
 
 // Types for use in components

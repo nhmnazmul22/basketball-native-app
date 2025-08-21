@@ -1,13 +1,14 @@
 import Splash from "@/components/Splash";
+import AuthProvider from "@/context/AuthContext";
+import { store } from "@/store";
 import { useFonts } from "expo-font";
-import {  Slot } from "expo-router";
+import { Slot } from "expo-router";
 import { StatusBar } from "expo-status-bar";
+import Toast from "react-native-toast-message";
+import { Provider } from "react-redux";
 import { TamaguiProvider } from "tamagui";
 import "../global.css";
 import { tamaguiConfig } from "../tamagui.config";
-import Toast from "react-native-toast-message";
-import AuthProvider from "@/context/AuthContext";
-
 
 export default function RootLayout() {
   const [loaded] = useFonts({
@@ -22,12 +23,14 @@ export default function RootLayout() {
   }
 
   return (
-    <AuthProvider>
-      <TamaguiProvider config={tamaguiConfig}>
-        <Slot />
-        <StatusBar style="auto" />
-        <Toast />
-      </TamaguiProvider>
-    </AuthProvider>
+    <Provider store={store}>
+      <AuthProvider>
+        <TamaguiProvider config={tamaguiConfig}>
+          <Slot />
+          <StatusBar style="auto" />
+          <Toast />
+        </TamaguiProvider>
+      </AuthProvider>
+    </Provider>
   );
 }

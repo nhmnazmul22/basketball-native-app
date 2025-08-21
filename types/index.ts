@@ -10,6 +10,7 @@ export interface User {
   fullName: string;
   dob?: string;
   email: string;
+  team: string;
   role: string;
   status: string;
   phone?: string;

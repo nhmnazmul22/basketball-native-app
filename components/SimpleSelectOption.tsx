@@ -11,8 +11,7 @@ interface Props {
 
 const SimpleSelectOption = ({ data, label, value, setValue }: Props) => {
   const [open, setOpen] = useState(false);
-  console.log(value);
-  console.log(data);
+
   return (
     <YStack className="relative">
       <Select
