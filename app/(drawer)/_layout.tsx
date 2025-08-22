@@ -24,7 +24,7 @@ const LogOutComponent = () => {
   const { setSession } = useAuth();
   const [loading, setLoading] = useState(false);
   const router = useRouter();
-  
+
   const handleLogout = async () => {
     try {
       setLoading(true);
@@ -99,40 +99,40 @@ export default function RootLayout() {
           <Drawer.Screen
             name="admin/dashboard"
             options={{
-              title: "Dashboard",
-              drawerLabel: "Dashboard",
+              title: "Dasbor",
+              drawerLabel: "Dasbor",
               drawerIcon: (color) => <LayoutDashboard color={color.color} />,
             }}
           />
           <Drawer.Screen
             name="admin/attendance"
             options={{
-              title: "Attendance",
-              drawerLabel: "Attendance",
+              title: "Kehadiran",
+              drawerLabel: "Kehadiran",
               drawerIcon: (color) => <BookA color={color.color} />,
             }}
           />
           <Drawer.Screen
             name="admin/user-management"
             options={{
-              title: "User Management",
-              drawerLabel: "User Management",
+              title: "Manajemen Pengguna",
+              drawerLabel: "Manajemen Pengguna",
               drawerIcon: (color) => <User color={color.color} />,
             }}
           />
           <Drawer.Screen
             name="admin/team-management"
             options={{
-              title: "Team Management",
-              drawerLabel: "Team Management",
+              title: "Manajemen Tim",
+              drawerLabel: "Manajemen Tim",
               drawerIcon: (color) => <Users color={color.color} />,
             }}
           />
           <Drawer.Screen
             name="admin/transaction"
             options={{
-              title: "Transactions",
-              drawerLabel: "Transactions",
+              title: "Transaksi",
+              drawerLabel: "Transaksi",
               drawerIcon: (color) => <ArrowLeftRight color={color.color} />,
             }}
           />
@@ -140,24 +140,24 @@ export default function RootLayout() {
           <Drawer.Screen
             name="admin/announcement"
             options={{
-              title: "Announcements",
-              drawerLabel: "Announcements",
+              title: "Pengumuman",
+              drawerLabel: "Pengumuman",
               drawerIcon: (color) => <Megaphone color={color.color} />,
             }}
           />
           <Drawer.Screen
             name="admin/reports"
             options={{
-              title: "Reports & Statistics",
-              drawerLabel: "Reports & Statistics",
+              title: "Laporan & Statistik",
+              drawerLabel: "Laporan & Statistik",
               drawerIcon: (color) => <ChartArea color={color.color} />,
             }}
           />
           <Drawer.Screen
             name="admin/profile"
             options={{
-              title: "Setting",
-              drawerLabel: "Setting",
+              title: "Pengaturan",
+              drawerLabel: "Pengaturan",
               drawerIcon: (color) => <Settings color={color.color} />,
             }}
           />

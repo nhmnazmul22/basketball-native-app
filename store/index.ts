@@ -1,8 +1,9 @@
+import announcementReducer from "@/store/AnnouncementSlice";
 import attendanceReducer from "@/store/AttendanceSlice";
+import dashboardSummaryReducer from "@/store/DashboardSlice";
 import teamsReducer from "@/store/teamsSlice";
 import userReducer from "@/store/userByIdSlice";
 import usersReducer from "@/store/usersSlice";
-import announcementReducer from "@/store/AnnouncementSlice"
 import { configureStore } from "@reduxjs/toolkit";
 
 export const store = configureStore({
@@ -11,7 +12,8 @@ export const store = configureStore({
     users: usersReducer,
     teams: teamsReducer,
     attendances: attendanceReducer,
-    announcements: announcementReducer
+    announcements: announcementReducer,
+    dashboardSummary: dashboardSummaryReducer,
   },
 });
 

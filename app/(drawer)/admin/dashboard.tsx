@@ -1,8 +1,12 @@
 import AnnounceMentItem from "@/components/AnnounceMentItem";
 import { useAuth } from "@/context/AuthContext";
+import { formatCurrency } from "@/lib/utils";
+import { AppDispatch, RootState } from "@/store";
+import { fetchAnnouncement } from "@/store/AnnouncementSlice";
+import { fetchDashboardSummary } from "@/store/DashboardSlice";
 import { Redirect, useRouter } from "expo-router";
 import { Plus } from "lucide-react-native";
-import React, { useCallback, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import {
   Pressable,
   RefreshControl,
@@ -10,37 +14,39 @@ import {
   Text,
   View,
 } from "react-native";
-
-const announcementData = [
-  {
-    Aid: "ANN001",
-    title: "Training Session Reminder",
-    message:
-      "U15 team training tomorrow at 5:00 PM, Court 2. Bring your own water bottle.",
-    team: "U15",
-    date: "2025-08-12",
-    createdBy: "Admin",
-    isPin: true,
-    status: "Active",
-  },
-];
+import { useDispatch, useSelector } from "react-redux";
 
 export default function Dashboard() {
   const { session } = useAuth();
   const [refreshing, setRefreshing] = useState(false);
-
   const router = useRouter();
+  const dispatch = useDispatch<AppDispatch>();
+  const { items: reports } = useSelector(
+    (state: RootState) => state.dashboardSummary
+  );
+  const { items: announcements } = useSelector(
+    (state: RootState) => state.announcements
+  );
+
+  if (!session) {
+    return <Redirect href="/login" />;
+  }
+
   // Page Refresh Function
   const onRefresh = useCallback(() => {
     setRefreshing(true);
+    dispatch(fetchAnnouncement());
+    dispatch(fetchDashboardSummary());
     setTimeout(() => {
       setRefreshing(false);
     }, 1500);
   }, []);
 
-  if (!session) {
-    return <Redirect href="/login" />;
-  }
+  useEffect(() => {
+    dispatch(fetchDashboardSummary());
+    dispatch(fetchAnnouncement());
+  }, [dispatch]);
+
   return (
     <ScrollView
       refreshControl={
@@ -55,20 +61,26 @@ export default function Dashboard() {
           <Text className="text-lg text-white font-[RobotoRegular]">
             Total Student
           </Text>
-          <Text className="text-3xl text-white font-[BebasNeue]">20</Text>
+          <Text className="text-3xl text-white font-[BebasNeue]">
+            {(reports?.data.summary && reports?.data.summary.totalStudent) || 0}
+          </Text>
         </View>
         <View className="bg-indigo-600 flex-1 min-w-[150px] p-4 rounded-lg">
           <Text className="text-lg text-white font-[RobotoRegular]">
             Total Couch
           </Text>
-          <Text className="text-3xl text-white font-[BebasNeue]">5</Text>
+          <Text className="text-3xl text-white font-[BebasNeue]">
+            {(reports?.data.summary && reports?.data.summary.totalCoach) || 0}
+          </Text>
         </View>
         <View className="bg-amber-500 flex-1 min-w-[150px] p-4 rounded-lg">
           <Text className="text-lg text-white font-[RobotoRegular]">
             Payments Pending
           </Text>
           <Text className="text-3xl text-white font-[BebasNeue]">
-            20,000 Rp
+            {(reports?.data.summary &&
+              formatCurrency(reports?.data.summary.paymentPending)) ||
+              "Rp 0"}
           </Text>
         </View>
         <View className="bg-green-600 flex-1 min-w-[150px] p-4 rounded-lg">
@@ -76,7 +88,9 @@ export default function Dashboard() {
             Net Income
           </Text>
           <Text className="text-3xl text-white font-[BebasNeue]">
-            200.000 Rp
+            {(reports?.data.summary &&
+              formatCurrency(reports?.data.summary.netIncome)) ||
+              "Rp 0"}
           </Text>
         </View>
       </View>
@@ -113,27 +127,42 @@ export default function Dashboard() {
           Attendance Overview
         </Text>
         <View className="bg-white rounded-lg p-5 border border-slate-200 items-center">
-          <Text className="text-5xl font-[BebasNeue] text-green-600">85%</Text>
+          <Text className="text-5xl font-[BebasNeue] text-green-600">
+            {(reports?.data.attendanceReport &&
+              Math.round(reports?.data.attendanceReport.averageAttendance)) ||
+              0}
+            %
+          </Text>
           <Text className="text-gray-500 font-[RobotoRegular] mt-1">
-            This Month
+            Daily Report
           </Text>
           <View className="flex-row justify-between w-full mt-5">
             <View className="items-center flex-1">
               <Text className="text-lg font-bold font-[RobotoRegular] ">
-                20
+                {(reports?.data.attendanceReport &&
+                  Math.round(reports?.data.attendanceReport.totalPresent)) ||
+                  0}
               </Text>
               <Text className="text-gray-500 font-[RobotoRegular] ">
                 Present
               </Text>
             </View>
             <View className="items-center flex-1">
-              <Text className="text-lg font-bold font-[RobotoRegular] ">2</Text>
+              <Text className="text-lg font-bold font-[RobotoRegular] ">
+                {(reports?.data.attendanceReport &&
+                  Math.round(reports?.data.attendanceReport.totalAbsent)) ||
+                  0}
+              </Text>
               <Text className="text-gray-500 font-[RobotoRegular] ">
                 Absent
               </Text>
             </View>
             <View className="items-center flex-1">
-              <Text className="text-lg font-bold font-[RobotoRegular] ">3</Text>
+              <Text className="text-lg font-bold font-[RobotoRegular] ">
+                {(reports?.data.attendanceReport &&
+                  Math.round(reports?.data.attendanceReport.late)) ||
+                  0}
+              </Text>
               <Text className="text-gray-500 font-[RobotoRegular] ">Late</Text>
             </View>
           </View>
@@ -145,9 +174,18 @@ export default function Dashboard() {
           Latest Announcement
         </Text>
         <View className="flex-col gap-5 mt-5">
-          {announcementData.map((item, index) => (
-            <AnnounceMentItem key={item.Aid} item={item} />
-          ))}
+          {announcements?.data.length === 0 && (
+            <Text className="text-lg font-[RobotoRegular] text-gray-500 text-center">
+              No announcements found.
+            </Text>
+          )}
+          {announcements?.data.map((item, index) => {
+            if (index === 0) {
+              return <AnnounceMentItem key={item._id} item={item} />;
+            } else {
+              return null;
+            }
+          })}
         </View>
       </View>
     </ScrollView>

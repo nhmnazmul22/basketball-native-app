@@ -57,3 +57,18 @@ export interface Announcement {
   createdAt?: string;
   updatedAt?: string;
 }
+
+export interface DashboardSummary {
+  summary: {
+    totalStudent: number;
+    totalCoach: number;
+    paymentPending: number;
+    netIncome: number;
+  };
+  attendanceReport: {
+    totalPresent: number;
+    totalAbsent: number;
+    late: number;
+    averageAttendance: number;
+  };
+}

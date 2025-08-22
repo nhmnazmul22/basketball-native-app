@@ -107,3 +107,22 @@ export const decodeToken = (token: string) => {
   const decoded = jwtDecode(token);
   return decoded;
 };
+
+export function formatCurrency(amount: number | null | undefined): string {
+  if (amount === null || amount === undefined) {
+    const formattedNum = new Intl.NumberFormat("id-ID", {
+      style: "currency",
+      currency: "IDR",
+      minimumFractionDigits: 0,
+    }).format(0);
+
+    return formattedNum.split(".").join(",");
+  }
+  const formattedNum = new Intl.NumberFormat("id-ID", {
+    style: "currency",
+    currency: "IDR",
+    minimumFractionDigits: 0,
+  }).format(amount);
+
+  return formattedNum.split(".").join(",");
+}

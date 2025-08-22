@@ -12,7 +12,8 @@
       "bundleIdentifier": "com.indo.basketball",
       "supportsTablet": true,
       "infoPlist": {
-        "NSCameraUsageDescription": "This app needs access to your camera for face scanning."
+        "NSCameraUsageDescription": "This app needs access to your camera for face scanning.",
+        "ITSAppUsesNonExemptEncryption": false
       }
     },
     "android": {
@@ -22,7 +23,9 @@
       },
       "edgeToEdgeEnabled": true,
       "package": "com.indo.basketball",
-      "permissions": ["CAMERA"]
+      "permissions": [
+        "CAMERA"
+      ]
     },
     "web": {
       "bundler": "metro",
