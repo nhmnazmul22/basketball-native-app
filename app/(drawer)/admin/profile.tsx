@@ -1,5 +1,11 @@
-import React, { useCallback, useState } from "react";
+import TakePicture from "@/components/TakePicture";
+import UserApi from "@/lib/apis/userApi";
+import { generateFileName } from "@/lib/utils";
+import { AppDispatch, RootState } from "@/store";
+import { fetchUser } from "@/store/userByIdSlice";
+import React, { useCallback, useEffect, useState } from "react";
 import {
+  ActivityIndicator,
   Image,
   Pressable,
   RefreshControl,
@@ -7,22 +13,94 @@ import {
   Text,
   View,
 } from "react-native";
+import Toast from "react-native-toast-message";
+import { useDispatch, useSelector } from "react-redux";
 import { Input, Label } from "tamagui";
 
 const avater = require("@/assets/images/avater.jpg");
 export default function AdminSettingPage() {
   const [refreshing, setRefreshing] = useState(false);
-  const [fullName, setFullName] = useState("John Doe");
-  const [email, setEmail] = useState("admin@example.com");
-  const [role] = useState("Admin");
-  const [phone, setPhone] = useState("0123456789");
+  const [fullName, setFullName] = useState("");
+  const [email, setEmail] = useState("");
+  const [role, setRole] = useState("");
+  const [phone, setPhone] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [photo, setPhoto] = useState<any>(null);
+  const [capturePic, setCapturePic] = useState<Boolean>(false);
+  const dispatch = useDispatch<AppDispatch>();
+  const { items } = useSelector((state: RootState) => state.user);
 
   const onRefresh = useCallback(() => {
     setRefreshing(true);
+    dispatch(fetchUser());
     setTimeout(() => {
       setRefreshing(false);
     }, 1500);
   }, []);
+
+  const handleUpdateUser = async () => {
+    try {
+      setLoading(true);
+
+      if (!items?.data._id) {
+        Toast.show({
+          type: "error",
+          text1: "User ID is missing",
+          text2: "Please try again later.",
+        });
+        return;
+      }
+
+      const formData = new FormData();
+      formData.append("fullName", fullName);
+      formData.append("role", role);
+      formData.append("email", email);
+      formData.append("phone", phone);
+      formData.append("status", status);
+      if (photo) {
+        formData.append("image", {
+          uri: photo.uri,
+          name: generateFileName(photo.uri) || `team-${Date.now()}.jpg`,
+          type: "image/jpeg",
+        } as any);
+      }
+
+      const response = await UserApi.updateUser(items.data._id, formData);
+
+      if (response?.success) {
+        Toast.show({
+          type: "success",
+          text1: "User updated successfully",
+        });
+        dispatch(fetchUser());
+      } else {
+        Toast.show({
+          type: "error",
+          text1: "Update failed",
+          text2: response?.message || "Something went wrong",
+        });
+      }
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    dispatch(fetchUser());
+  }, []);
+
+  useEffect(() => {
+    if (items?.data) {
+      setFullName(items.data.fullName || "");
+      setEmail(items.data.email || "");
+      setPhone(items.data.phone || "");
+      setRole(items.data.role || "");
+    }
+  }, [items]);
+
+  if (capturePic && !photo) {
+    return <TakePicture photo={photo} setPhoto={setPhoto} />;
+  }
 
   return (
     <ScrollView
@@ -35,17 +113,43 @@ export default function AdminSettingPage() {
     >
       {/* Profile Section */}
       <View className="items-center mb-6">
-        <Image source={avater} className="w-24 h-24 rounded-full mb-3" />
-        <Pressable className="bg-orange-600 px-4 py-1 rounded-md">
-          <Text className="text-white font-bold">Change Photo</Text>
-        </Pressable>
+        <Image
+          source={
+            photo !== null
+              ? { uri: photo.uri }
+              : items?.data.profilePicture
+                ? { uri: items?.data.profilePicture }
+                : avater
+          }
+          className="w-24 h-24 rounded-full mb-3"
+        />
+        {photo ? (
+          <Pressable
+            className="bg-orange-600 px-4 py-2 rounded-md"
+            onPress={() => {
+              setCapturePic(true);
+              setPhoto(null);
+            }}
+          >
+            <Text className="text-white font-bold text-center">
+              Foto pengambilan ulang
+            </Text>
+          </Pressable>
+        ) : (
+          <Pressable
+            className="bg-orange-600 px-4 py-2 rounded-md"
+            onPress={() => setCapturePic(true)}
+          >
+            <Text className="text-white font-bold text-center">Ubah foto</Text>
+          </Pressable>
+        )}
       </View>
 
       {/* Form Fields */}
       <View className="flex-col gap-4">
         <View className="flex-col">
           <Label unstyled className="text-lg font-bold font-[RobotoRegular]">
-            Full Name
+            Nama lengkap
           </Label>
           <Input
             className="text-base font-[RobotoRegular]"
@@ -57,7 +161,7 @@ export default function AdminSettingPage() {
 
         <View className="flex-col">
           <Label unstyled className="text-lg font-bold font-[RobotoRegular]">
-            Email
+            E-mail
           </Label>
           <Input
             className="text-base font-[RobotoRegular]"
@@ -69,7 +173,7 @@ export default function AdminSettingPage() {
 
         <View className="flex-col">
           <Label unstyled className="text-lg font-bold font-[RobotoRegular]">
-            Phone
+            Telepon
           </Label>
           <Input
             className="text-base font-[RobotoRegular]"
@@ -81,7 +185,7 @@ export default function AdminSettingPage() {
 
         <View className="flex-col">
           <Label unstyled className="text-lg font-bold font-[RobotoRegular]">
-            Role
+            Peran
           </Label>
           <Input
             className="text-base font-[RobotoRegular]"
@@ -91,7 +195,7 @@ export default function AdminSettingPage() {
         </View>
 
         {/* Change Password */}
-        <View className="flex-col mt-6 gap-2">
+        {/* <View className="flex-col mt-6 gap-2">
           <Label unstyled className="text-lg font-bold font-[RobotoRegular]">
             Change Password
           </Label>
@@ -110,13 +214,21 @@ export default function AdminSettingPage() {
             placeholder="Confirm new password"
             secureTextEntry
           />
-        </View>
+        </View> */}
 
         {/* Update Button */}
-        <Pressable className="bg-orange-600 mt-6 py-3 rounded-xl items-center">
-          <Text className="text-white font-bold text-base font-[RobotoRegular]">
-            Update Profile
-          </Text>
+        <Pressable
+          className="bg-orange-600 mt-6 py-3 rounded-xl items-center"
+          onPress={handleUpdateUser}
+          disabled={loading}
+        >
+          {loading ? (
+            <ActivityIndicator size="small" color="white" />
+          ) : (
+            <Text className="text-white font-bold text-base font-[RobotoRegular]">
+              Perbarui profil
+            </Text>
+          )}
         </Pressable>
       </View>
     </ScrollView>

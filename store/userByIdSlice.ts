@@ -27,9 +27,10 @@ export const fetchUser = createAsyncThunk<Response>(
   async () => {
     const response = await fetch(`${BASE_URL}/user-by-id`);
     const data = await response.json();
+
     return {
       isOk: response.ok,
-      data: data.data,
+      data: data.data || data,
     };
   }
 );
@@ -54,7 +55,6 @@ const userSlice = createSlice({
       )
       .addCase(fetchUser.rejected, (state, action) => {
         state.loading = false;
-        // console.log("action", action);
         state.error = action.error.message ?? "Something went wrong";
         state.items = initialState.items;
       });

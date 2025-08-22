@@ -13,6 +13,7 @@ import {
   Settings,
   User,
   Users,
+  Wallet,
 } from "lucide-react-native";
 import { useState } from "react";
 import { ActivityIndicator, Pressable } from "react-native";
@@ -68,6 +69,8 @@ const LogOutComponent = () => {
 };
 
 export default function RootLayout() {
+  const { session } = useAuth();
+
   return (
     <SafeAreaView className="flex-1">
       <GestureHandlerRootView className="flex-1">
@@ -118,6 +121,9 @@ export default function RootLayout() {
               title: "Manajemen Pengguna",
               drawerLabel: "Manajemen Pengguna",
               drawerIcon: (color) => <User color={color.color} />,
+              drawerItemStyle: {
+                display: session?.role === "admin" ? "flex" : "none",
+              },
             }}
           />
           <Drawer.Screen
@@ -134,6 +140,9 @@ export default function RootLayout() {
               title: "Transaksi",
               drawerLabel: "Transaksi",
               drawerIcon: (color) => <ArrowLeftRight color={color.color} />,
+              drawerItemStyle: {
+                display: session?.role === "admin" ? "flex" : "none",
+              },
             }}
           />
 
@@ -146,11 +155,22 @@ export default function RootLayout() {
             }}
           />
           <Drawer.Screen
+            name="admin/createTransaction"
+            options={{
+              title: "Buat Transaksi",
+              drawerLabel: "Buat Transaksi",
+              drawerIcon: (color) => <Wallet color={color.color} />,
+            }}
+          />
+          <Drawer.Screen
             name="admin/reports"
             options={{
               title: "Laporan & Statistik",
               drawerLabel: "Laporan & Statistik",
               drawerIcon: (color) => <ChartArea color={color.color} />,
+              drawerItemStyle: {
+                display: session?.role === "admin" ? "flex" : "none",
+              },
             }}
           />
           <Drawer.Screen
@@ -161,6 +181,7 @@ export default function RootLayout() {
               drawerIcon: (color) => <Settings color={color.color} />,
             }}
           />
+
           <Drawer.Screen
             name="admin/createUsers"
             options={{

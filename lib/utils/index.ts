@@ -2,6 +2,12 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { jwtDecode } from "jwt-decode";
 import Toast from "react-native-toast-message";
 
+type DecodedToken = {
+  exp: number; // JWT expiration timestamp in seconds
+  iat?: number;
+  [key: string]: any;
+};
+
 export const shortText = (text: String, length: number) => {
   const newText = text.slice(0, length);
   if (text.length > length) {
@@ -73,15 +79,27 @@ export const saveData = async (value: { token: string }) => {
 export const getData = async () => {
   try {
     const jsonValue = await AsyncStorage.getItem("auth-token");
-    return jsonValue != null ? JSON.parse(jsonValue) : null;
+    if (!jsonValue) return null;
+
+    const { token } = JSON.parse(jsonValue);
+    // ✅ Decode and check expiration
+    const decoded: DecodedToken = jwtDecode(token);
+
+    if (decoded.exp * 1000 < Date.now()) {
+      // Token expired → remove it
+      await removeData();
+      return null;
+    }
+
+    return { token, decoded };
   } catch (e: any) {
     console.log(e);
     Toast.show({
       type: "error",
-      text1: "Auth session getting error",
-      text2: e.message && e.message,
+      text1: "Auth session get error",
+      text2: e.message,
     });
-    return;
+    return null;
   }
 };
 

@@ -174,7 +174,7 @@ export default function ReportsPage() {
       <View className="mb-5 w-full flex-row flex-wrap gap-4">
         <View className="min-w-[48%] flex-1">
           <Text className="font-[RobotoRegular] text-base font-bold">
-            Start Date
+           Tanggal mulai
           </Text>
           <Pressable
             onPress={() => {
@@ -202,7 +202,7 @@ export default function ReportsPage() {
 
         <View className="min-w-[48%] flex-1">
           <Text className="font-[RobotoRegular] text-base font-bold">
-            End Date
+           Tanggal akhir
           </Text>
           <Pressable
             onPress={() => {
@@ -239,7 +239,7 @@ export default function ReportsPage() {
             </Text>
           </View>
           <Text className="text-white font-[RobotoRegular] mt-1">
-            Avg Attendance
+            Kehadiran rata -rata
           </Text>
         </View>
         <View className="bg-green-600 w-full p-4 rounded-xl">
@@ -250,7 +250,7 @@ export default function ReportsPage() {
             </Text>
           </View>
           <Text className="text-white font-[RobotoRegular] mt-1">
-            Net Income
+           Pendapatan bersih
           </Text>
         </View>
         <View className="bg-blue-600 w-[48%] p-4 rounded-xl">
@@ -261,7 +261,7 @@ export default function ReportsPage() {
             </Text>
           </View>
           <Text className="text-white font-[RobotoRegular] mt-1">
-            Total Income
+            Total pendapatan
           </Text>
         </View>
         <View className="bg-red-600 w-[48%] p-4 rounded-xl">
@@ -272,7 +272,7 @@ export default function ReportsPage() {
             </Text>
           </View>
           <Text className="text-white font-[RobotoRegular] mt-1">
-            Total Expenses
+            Total biaya
           </Text>
         </View>
         <View className="bg-orange-600 w-[48%] p-4 rounded-xl">
@@ -283,7 +283,7 @@ export default function ReportsPage() {
             </Text>
           </View>
           <Text className="text-white font-[RobotoRegular] mt-1">
-            Fees Collected
+            Biaya dikumpulkan
           </Text>
         </View>
         <View className="bg-amber-600 w-[48%] p-4 rounded-xl">
@@ -294,14 +294,14 @@ export default function ReportsPage() {
             </Text>
           </View>
           <Text className="text-white font-[RobotoRegular] mt-1">
-            Pending Fees
+            Biaya yang tertunda
           </Text>
         </View>
       </View>
 
       {/* Charts Section (Placeholder Views) */}
       <View className="mb-6">
-        <Text className="text-xl font-[BebasNeue] mb-2">Attendance Trend</Text>
+        <Text className="text-xl font-[BebasNeue] mb-2">Tren kehadiran</Text>
         <View className="border border-gray-200 rounded-lg justify-center items-center">
           <BarChart
             data={AttendanceData}
@@ -329,7 +329,7 @@ export default function ReportsPage() {
       </View>
 
       <View className="mb-6">
-        <Text className="text-xl font-[BebasNeue] mb-2">Fee Summary</Text>
+        <Text className="text-xl font-[BebasNeue] mb-2">Ringkasan Biaya</Text>
         <View className="border border-gray-200 rounded-lg justify-center items-center">
           <BarChart
             data={IncomeData}
