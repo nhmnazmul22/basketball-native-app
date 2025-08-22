@@ -1,5 +1,6 @@
 import announcementApi from "@/lib/apis/announcement";
 import { AppDispatch, RootState } from "@/store";
+import { fetchAnnouncement } from "@/store/AnnouncementSlice";
 import { fetchTeams } from "@/store/teamsSlice";
 import { Announcement } from "@/types";
 import DateTimePicker from "@react-native-community/datetimepicker";
@@ -106,12 +107,12 @@ const NewAnnouncement = ({ setVisibleModal }: Props) => {
       }
 
       reset();
-      setVisibleModal(false);
       Toast.show({
         type: "success",
         text1: response.message,
       });
-      router.push("/admin/announcement");
+      setVisibleModal(false);
+      dispatch(fetchAnnouncement());
     } finally {
       setLoading(false);
     }

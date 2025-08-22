@@ -38,7 +38,7 @@ const SimpleSelectOption = ({ data, label, value, setValue }: Props) => {
           <Select.Viewport unstyled>
             {open && (
               <View
-                className={`absolute bg-white w-full z-30 top-[60px] border border-gray-300 rounded shadow-md max-h-[250px] `}
+                className={`absolute bg-white w-full z-[999] top-[55px] border border-gray-300 rounded shadow-md max-h-[150px] `}
               >
                 <ScrollView nestedScrollEnabled>
                   {data &&
