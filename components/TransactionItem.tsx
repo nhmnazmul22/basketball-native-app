@@ -1,9 +1,16 @@
+import {
+  formatCurrency,
+  formateDate,
+  formateDateTime,
+  shortText,
+} from "@/lib/utils";
+import { Transaction } from "@/types";
 import { Eye } from "lucide-react-native";
 import React, { useState } from "react";
 import { Modal, Pressable, Text, View } from "react-native";
 
 interface Props {
-  item: any;
+  item: Transaction;
 }
 
 const TransactionItem = ({ item }: Props) => {
@@ -12,27 +19,24 @@ const TransactionItem = ({ item }: Props) => {
   return (
     <View className="flex-row gap-2 border-b border-gray-200 px-2 py-4">
       <Text className="w-28 text-md text-center font-[RobotoRegular]">
-        {item.TrxId}
+        {shortText(item._id, 10)}
       </Text>
-      <Text className="w-20 text-md text-center font-[RobotoRegular]">
-        {item.studentName}
+      <Text className="w-28 text-md text-center font-[RobotoRegular]">
+        {item.studentInfo.fullName}
       </Text>
-      <Text className="w-20 text-md text-center font-[RobotoRegular]">
-        {item.team || "-"}
-      </Text>
-      <Text className="w-20 text-md capitalize text-center font-[RobotoRegular]">
+      <Text className="w-28 text-md capitalize text-center font-[RobotoRegular]">
         {item.amount}
       </Text>
-      <Text className="w-20 text-md text-center font-[RobotoRegular]">
-        {item.paymentMethod}
+      <Text className="w-28 text-md text-center font-[RobotoRegular]">
+        {item.method}
       </Text>
-      <Text className="w-24 text-md text-center font-[RobotoRegular]">
+      <Text className="w-28 text-md text-center font-[RobotoRegular]">
         {item.status}
       </Text>
-      <Text className="w-24 text-md text-center font-[RobotoRegular]">
-        {item.date}
+      <Text className="w-28 text-md text-center font-[RobotoRegular]">
+        {formateDateTime(item.createdAt)}
       </Text>
-      <View className="w-24 flex-row justify-center items-start gap-3">
+      <View className="w-28 flex-row justify-center items-start gap-3">
         <Pressable
           className="bg-orange-500 px-2 py-2 rounded"
           onPress={() => setVisibleModal(true)}
@@ -53,74 +57,87 @@ const TransactionItem = ({ item }: Props) => {
         <View className="flex-1 justify-center items-center bg-[#000000d2] py-16">
           <View className="w-[90%] bg-white p-5 rounded-lg">
             <Text className="text-center text-2xl font-bold font-[BebasNeue] text-orange-600">
-              Transaction Data
+              Data transaksi
             </Text>
             <Text className="font-[RobotoRegular] text-center text-xl font-medium">
-              {item.TrxId}
+              {item._id}
             </Text>
             <View className="mt-5 flex flex-col gap-2">
               <Text className="text-lg font-bold font-[RobotoRegular] border-b ">
-                Student Info:
+                Info Siswa:{" "}
               </Text>
               <View>
                 <View className="flex-row gap-3 ">
                   <Text className="text-lg font-[RobotoRegular] w-20 font-bold">
-                    Name:
+                    Nama:
                   </Text>
                   <Text className="text-lg font-[RobotoRegular]">
-                    {item.studentName}
+                    {item.studentInfo.fullName}
                   </Text>
                 </View>
                 <View className="flex-row gap-3 ">
                   <Text className="text-lg font-[RobotoRegular] w-20 font-bold ">
-                    Team:
+                    Email:
                   </Text>
                   <Text className="text-lg font-[RobotoRegular]">
-                    {item.team}
+                    {item.studentInfo.email}
                   </Text>
                 </View>
               </View>
             </View>
             <View className="mt-5 flex flex-col gap-2">
               <Text className="text-lg font-bold font-[RobotoRegular] border-b">
-                Payment Info:
+                Info Pembayaran:
               </Text>
-              <View className="flex-row justify-between items-center">
+              <View className="flex-col gap-1 justify-between items-start">
                 <View>
                   <View className="flex-row gap-3 ">
                     <Text className="text-lg font-[RobotoRegular] w-20 font-bold">
-                      Amount:
+                      Jumlah
                     </Text>
+                    <Text className="text-lg font-[RobotoRegular]">:</Text>
                     <Text className="text-lg font-[RobotoRegular]">
-                      {item.amount} Rp
+                      {formatCurrency(item.amount)}
                     </Text>
                   </View>
                   <View className="flex-row gap-3 ">
                     <Text className="text-lg font-[RobotoRegular] w-20 font-bold ">
-                      Method:
+                      Metode
                     </Text>
+                    <Text className="text-lg font-[RobotoRegular]">:</Text>
                     <Text className="text-lg font-[RobotoRegular]">
-                      {item.paymentMethod}
+                      {item.method[0].toUpperCase() + item.method.slice(1)}
+                    </Text>
+                  </View>
+                  <View className="flex-row gap-3 ">
+                    <Text className="text-lg font-[RobotoRegular] w-20 font-bold ">
+                      Jenis
+                    </Text>
+                    <Text className="text-lg font-[RobotoRegular]">:</Text>
+                    <Text className="text-lg font-[RobotoRegular]">
+                      {item.type[0].toUpperCase() + item.type.slice(1)}
                     </Text>
                   </View>
                 </View>
                 <View>
                   <View className="flex-row gap-3 ">
                     <Text className="text-lg font-[RobotoRegular] w-20 font-bold">
-                      Date:
+                      Tanggal
                     </Text>
+                    <Text className="text-lg font-[RobotoRegular]">:</Text>
                     <Text className="text-lg font-[RobotoRegular]">
-                      {item.date}
+                      {formateDateTime(item.createdAt)}
                     </Text>
                   </View>
                   <View className="flex-row gap-3 ">
                     <Text className="text-lg font-[RobotoRegular] w-20 font-bold ">
-                      Status:
+                      Status
                     </Text>
+                    <Text className="text-lg font-[RobotoRegular]">:</Text>
                     <Text
-                      className={`text-lg font-[RobotoRegular] ${item.status === "Paid" ? "text-green-600" : item.status === "Pending" ? "text-orange-600" : "text-red-600"}`}
+                      className={`text-lg font-[RobotoRegular] ${item.status === "dibayar" ? "text-green-600" : item.status === "menunggu" ? "text-orange-600" : "text-red-600"}`}
                     >
-                      {item.status}
+                      {item.status[0].toUpperCase() + item.status.slice(1)}
                     </Text>
                   </View>
                 </View>
@@ -128,12 +145,12 @@ const TransactionItem = ({ item }: Props) => {
             </View>
             <View className="mt-5 flex flex-col gap-2">
               <Text className="text-lg font-bold font-[RobotoRegular] border-b">
-                Remark:
+                Komentar:
               </Text>
               <View className="flex-row justify-between items-center">
                 <View className="flex-row gap-3 ">
                   <Text className="text-lg font-[RobotoRegular] italic">
-                    {item.remarks}
+                    {item.remark}
                   </Text>
                 </View>
               </View>

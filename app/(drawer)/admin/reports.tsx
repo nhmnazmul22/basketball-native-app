@@ -1,24 +1,46 @@
+import { BASE_URL } from "@/config";
+import { formatCurrency } from "@/lib/utils";
+import { AppDispatch, RootState } from "@/store";
+import { fetchReports } from "@/store/ReportSlice";
 import DateTimePicker from "@react-native-community/datetimepicker";
-import { AlertCircle, Calendar, Users, Wallet } from "lucide-react-native";
-import React, { useState } from "react";
-import { Dimensions, Pressable, ScrollView, Text, View } from "react-native";
+import * as FileSystem from "expo-file-system";
+import * as Sharing from "expo-sharing";
+import {
+  AlertCircle,
+  Banknote,
+  Calendar,
+  ChartBar,
+  ChartBarDecreasing,
+  Wallet,
+} from "lucide-react-native";
+import React, { useEffect, useState } from "react";
+import {
+  ActivityIndicator,
+  Dimensions,
+  Pressable,
+  ScrollView,
+  Text,
+  View,
+} from "react-native";
 import { BarChart } from "react-native-chart-kit";
+import { useDispatch, useSelector } from "react-redux";
 import { Input } from "tamagui";
 
 const screenWidth = Dimensions.get("window").width;
-const data = {
-  labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun"],
-  datasets: [
-    { data: [44, 30, 50, 60, 50, 60], color: () => "#4f46e5" }, // Indigo
-  ],
-};
 
 export default function ReportsPage() {
   const [showStart, setShowStart] = useState(false);
   const [showEnd, setShowEnd] = useState(false);
   const [mode, setMode] = useState<any>("date");
+  const [loading, setLoading] = useState(false);
   const [startDate, setStartDate] = useState(new Date());
-  const [endDate, setEndDate] = useState(new Date());
+  const [endDate, setEndDate] = useState(() => {
+    const d = new Date();
+    d.setMonth(d.getMonth() + 1);
+    return d;
+  });
+  const dispatch = useDispatch<AppDispatch>();
+  const { items } = useSelector((state: RootState) => state.report);
 
   const onStartChange = (event: any, selectedDate: any) => {
     if (event.type === "dismissed") {
@@ -53,6 +75,95 @@ export default function ReportsPage() {
       setShowEnd(false);
     }
   };
+
+  const downloadReport = async () => {
+    try {
+      setLoading(true);
+      const response = await fetch(`${BASE_URL}/generate-pdf-report`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          startDate,
+          endDate,
+        }),
+      });
+
+      if (!response.ok) throw new Error("Failed to fetch PDF");
+
+      // Convert response to blob
+      const blob = await response.blob();
+
+      // Convert blob → base64
+      const reader = new FileReader();
+      reader.onloadend = async () => {
+        //@ts-ignore
+        const base64data = reader?.result?.split(",")[1];
+
+        // Save to local file
+        const fileUri = FileSystem.documentDirectory + "report.pdf";
+        await FileSystem.writeAsStringAsync(fileUri, base64data, {
+          encoding: FileSystem.EncodingType.Base64,
+        });
+
+        console.log("✅ PDF saved to:", fileUri);
+
+        // Open share dialog
+        if (await Sharing.isAvailableAsync()) {
+          await Sharing.shareAsync(fileUri);
+        } else {
+          alert("Sharing not available on this device");
+        }
+      };
+      reader.readAsDataURL(blob);
+    } catch (error) {
+      console.error("❌ Download failed:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    if (startDate && endDate) {
+      dispatch(fetchReports({ startDate, endDate }));
+    }
+  }, [startDate, endDate]);
+
+  const summary = items?.data.summary;
+
+  const AttendanceData: any = {
+    labels: [],
+    datasets: [
+      { data: [], color: () => "#4f46e5" }, // Indigo
+    ],
+  };
+  const IncomeData: any = {
+    labels: [],
+    datasets: [
+      { data: [], color: () => "#4f46e5" }, // Indigo
+    ],
+  };
+
+  if (items?.data.attendanceGraph) {
+    Object.keys(items.data.attendanceGraph).forEach((key) => {
+      AttendanceData.labels.push(key[0].toUpperCase() + key.slice(1));
+    });
+
+    Object.values(items.data.attendanceGraph).forEach((value) => {
+      AttendanceData.datasets[0].data.push(value);
+    });
+  }
+
+  if (items?.data.incomeGraph) {
+    Object.keys(items.data.incomeGraph).forEach((key) => {
+      IncomeData.labels.push(key[0].toUpperCase() + key.slice(1));
+    });
+
+    Object.values(items.data.incomeGraph).forEach((value) => {
+      IncomeData.datasets[0].data.push(value);
+    });
+  }
 
   return (
     <ScrollView
@@ -119,41 +230,71 @@ export default function ReportsPage() {
       </View>
 
       {/* Summary Cards */}
-      <View className="flex-col flex-wrap items-center justify-between gap-4 mb-6">
-        <View className="bg-blue-600 w-full p-4 rounded-xl">
-          <View className="flex-row gap-3 items-center ">
-            <Users size={24} color="#fff" />
-            <Text className="text-white text-2xl font-bold">1,254</Text>
-          </View>
-          <Text className="text-white font-[RobotoRegular] mt-1">
-            Total Attendance
-          </Text>
-        </View>
-        <View className="bg-green-600 w-full p-4 rounded-xl">
+      <View className="flex-row flex-wrap items-center justify-between gap-4 mb-6">
+        <View className="bg-orange-600 w-full p-4 rounded-xl">
           <View className="flex-row gap-3 items-center ">
             <Calendar size={24} color="#fff" />
-            <Text className="text-white text-2xl font-bold">78%</Text>
+            <Text className="text-white text-2xl font-bold">
+              {summary?.averageAttendance}%
+            </Text>
           </View>
           <Text className="text-white font-[RobotoRegular] mt-1">
             Avg Attendance
           </Text>
         </View>
-        <View className="bg-orange-600 w-full p-4 rounded-xl">
-          <View className="flex-row gap-3 items-center">
+        <View className="bg-green-600 w-full p-4 rounded-xl">
+          <View className="flex-row gap-3 items-center ">
             <Wallet size={24} color="#fff" />
-            <Text className="text-white text-2xl font-bold">Rp 5,400</Text>
+            <Text className="text-white text-2xl font-bold">
+              {summary?.netIncome}
+            </Text>
+          </View>
+          <Text className="text-white font-[RobotoRegular] mt-1">
+            Net Income
+          </Text>
+        </View>
+        <View className="bg-blue-600 w-[48%] p-4 rounded-xl">
+          <View className="flex-row gap-3 items-center">
+            <ChartBar size={24} color="#fff" />
+            <Text className="text-white text-2xl font-bold">
+              {formatCurrency(summary?.paymentPaid)}
+            </Text>
+          </View>
+          <Text className="text-white font-[RobotoRegular] mt-1">
+            Total Income
+          </Text>
+        </View>
+        <View className="bg-red-600 w-[48%] p-4 rounded-xl">
+          <View className="flex-row gap-3 items-center">
+            <ChartBarDecreasing size={24} color="#fff" />
+            <Text className="text-white text-2xl font-bold ">
+              {formatCurrency(summary?.paymentPending)}
+            </Text>
+          </View>
+          <Text className="text-white font-[RobotoRegular] mt-1">
+            Total Expenses
+          </Text>
+        </View>
+        <View className="bg-orange-600 w-[48%] p-4 rounded-xl">
+          <View className="flex-row gap-3 items-center">
+            <Banknote size={24} color="#fff" />
+            <Text className="text-white text-2xl font-bold">
+              {formatCurrency(summary?.paymentPaid)}
+            </Text>
           </View>
           <Text className="text-white font-[RobotoRegular] mt-1">
             Fees Collected
           </Text>
         </View>
-        <View className="bg-red-600 w-full p-4 rounded-xl">
+        <View className="bg-amber-600 w-[48%] p-4 rounded-xl">
           <View className="flex-row gap-3 items-center">
             <AlertCircle size={24} color="#fff" />
-            <Text className="text-white text-2xl font-bold ">Rp 1,200</Text>
+            <Text className="text-white text-2xl font-bold ">
+              {formatCurrency(summary?.paymentPending)}
+            </Text>
           </View>
           <Text className="text-white font-[RobotoRegular] mt-1">
-            Outstanding Fees
+            Pending Fees
           </Text>
         </View>
       </View>
@@ -163,7 +304,7 @@ export default function ReportsPage() {
         <Text className="text-xl font-[BebasNeue] mb-2">Attendance Trend</Text>
         <View className="border border-gray-200 rounded-lg justify-center items-center">
           <BarChart
-            data={data}
+            data={AttendanceData}
             width={screenWidth - 32} // padding
             height={300}
             fromZero
@@ -191,7 +332,7 @@ export default function ReportsPage() {
         <Text className="text-xl font-[BebasNeue] mb-2">Fee Summary</Text>
         <View className="border border-gray-200 rounded-lg justify-center items-center">
           <BarChart
-            data={data}
+            data={IncomeData}
             width={screenWidth - 32} // padding
             height={300}
             fromZero
@@ -217,10 +358,17 @@ export default function ReportsPage() {
 
       {/* Export Buttons */}
       <View className="flex-row justify-around mt-4">
-        <Pressable className="bg-blue-600 px-6 py-3 rounded-xl">
-          <Text className="text-white font-[RobotoRegular] text-lg">
-            Export PDF
-          </Text>
+        <Pressable
+          className="bg-blue-600 px-6 py-3 rounded-xl"
+          onPress={downloadReport}
+        >
+          {loading ? (
+            <ActivityIndicator size="small" color="#fff" />
+          ) : (
+            <Text className="text-white font-[RobotoRegular] text-lg">
+              Export PDF
+            </Text>
+          )}
         </Pressable>
       </View>
     </ScrollView>

@@ -72,3 +72,31 @@ export interface DashboardSummary {
     averageAttendance: number;
   };
 }
+
+export interface Transaction {
+  _id: string;
+  studentId: string;
+  amount: number;
+  method: string;
+  type: "penghasilan" | "pengeluaran";
+  status: "dibayar" | "dibatalkan" | "menunggu";
+  remark: string;
+  studentInfo: User;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface Reports {
+  summary: {
+    totalStudent: number;
+    totalCoach: number;
+    averageAttendance: number;
+    paymentPaid: number;
+    paymentPending: number;
+    totalIncome: number;
+    totalExpenses: number;
+    netIncome: number;
+  };
+  attendanceGraph: any;
+  incomeGraph: any;
+}
