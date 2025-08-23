@@ -144,7 +144,7 @@ const NewAnnouncement = ({ setVisibleModal }: Props) => {
     <View className="flex-1 justify-center items-center bg-[#00000051] py-16">
       <View className="w-[90%] bg-white p-5 rounded-lg">
         <Text className="text-center text-2xl font-bold font-[BebasNeue] text-orange-600">
-          Announcement Update
+          Pengumuman baru
         </Text>
         <View className="mt-5 flex flex-col gap-2">
           <View className="flex-col gap-2">
@@ -153,11 +153,11 @@ const NewAnnouncement = ({ setVisibleModal }: Props) => {
                 unstyled
                 className="text-xl font-bold font-[RobotoRegular]"
               >
-                Title:
+                Judul:
               </Label>
               <Input
                 className="text-lg font-[RobotoRegular]"
-                placeholder="Enter title"
+                placeholder="Masukkan judul"
                 value={title}
                 onChangeText={(text) => setTitle(text)}
               />
@@ -167,11 +167,11 @@ const NewAnnouncement = ({ setVisibleModal }: Props) => {
                 unstyled
                 className="text-xl font-bold font-[RobotoRegular]"
               >
-                Message:
+                Pesan:
               </Label>
               <TextArea
                 className="text-lg font-[RobotoRegular]"
-                placeholder="Enter message"
+                placeholder="Masukkan pesan"
                 value={message}
                 onChangeText={(text) => setMessage(text)}
               />
@@ -181,7 +181,7 @@ const NewAnnouncement = ({ setVisibleModal }: Props) => {
                 unstyled
                 className="text-xl font-bold font-[RobotoRegular]"
               >
-                Date:
+                Tanggal:
               </Label>
               <Pressable
                 onPress={() => {
@@ -191,7 +191,7 @@ const NewAnnouncement = ({ setVisibleModal }: Props) => {
                 <Input
                   readOnly
                   className="text-lg font-[RobotoRegular]"
-                  placeholder="Enter your name"
+                  placeholder="Masukkan nama Anda"
                   value={date.toLocaleString()}
                 />
               </Pressable>
@@ -211,11 +211,11 @@ const NewAnnouncement = ({ setVisibleModal }: Props) => {
                 unstyled
                 className="text-xl font-bold font-[RobotoRegular]"
               >
-                Team
+                Tim
               </Label>
               <SimpleSelectOption
                 data={items?.data}
-                label="Choose the team"
+                label="Pilih tim"
                 value={team}
                 setValue={setTeam}
               />
@@ -236,7 +236,7 @@ const NewAnnouncement = ({ setVisibleModal }: Props) => {
             </View>
             <View className="flex-row gap-2 items-center">
               <Text className="text-lg font-normal font-[RobotoRegular]">
-                Pinned:
+                Disematkan:
               </Text>
               <Switch
                 unstyled
@@ -262,7 +262,7 @@ const NewAnnouncement = ({ setVisibleModal }: Props) => {
               <>
                 <Edit size={18} color="#ffffff" />
                 <Text className="text-white font-[RobotoRegular]text-base font-bold text-center">
-                  Create
+                  Membuat
                 </Text>
               </>
             )}
@@ -273,7 +273,7 @@ const NewAnnouncement = ({ setVisibleModal }: Props) => {
           >
             <CircleX size={18} color="#ffffff" />
             <Text className="text-white font-[RobotoRegular]text-base font-bold text-center">
-              Close
+              Menutup
             </Text>
           </Pressable>
         </View>

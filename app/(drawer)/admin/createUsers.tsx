@@ -28,11 +28,7 @@ import { Input } from "tamagui";
 const profilePicture = require("@/assets/images/profile-picture.jpg");
 const width = Dimensions.get("window").width;
 
-const teamData = [
-  { id: 18254, name: "U12" },
-  { id: 55288, name: "U15" },
-  { id: 98566, name: "U30" },
-];
+
 
 const CreateStudent = () => {
   const [name, setName] = useState("");
@@ -158,7 +154,7 @@ const CreateStudent = () => {
         >
           <View style={{ width: width * 0.9 }} className="w-full mx-auto">
             <View className="flex-col w-full gap-3 mt-5">
-              <View className="flex-col gap-3 p-2 w-40">
+              <View className="flex-col gap-3 p-2 w-44">
                 <Image
                   source={photo !== null ? { uri: photo.uri } : profilePicture}
                   className="w-40 h-40 object-cover rounded-lg border border-slate-200"
@@ -172,7 +168,7 @@ const CreateStudent = () => {
                     }}
                   >
                     <Text className="text-white font-bold text-center">
-                      Retake Photo
+                      Foto pengambilan ulang
                     </Text>
                   </Pressable>
                 ) : (
@@ -181,34 +177,34 @@ const CreateStudent = () => {
                     onPress={() => setCapturePic(true)}
                   >
                     <Text className="text-white font-bold text-center">
-                      Add Photo
+                      Tambahkan foto
                     </Text>
                   </Pressable>
                 )}
               </View>
               <View className="flex-col gap-1">
                 <Text className="text-lg font-[RobotoRegular] text-black">
-                  Name: <Text className="text-orange-600">*</Text>
+                  Nama: <Text className="text-orange-600">*</Text>
                 </Text>
                 <Input
-                  placeholder="Enter your name"
+                  placeholder="Masukkan nama Anda"
                   value={name}
                   onChangeText={(text) => setName(text)}
                 />
               </View>
               <View className="flex-col gap-1">
                 <Text className="text-lg font-[RobotoRegular] text-black">
-                  Whatsapp Number: <Text className="text-orange-600">*</Text>
+                  Nomor whatsapp: <Text className="text-orange-600">*</Text>
                 </Text>
                 <Input
-                  placeholder="Enter your whatsapp number"
+                  placeholder="Masukkan nomor whatsapp Anda"
                   value={phone}
                   onChangeText={(text) => setPhone(text)}
                 />
               </View>
               <View className="flex-col gap-1">
                 <Text className="text-lg font-[RobotoRegular] text-black">
-                  Date of Birth (DOB):{" "}
+                  Tanggal lahir (DOB):{" "}
                   <Text className="text-orange-600">*</Text>
                 </Text>
                 <Pressable onPress={() => setShow(true)}>
@@ -231,22 +227,22 @@ const CreateStudent = () => {
               </View>
               <View className="flex-col gap-1">
                 <Text className="text-lg font-[RobotoRegular]">
-                  Team <Text className="text-orange-600">*</Text>
+                  Tim <Text className="text-orange-600">*</Text>
                 </Text>
                 <SimpleSelectOption
                   data={items?.data}
-                  label="Choose the team"
+                  label="Pilih tim"
                   value={team}
                   setValue={setTeam}
                 />
               </View>
               <View className="flex-col gap-1">
                 <Text className="text-lg  font-[RobotoRegular]">
-                  Role: <Text className="text-orange-600">*</Text>
+                  Peran: <Text className="text-orange-600">*</Text>
                 </Text>
                 <SimpleSelectOption
                   data={roles}
-                  label="Choose the role"
+                  label="Pilih peran"
                   value={role}
                   setValue={setRole}
                 />
@@ -257,17 +253,17 @@ const CreateStudent = () => {
                 </Text>
                 <SimpleSelectOption
                   data={userStatus}
-                  label="Choose the status"
+                  label="Pilih status"
                   value={status}
                   setValue={setStatus}
                 />
               </View>
               <View className="flex-col gap-1">
                 <Text className="text-lg font-[RobotoRegular] text-black">
-                  Email: <Text className="text-orange-600">*</Text>
+                  E-mail: <Text className="text-orange-600">*</Text>
                 </Text>
                 <Input
-                  placeholder="Enter your email"
+                  placeholder="Masukkan e-mail Anda"
                   value={email}
                   onChangeText={(text) => setEmail(text)}
                 />
@@ -278,7 +274,7 @@ const CreateStudent = () => {
                 </Text>
                 <Input
                   secureTextEntry
-                  placeholder="Enter new password"
+                  placeholder="Masukkan password baru"
                   value={password}
                   onChangeText={(text) => setPassword(text)}
                 />
@@ -293,13 +289,13 @@ const CreateStudent = () => {
                     <View className="flex-row gap-2 items-center justify-center">
                       <ActivityIndicator size={24} color="white" />{" "}
                       <Text className="text-lg font-[RobotoRegular] text-white text-center">
-                        Creating User...
+                        Membuat Pengguna...
                       </Text>
                     </View>
                   )}
                   {!loading && (
                     <Text className="text-lg font-[RobotoRegular] text-white text-center">
-                      Create Student
+                      Buat Pengguna
                     </Text>
                   )}
                 </Pressable>

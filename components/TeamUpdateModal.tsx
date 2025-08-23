@@ -88,7 +88,7 @@ const TeamDateUpdateModal = ({ item, setVisibleModal }: Props) => {
     <View className="flex-1 justify-center items-center bg-[#000000d2]">
       <View className="w-[90%] bg-white p-5 rounded-lg">
         <Text className="text-center text-2xl font-bold font-[BebasNeue] text-orange-600">
-          Update Team Data
+          Perbarui data tim
         </Text>
         <Text className="font-[RobotoRegular] text-gray-600 text-center text-lg font-medium">
           ID: {item._id}
@@ -105,26 +105,26 @@ const TeamDateUpdateModal = ({ item, setVisibleModal }: Props) => {
                 onPress={() => pickImage()}
               >
                 <Text className="text-white font-bold text-center">
-                  Add Logo
+                  Tambahkan logo
                 </Text>
               </Pressable>
             </View>
             <View className="flex-col gap-1">
               <Text className="text-lg font-[RobotoRegular] text-black">
-                Team Name: <Text className="text-orange-600">*</Text>
+               Nama Tim: <Text className="text-orange-600">*</Text>
               </Text>
               <Input
-                placeholder="Enter team name"
+                placeholder="Masukkan nama tim"
                 value={name}
                 onChangeText={(text) => setName(text)}
               />
             </View>
             <View className="flex-col gap-1">
               <Text className="text-lg font-[RobotoRegular] text-black">
-                Team Description:
+              Deskripsi Tim:
               </Text>
               <TextArea
-                placeholder="Some description"
+                placeholder="Beberapa deskripsi"
                 value={description}
                 onChangeText={(text) => setDescription(text)}
               />
@@ -150,7 +150,7 @@ const TeamDateUpdateModal = ({ item, setVisibleModal }: Props) => {
               <>
                 <Save size={18} color="#ffffff" />
                 <Text className="text-white font-[RobotoRegular]text-base font-bold text-center">
-                  Update
+                  Memperbarui
                 </Text>
               </>
             )}
@@ -161,7 +161,7 @@ const TeamDateUpdateModal = ({ item, setVisibleModal }: Props) => {
           >
             <CircleX size={18} color="#ffffff" />
             <Text className="text-white font-[RobotoRegular]text-base font-bold text-center">
-              Close
+              Menutup
             </Text>
           </Pressable>
         </View>

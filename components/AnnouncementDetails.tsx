@@ -21,7 +21,7 @@ const AnnouncementDetails = ({
         <ScrollView showsVerticalScrollIndicator={false}>
           {/* Header */}
           <Text className="text-center text-2xl font-bold font-[BebasNeue] text-orange-600">
-            Announcement Details
+            Detail Pengumuman
           </Text>
           <Text className="font-[RobotoRegular] text-center text-base text-slate-500 mb-4">
             ID: {item._id}
@@ -40,12 +40,12 @@ const AnnouncementDetails = ({
           {/* Info section */}
           <View className="mt-6">
             <Text className="text-lg font-bold font-[RobotoRegular] border-b pb-1 mb-3 text-slate-800">
-              Other Information
+              Informasi lainnya
             </Text>
 
             {[
-              { label: "Team", value: item.teamDetails.name },
-              { label: "Date", value: formateDateTime(item.date) },
+              { label: "Tim", value: item.teamDetails.name },
+              { label: "Tanggal", value: formateDateTime(item.date) },
               { label: "Status", value: firstWordUpper(item.status) },
             ].map((info, idx) => (
               <View key={idx} className="flex-row mb-2">

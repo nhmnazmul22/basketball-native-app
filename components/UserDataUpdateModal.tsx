@@ -144,7 +144,7 @@ const UserDateUpdateModal = ({ item, setVisibleModal }: Props) => {
       <View className="flex-1 justify-center items-center bg-[#000000d2] py-16">
         <View className="w-[90%] bg-white p-5 rounded-lg">
           <Text className="text-center text-2xl font-bold font-[BebasNeue] text-orange-600">
-            Update User Data
+            Perbarui data pengguna
           </Text>
           <Text className="font-[RobotoRegular] text-gray-600 text-center text-lg font-medium">
             ID: {item._id}
@@ -171,7 +171,7 @@ const UserDateUpdateModal = ({ item, setVisibleModal }: Props) => {
                     }}
                   >
                     <Text className="text-white font-bold text-center">
-                      Retake Photo
+                      Foto pengambilan ulang{" "}
                     </Text>
                   </Pressable>
                 ) : (
@@ -180,7 +180,7 @@ const UserDateUpdateModal = ({ item, setVisibleModal }: Props) => {
                     onPress={() => setCapturePic(true)}
                   >
                     <Text className="text-white font-bold text-center">
-                      Add Photo
+                      Tambahkan
                     </Text>
                   </Pressable>
                 )}
@@ -191,11 +191,11 @@ const UserDateUpdateModal = ({ item, setVisibleModal }: Props) => {
                   htmlFor="name"
                   className="text-xl font-bold font-[RobotoRegular]"
                 >
-                  Name:
+                  Nama:
                 </Label>
                 <Input
                   className="text-lg font-[RobotoRegular]"
-                  placeholder="Enter name"
+                  placeholder="Masukkan nama"
                   value={name}
                   onChangeText={(text) => setName(text)}
                 />
@@ -203,16 +203,15 @@ const UserDateUpdateModal = ({ item, setVisibleModal }: Props) => {
               <View className="flex-col">
                 <Label
                   unstyled
-                  htmlFor="name"
                   className="text-xl font-bold font-[RobotoRegular]"
                 >
-                  Date of Birth (DOB):
+                  Tanggal Lahir (DOB):
                 </Label>
                 <Pressable onPress={() => setShow(true)}>
                   <Input
                     readOnly
                     className="text-lg font-[RobotoRegular]"
-                    placeholder="Enter your name"
+                    placeholder="Masukkan DOB Anda"
                     value={date.toLocaleDateString()}
                   />
                 </Pressable>
@@ -229,14 +228,13 @@ const UserDateUpdateModal = ({ item, setVisibleModal }: Props) => {
               <View className="flex-col">
                 <Label
                   unstyled
-                  htmlFor="name"
                   className="text-xl font-bold font-[RobotoRegular]"
                 >
-                  Team
+                  Tim
                 </Label>
                 <SimpleSelectOption
                   data={items?.data}
-                  label="Choose the team"
+                  label="Pilih tim"
                   value={team}
                   setValue={setTeam}
                 />
@@ -247,11 +245,11 @@ const UserDateUpdateModal = ({ item, setVisibleModal }: Props) => {
                   htmlFor="role"
                   className="text-xl font-bold font-[RobotoRegular]"
                 >
-                  Role:
+                  Peran:
                 </Label>
                 <SimpleSelectOption
                   data={roles}
-                  label="Choose the role"
+                  label="Pilih peran"
                   value={role}
                   setValue={setRole}
                 />
@@ -265,7 +263,7 @@ const UserDateUpdateModal = ({ item, setVisibleModal }: Props) => {
                 </Label>
                 <SimpleSelectOption
                   data={userStatus}
-                  label="Choose the status"
+                  label="Pilih statusnya"
                   value={status}
                   setValue={setStatus}
                 />
@@ -276,12 +274,12 @@ const UserDateUpdateModal = ({ item, setVisibleModal }: Props) => {
                   htmlFor="email"
                   className="text-xl font-bold font-[RobotoRegular]"
                 >
-                  Email:
+                  E-mail:
                 </Label>
                 <Input
                   id="email"
                   className="text-lg font-[RobotoRegular]"
-                  placeholder="Enter email"
+                  placeholder="Masukkan email"
                   value={email}
                   onChangeText={(text) => setEmail(text)}
                 />
@@ -292,12 +290,12 @@ const UserDateUpdateModal = ({ item, setVisibleModal }: Props) => {
                   htmlFor="phone"
                   className="text-xl font-bold font-[RobotoRegular]"
                 >
-                  Phone:
+                  Telepon:
                 </Label>
                 <Input
                   id="phone"
                   className="text-lg font-[RobotoRegular]"
-                  placeholder="Enter phone"
+                  placeholder="Masukkan telepon"
                   value={phone}
                   onChangeText={(text) => setPhone(text)}
                 />
@@ -314,7 +312,7 @@ const UserDateUpdateModal = ({ item, setVisibleModal }: Props) => {
                 <>
                   <Save size={18} color="#ffffff" />
                   <Text className="text-white font-[RobotoRegular]text-base font-bold text-center">
-                    Update
+                    Memperbarui
                   </Text>
                 </>
               )}
@@ -325,7 +323,7 @@ const UserDateUpdateModal = ({ item, setVisibleModal }: Props) => {
             >
               <CircleX size={18} color="#ffffff" />
               <Text className="text-white font-[RobotoRegular]text-base font-bold text-center">
-                Close
+                Menutup
               </Text>
             </Pressable>
           </View>

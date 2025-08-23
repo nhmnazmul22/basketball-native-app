@@ -52,22 +52,22 @@ const TeamList = () => {
           {/* Table Header */}
           <View className="flex-row gap-5 bg-gray-100 p-2 rounded-t">
             <Text className="w-20 font-bold text-lg text-center font-[RobotoRegular]">
-              Logo
+              logo
             </Text>
             <Text className="w-28 font-bold text-lg text-center font-[RobotoRegular]">
-              TeamId
+              Sains
             </Text>
             <Text className="w-28 font-bold text-lg text-center font-[RobotoRegular]">
-              Name
+              Nama
             </Text>
             <Text className="w-60 font-bold text-lg text-center font-[RobotoRegular]">
-              Description
+              Keterangan
             </Text>
             <Text className="w-20 font-bold text-lg text-center font-[RobotoRegular]">
-              Status
+              status
             </Text>
             <Text className="w-28 font-bold text-lg text-center font-[RobotoRegular]">
-              Actions
+              Tindakann
             </Text>
           </View>
           {/* Table Rows */}

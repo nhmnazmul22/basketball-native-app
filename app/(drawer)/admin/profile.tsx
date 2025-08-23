@@ -3,6 +3,7 @@ import UserApi from "@/lib/apis/userApi";
 import { generateFileName } from "@/lib/utils";
 import { AppDispatch, RootState } from "@/store";
 import { fetchUser } from "@/store/userByIdSlice";
+import { useRouter } from "expo-router";
 import React, { useCallback, useEffect, useState } from "react";
 import {
   ActivityIndicator,
@@ -29,7 +30,7 @@ export default function AdminSettingPage() {
   const [capturePic, setCapturePic] = useState<Boolean>(false);
   const dispatch = useDispatch<AppDispatch>();
   const { items } = useSelector((state: RootState) => state.user);
-
+  const router = useRouter();
   const onRefresh = useCallback(() => {
     setRefreshing(true);
     dispatch(fetchUser());
@@ -41,7 +42,6 @@ export default function AdminSettingPage() {
   const handleUpdateUser = async () => {
     try {
       setLoading(true);
-
       if (!items?.data._id) {
         Toast.show({
           type: "error",
@@ -53,10 +53,8 @@ export default function AdminSettingPage() {
 
       const formData = new FormData();
       formData.append("fullName", fullName);
-      formData.append("role", role);
       formData.append("email", email);
       formData.append("phone", phone);
-      formData.append("status", status);
       if (photo) {
         formData.append("image", {
           uri: photo.uri,
@@ -153,7 +151,7 @@ export default function AdminSettingPage() {
           </Label>
           <Input
             className="text-base font-[RobotoRegular]"
-            placeholder="Enter full name"
+            placeholder="Masukkan nama lengkap"
             value={fullName}
             onChangeText={setFullName}
           />
@@ -165,7 +163,7 @@ export default function AdminSettingPage() {
           </Label>
           <Input
             className="text-base font-[RobotoRegular]"
-            placeholder="Enter email"
+            placeholder="Masukkan email"
             value={email}
             onChangeText={setEmail}
           />
@@ -177,7 +175,7 @@ export default function AdminSettingPage() {
           </Label>
           <Input
             className="text-base font-[RobotoRegular]"
-            placeholder="Enter phone number"
+            placeholder="Masukkan nomor telepon"
             value={phone}
             onChangeText={setPhone}
           />

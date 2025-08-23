@@ -1,7 +1,7 @@
 import { BASE_URL } from "@/config";
 import { useAuth } from "@/context/AuthContext";
 import { removeData } from "@/lib/utils";
-import { useRouter } from "expo-router";
+import { Redirect } from "expo-router";
 import { Drawer } from "expo-router/drawer";
 import {
   ArrowLeftRight,
@@ -22,9 +22,8 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import Toast from "react-native-toast-message";
 
 const LogOutComponent = () => {
-  const { setSession } = useAuth();
+  const { setSession, session } = useAuth();
   const [loading, setLoading] = useState(false);
-  const router = useRouter();
 
   const handleLogout = async () => {
     try {
@@ -39,7 +38,6 @@ const LogOutComponent = () => {
       if (res.ok) {
         await removeData();
         setSession(null);
-        router.replace("/login");
         Toast.show({
           type: "success",
           text1: "Logout successful",
@@ -70,6 +68,10 @@ const LogOutComponent = () => {
 
 export default function RootLayout() {
   const { session } = useAuth();
+
+  if (!session) {
+    return <Redirect href="/login" />;
+  }
 
   return (
     <SafeAreaView className="flex-1">
@@ -185,7 +187,7 @@ export default function RootLayout() {
           <Drawer.Screen
             name="admin/createUsers"
             options={{
-              title: "Create User",
+              title: "Buat Pengguna",
               drawerItemStyle: {
                 display: "none",
               },
@@ -194,7 +196,7 @@ export default function RootLayout() {
           <Drawer.Screen
             name="admin/createAttendance"
             options={{
-              title: "New Attendance",
+              title: "Kehadiran baru",
               drawerItemStyle: {
                 display: "none",
               },
@@ -203,7 +205,7 @@ export default function RootLayout() {
           <Drawer.Screen
             name="admin/scanFace"
             options={{
-              title: "Scan Face",
+              title: "Pindai wajah",
               drawerItemStyle: {
                 display: "none",
               },
@@ -212,7 +214,7 @@ export default function RootLayout() {
           <Drawer.Screen
             name="admin/createTeam"
             options={{
-              title: "Create Team",
+              title: "Buat tim",
               drawerItemStyle: {
                 display: "none",
               },

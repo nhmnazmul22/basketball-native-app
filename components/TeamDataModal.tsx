@@ -19,7 +19,7 @@ const TeamDataModal = ({
     <View className="flex-1 justify-center items-center bg-[#000000d2] py-16">
       <View className="w-[90%] bg-white p-5 rounded-lg">
         <Text className="text-center text-2xl font-bold font-[BebasNeue] text-orange-600">
-          Update Team Data
+          Data Tim
         </Text>
         <Text className="font-[RobotoRegular] text-gray-600 text-center text-lg font-medium">
           ID: {item._id}
@@ -49,7 +49,7 @@ const TeamDataModal = ({
           >
             <Save size={18} color="#ffffff" />
             <Text className="text-white font-[RobotoRegular]text-base font-bold text-center">
-              Update
+              Memperbarui
             </Text>
           </Pressable>
           <Pressable
@@ -58,7 +58,7 @@ const TeamDataModal = ({
           >
             <CircleX size={18} color="#ffffff" />
             <Text className="text-white font-[RobotoRegular]text-base font-bold text-center">
-              Close
+              Menutup
             </Text>
           </Pressable>
         </View>

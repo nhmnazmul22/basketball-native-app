@@ -68,7 +68,7 @@ const AttendanceList = () => {
       <View className="my-5 flex-col gap-2 items-center justify-between">
         <View className="w-full">
           <Input
-            placeholder="Name or Team or Status"
+            placeholder="Nama atau tim atau status"
             value={searchParams}
             onChangeText={setSearchParams}
           />
@@ -79,25 +79,25 @@ const AttendanceList = () => {
           {/* Table Header */}
           <View className="flex-row gap-2 bg-gray-100 p-2 rounded-t">
             <Text className="w-36 font-bold text-lg text-center font-[RobotoRegular]">
-              Name
+              Nama
             </Text>
             <Text className="w-28 font-bold text-lg text-center font-[RobotoRegular]">
-              Team
+              Tim
             </Text>
             <Text className="w-28 font-bold text-lg text-center font-[RobotoRegular]">
-              Time
+              Waktu
             </Text>
             <Text className="w-28 font-bold text-lg text-center font-[RobotoRegular]">
               Status
             </Text>
             <Text className="w-28 font-bold text-lg text-center font-[RobotoRegular]">
-              GPS
+              Gps
             </Text>
             <Text className="w-28 font-bold text-lg text-center font-[RobotoRegular]">
-              Face Match
+              Match wajah
             </Text>
             <Text className="w-24 font-bold text-lg text-center font-[RobotoRegular]">
-              Actions
+              Tindakan
             </Text>
           </View>
           {/* Table Rows */}

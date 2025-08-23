@@ -1,16 +1,16 @@
 export const roles = [
-  { id: 1, name: "student" },
-  { id: 2, name: "coach" },
+  { id: 1, name: "murid" },
+  { id: 2, name: "pelatih" },
   { id: 3, name: "admin" },
 ];
 
 export const userStatus = [
-  { id: 1, name: "active" },
-  { id: 2, name: "inactive" },
-  { id: 3, name: "on leave" },
+  { id: 1, name: "aktif" },
+  { id: 2, name: "tidak aktif" },
+  { id: 3, name: "sedang cuti" },
 ];
 
 export const teamStatus = [
-  { id: 1, name: "active" },
-  { id: 2, name: "inactive" },
+  { id: 1, name: "aktif" },
+  { id: 2, name: "tidak aktif" },
 ];

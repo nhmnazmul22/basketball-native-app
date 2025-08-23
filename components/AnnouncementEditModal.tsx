@@ -139,7 +139,7 @@ const AnnouncementEditModal = ({ item, setVisibleEditModal }: Props) => {
     <View className="flex-1 justify-center items-center bg-[#00000070] py-16">
       <View className="w-[90%] bg-white p-5 rounded-lg">
         <Text className="text-center text-2xl font-bold font-[BebasNeue] text-orange-600">
-          Update Announcement
+          Perbarui pengumuman
         </Text>
 
         <View className="mt-5 flex flex-col gap-2">
@@ -150,7 +150,7 @@ const AnnouncementEditModal = ({ item, setVisibleEditModal }: Props) => {
                 unstyled
                 className="text-xl font-bold font-[RobotoRegular]"
               >
-                Title
+                Judul
               </Label>
               <Input
                 className="text-lg font-[RobotoRegular]"
@@ -166,7 +166,7 @@ const AnnouncementEditModal = ({ item, setVisibleEditModal }: Props) => {
                 unstyled
                 className="text-xl font-bold font-[RobotoRegular]"
               >
-                Message
+                Pesan
               </Label>
               <TextArea
                 className="text-lg font-[RobotoRegular]"
@@ -213,7 +213,7 @@ const AnnouncementEditModal = ({ item, setVisibleEditModal }: Props) => {
                 unstyled
                 className="text-xl font-bold font-[RobotoRegular]"
               >
-                Team
+                Tim
               </Label>
               <SimpleSelectOption
                 data={items?.data}

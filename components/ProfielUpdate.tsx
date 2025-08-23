@@ -47,7 +47,7 @@ const ProfileUpdateModal = ({ item, setVisibleEditModal }: Props) => {
       <View className="w-full max-h-[85%] bg-white p-5 rounded-2xl shadow-lg">
         <ScrollView showsVerticalScrollIndicator={false}>
           <Text className="text-center text-2xl font-bold font-[BebasNeue] text-orange-600">
-            Update Profile
+            Perbarui profil
           </Text>
 
           <View className="mt-5 flex-col gap-4">
@@ -56,11 +56,11 @@ const ProfileUpdateModal = ({ item, setVisibleEditModal }: Props) => {
                 unstyled
                 className="text-xl font-bold font-[RobotoRegular]"
               >
-                Name
+                Nama
               </Label>
               <Input
                 className="text-lg font-[RobotoRegular]"
-                placeholder="Enter full name"
+                placeholder="Masukkan nama lengkap"
                 value={name}
                 onChangeText={setName}
               />
@@ -70,11 +70,11 @@ const ProfileUpdateModal = ({ item, setVisibleEditModal }: Props) => {
                 unstyled
                 className="text-xl font-bold font-[RobotoRegular]"
               >
-                Email
+                E-mail{" "}
               </Label>
               <Input
                 className="text-lg font-[RobotoRegular]"
-                placeholder="Enter email address"
+                placeholder="Masukkan alamat email"
                 value={email}
                 onChangeText={setEmail}
               />
@@ -84,11 +84,11 @@ const ProfileUpdateModal = ({ item, setVisibleEditModal }: Props) => {
                 unstyled
                 className="text-xl font-bold font-[RobotoRegular]"
               >
-                Phone
+                Telepon
               </Label>
               <Input
                 className="text-lg font-[RobotoRegular]"
-                placeholder="Enter whatsapp number"
+                placeholder="Masukkan nomor whatsapp"
                 value={phone}
                 onChangeText={setPhone}
               />
@@ -99,7 +99,7 @@ const ProfileUpdateModal = ({ item, setVisibleEditModal }: Props) => {
                 unstyled
                 className="text-xl font-bold font-[RobotoRegular]"
               >
-                Date of Birth
+                Tanggal lahir
               </Label>
               <Pressable
                 onPress={() => {
@@ -136,7 +136,7 @@ const ProfileUpdateModal = ({ item, setVisibleEditModal }: Props) => {
           >
             <Edit size={18} color="#fff" />
             <Text className="text-white font-[RobotoRegular] text-base font-bold">
-              Update
+              Memperbarui
             </Text>
           </Pressable>
 
@@ -146,7 +146,7 @@ const ProfileUpdateModal = ({ item, setVisibleEditModal }: Props) => {
           >
             <CircleX size={18} color="#fff" />
             <Text className="text-white font-[RobotoRegular] text-base font-bold">
-              Close
+              Menutup
             </Text>
           </Pressable>
         </View>

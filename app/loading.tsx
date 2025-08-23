@@ -19,11 +19,11 @@ const Loading = () => {
     return <Redirect href="/login" />;
   }
 
-  if (session && (session.role === "admin" || session.role === "coach")) {
+  if (session && (session.role === "admin" || session.role === "pelatih")) {
     return <Redirect href="/admin/dashboard" />;
   }
 
-  if (session && session.role === "student") {
+  if (session && session.role === "murid") {
     return <Redirect href="/" />;
   }
 

@@ -61,25 +61,25 @@ const UserList = () => {
               {/* Table Header */}
               <View className="flex-row gap-5 bg-gray-100 p-2 rounded-t">
                 <Text className="w-28 font-bold text-lg text-center font-[RobotoRegular]">
-                  UserId
+                  Pengguna
                 </Text>
                 <Text className="w-28 font-bold text-lg text-center font-[RobotoRegular]">
-                  Name
+                  Nama
                 </Text>
                 <Text className="w-20 font-bold text-lg text-center font-[RobotoRegular]">
-                  DOB
+                  Dob
                 </Text>
                 <Text className="w-20 font-bold text-lg text-center font-[RobotoRegular]">
-                  Team
+                  Tim
                 </Text>
                 <Text className="w-20 font-bold text-lg text-center font-[RobotoRegular]">
-                  Role
+                  Peran
                 </Text>
                 <Text className="w-28 font-bold text-lg text-center font-[RobotoRegular]">
-                  Face Registered
+                  Wajah terdaftar{" "}
                 </Text>
                 <Text className="w-28 font-bold text-lg text-center font-[RobotoRegular]">
-                  Actions
+                  Tindakan
                 </Text>
               </View>
               {/* Table Rows */}

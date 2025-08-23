@@ -20,14 +20,14 @@ const UserDateModalContent = ({
     <View className="flex-1 justify-center items-center bg-[#000000d2] py-16">
       <View className="w-[90%] bg-white p-5 rounded-lg">
         <Text className="text-center text-2xl font-bold font-[BebasNeue] text-orange-600">
-          User Data
+          Data Pengguna
         </Text>
         <Text className="font-[RobotoRegular] text-center text-xl font-medium">
           {item?._id}
         </Text>
         <View className="mt-5 flex flex-col gap-2">
           <Text className="text-lg font-bold font-[RobotoRegular] border-b ">
-            Student Info:
+            Info siswa:
           </Text>
           <View>
             <View className="w-36 h-36 rounded-lg p-1 mb-3">
@@ -42,7 +42,7 @@ const UserDateModalContent = ({
             </View>
             <View className="flex-row gap-3 ">
               <Text className="text-lg font-[RobotoRegular] w-20 font-bold">
-                Name
+                Nama
               </Text>
               <Text className="text-lg font-[RobotoRegular]">:</Text>
               <Text className="text-lg font-[RobotoRegular]">
@@ -51,7 +51,7 @@ const UserDateModalContent = ({
             </View>
             <View className="flex-row gap-3 ">
               <Text className="text-lg font-[RobotoRegular] w-20 font-bold">
-                DOB
+                Dob
               </Text>
               <Text className="text-lg font-[RobotoRegular]">:</Text>
               <Text className="text-lg font-[RobotoRegular]">
@@ -60,7 +60,7 @@ const UserDateModalContent = ({
             </View>
             <View className="flex-row gap-3 ">
               <Text className="text-lg font-[RobotoRegular] w-20 font-bold ">
-                Team
+                Tim
               </Text>
               <Text className="text-lg font-[RobotoRegular]">:</Text>
               <Text className="text-lg font-[RobotoRegular]">
@@ -69,7 +69,7 @@ const UserDateModalContent = ({
             </View>
             <View className="flex-row gap-3 ">
               <Text className="text-lg font-[RobotoRegular] w-20 font-bold ">
-                Role
+                Perann
               </Text>
               <Text className="text-lg font-[RobotoRegular]">:</Text>
               <Text className="text-lg font-[RobotoRegular]">
@@ -87,7 +87,7 @@ const UserDateModalContent = ({
             </View>
             <View className="flex-row gap-3 ">
               <Text className="text-lg font-[RobotoRegular] w-20 font-bold ">
-                Email
+                E-maill
               </Text>
               <Text className="text-lg font-[RobotoRegular]">:</Text>
               <Text className="text-lg font-[RobotoRegular]">
@@ -96,7 +96,7 @@ const UserDateModalContent = ({
             </View>
             <View className="flex-row gap-3 ">
               <Text className="text-lg font-[RobotoRegular] w-20 font-bold ">
-                Phone
+                Teleponon
               </Text>
               <Text className="text-lg font-[RobotoRegular]">:</Text>
               <Text className="text-lg font-[RobotoRegular]">
@@ -124,7 +124,7 @@ const UserDateModalContent = ({
           >
             <CircleX size={18} color="#ffffff" />
             <Text className="text-white font-[RobotoRegular]text-base font-bold text-center">
-              Close
+              Menutup
             </Text>
           </Pressable>
         </View>

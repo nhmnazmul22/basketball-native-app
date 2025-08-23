@@ -11,6 +11,10 @@ export default function Home() {
     return <Redirect href="/login" />;
   }
 
+  if (session.role !== "murid") {
+    return <Redirect href="/admin/dashboard" />;
+  }
+
   return (
     <View className="flex-1 p-5 bg-white flex-col gap-3">
       <View className="bg-white rounded-xl shadow-md p-4 mb-5">
