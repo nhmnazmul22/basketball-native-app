@@ -18,8 +18,8 @@ interface Props {
 }
 
 const statusData = [
-  { id: 85885, name: "active" },
-  { id: 89865, name: "archive" },
+  { id: 85885, name: "aktif" },
+  { id: 89865, name: "arsip" },
 ];
 
 const NewAnnouncement = ({ setVisibleModal }: Props) => {

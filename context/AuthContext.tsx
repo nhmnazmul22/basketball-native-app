@@ -1,15 +1,10 @@
 import { decodeToken, getData } from "@/lib/utils";
 import { AppDispatch } from "@/store";
 import { fetchUser } from "@/store/userByIdSlice";
+import { Session } from "@/types";
 import React, { createContext, useContext, useEffect, useState } from "react";
 import Toast from "react-native-toast-message";
 import { useDispatch } from "react-redux";
-
-interface Session {
-  userId: string;
-  email: string;
-  role: string;
-}
 
 interface AuthContextType {
   session: Session;

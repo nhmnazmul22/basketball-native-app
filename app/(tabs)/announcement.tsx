@@ -1,64 +1,27 @@
 import AnnounceMentItem from "@/components/AnnounceMentItem";
 import SimpleSelectOption from "@/components/SimpleSelectOption";
-import React, { useCallback, useState } from "react";
+import TableError from "@/components/TableError";
+import TableLoading from "@/components/TableLoading";
+import { AppDispatch, RootState } from "@/store";
+import { fetchAnnouncement } from "@/store/AnnouncementSlice";
+import React, { useCallback, useEffect, useState } from "react";
 import { RefreshControl, ScrollView, View } from "react-native";
+import { useDispatch, useSelector } from "react-redux";
 import { Label } from "tamagui";
 
-const announcementData = [
-  {
-    Aid: "ANN001",
-    title: "Training Session Reminder",
-    message:
-      "U15 team training tomorrow at 5:00 PM, Court 2. Bring your own water bottle.",
-    team: "U15",
-    date: "2025-08-12",
-    createdBy: "Admin",
-    isPin: true,
-    status: "Active",
-  },
-  {
-    Aid: "ANN002",
-    title: "Battle Match Announcement",
-    message:
-      "U12 vs U15 friendly match scheduled for August 20 at 4:00 PM, Main Court.",
-    team: "All Teams",
-    date: "2025-08-10",
-    createdBy: "Admin",
-    isPin: true,
-    status: "Active",
-  },
-  {
-    Aid: "ANN003",
-    title: "Payment Reminder",
-    message:
-      "August membership fee is due by August 15. Please pay via the app or to your coach.",
-    team: "All Students",
-    date: "2025-08-09",
-    createdBy: "Coach Liam",
-    isPin: false,
-    status: "Active",
-  },
-  {
-    Aid: "ANN004",
-    title: "Holiday Notice",
-    message: "No training on August 25 due to facility maintenance.",
-    team: "All Teams",
-    date: "2025-08-08",
-    createdBy: "Admin",
-    isPin: false,
-    status: "Archived",
-  },
-];
-
 const filterData = [
-  { id: 23543, name: "Active" },
-  { id: 23343, name: "Archived" },
+  { id: 23543, name: "aktif" },
+  { id: 23343, name: "arsip" },
 ];
 
 export default function AnnouncementPage() {
   const [refreshing, setRefreshing] = useState(false);
-  const [filterType, setFilterType] = useState("Active");
+  const [filterType, setFilterType] = useState("aktif");
   const [visibleModal, setVisibleModal] = useState(false);
+  const dispatch = useDispatch<AppDispatch>();
+  const { items, error, loading } = useSelector(
+    (state: RootState) => state.announcements
+  );
 
   // Page Refresh Function
   const onRefresh = useCallback(() => {
@@ -67,6 +30,26 @@ export default function AnnouncementPage() {
       setRefreshing(false);
     }, 1500);
   }, []);
+
+  useEffect(() => {
+    dispatch(fetchAnnouncement());
+  }, []);
+
+  const filteredAnnouncement = items?.data.filter((item) => {
+    if (filterType) {
+      return item.status.toLowerCase() === filterType.toLowerCase();
+    } else {
+      return item.status.toLowerCase() === "aktif";
+    }
+  });
+
+  if (loading) {
+    return <TableLoading />;
+  }
+
+  if (error) {
+    return <TableError error={error} />;
+  }
 
   return (
     <ScrollView
@@ -93,8 +76,8 @@ export default function AnnouncementPage() {
           />
         </View>
         <View className="flex-col gap-5 mt-5">
-          {announcementData.map((item, index) => (
-            <AnnounceMentItem key={item.Aid} item={item} />
+          {filteredAnnouncement?.map((item, index) => (
+            <AnnounceMentItem key={item._id} item={item} />
           ))}
         </View>
       </View>

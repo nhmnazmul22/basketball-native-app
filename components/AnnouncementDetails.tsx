@@ -1,3 +1,4 @@
+import { useAuth } from "@/context/AuthContext";
 import { firstWordUpper, formateDateTime } from "@/lib/utils";
 import { Announcement } from "@/types";
 import { CircleX, Edit } from "lucide-react-native";
@@ -15,6 +16,8 @@ const AnnouncementDetails = ({
   setVisibleModal,
   setVisibleEditModal,
 }: Props) => {
+  const { session } = useAuth();
+
   return (
     <View className="flex-1 justify-center items-center bg-[#00000070] px-4">
       <View className="w-full max-h-[85%] bg-white p-6 rounded-2xl shadow-lg">
@@ -62,18 +65,20 @@ const AnnouncementDetails = ({
 
         {/* Action buttons */}
         <View className="flex-row gap-4 justify-end mt-6">
-          <Pressable
-            className="bg-orange-600 flex-row gap-2 px-5 py-2 rounded-lg items-center"
-            onPress={() => {
-              setVisibleModal(false);
-              setVisibleEditModal(true);
-            }}
-          >
-            <Edit size={18} color="#ffffff" />
-            <Text className="text-white font-[RobotoRegular] text-base font-bold">
-              Edit
-            </Text>
-          </Pressable>
+          {session.role !== "murid" && (
+            <Pressable
+              className="bg-orange-600 flex-row gap-2 px-5 py-2 rounded-lg items-center"
+              onPress={() => {
+                setVisibleModal(false);
+                setVisibleEditModal(true);
+              }}
+            >
+              <Edit size={18} color="#ffffff" />
+              <Text className="text-white font-[RobotoRegular] text-base font-bold">
+                Edit
+              </Text>
+            </Pressable>
+          )}
 
           <Pressable
             className="bg-red-600 flex-row gap-2 px-5 py-2 rounded-lg items-center"

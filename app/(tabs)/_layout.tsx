@@ -171,6 +171,12 @@ const Layout = () => {
             href: null,
           }}
         />
+        <Tabs.Screen
+          name="createPayment"
+          options={{
+            href: null,
+          }}
+        />
       </Tabs>
     </SafeAreaView>
   );

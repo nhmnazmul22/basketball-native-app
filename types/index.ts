@@ -1,5 +1,5 @@
 export interface Session {
-  userId: string;
+  user_id: string;
   email: string;
   role: string;
 }
@@ -35,7 +35,7 @@ export interface Attendance {
   _id: string;
   studentId: string;
   teamId: string;
-  status: "present" | "absent" | "late";
+  status: "hadiah" | "absen" | "terlambat";
   gps: boolean;
   faceMatch: boolean;
   studentName: string;
