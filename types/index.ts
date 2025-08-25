@@ -100,3 +100,13 @@ export interface Reports {
   attendanceGraph: any;
   incomeGraph: any;
 }
+
+export interface Post{
+  _id: string;
+  authorName: string;
+  title: string;
+  description: string;
+  like?:number |string;
+  createdAt: string;
+  updatedAt: string; 
+}

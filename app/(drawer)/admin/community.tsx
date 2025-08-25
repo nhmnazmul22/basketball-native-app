@@ -1,0 +1,95 @@
+import ChatScreen from "@/components/ChatScreen";
+import { Plus } from "lucide-react-native";
+import React, { useState } from "react";
+import { Pressable, ScrollView, Text, View } from "react-native";
+
+// Dummy data
+const users = [
+  { id: 1, name: "Coach Rahim", role: "Coach" },
+  { id: 2, name: "Student A", role: "Student" },
+  { id: 3, name: "Student B", role: "Student" },
+];
+
+const CommunityTabs = () => {
+  const [activeTab, setActiveTab] = useState("Posts");
+
+  const renderPosts = () => (
+    <ScrollView className="p-4">
+      <View className="flex-row gap-3 justify-between items-center mb-5">
+        <Text className="text-xl font-bold mb-3 font-[RobotoRegular]">
+          Community Posts
+        </Text>
+        <Pressable className="bg-orange-600 flex-row gap-2 justify-center items-center py-2 px-4 rounded-lg">
+          <Plus size={20} color="#ffffff" />
+          <Text className="text-white font-[RobotoRegular]">Add Post</Text>
+        </Pressable>
+      </View>
+      <View className="bg-white rounded-xl shadow-lg border border-gray-200 p-4 mb-4">
+        <Text className="font-bold text-base font-[RobotoRegular]">
+          Student A
+        </Text>
+        <Text className="text-xs text-slate-500 font-[RobotoRegular]">
+          2h ago
+        </Text>
+        <Text className="mt-2 font-[RobotoRegular]">Scored 95% in Math 🎉</Text>
+      </View>
+    </ScrollView>
+  );
+
+  const renderFriends = () => (
+    <ScrollView className="p-4">
+      <Text className="text-xl font-bold mb-3">Friends</Text>
+      <View className="flex-col gap-4">
+        {users.map((user) => (
+          <View
+            key={user.id}
+            className="flex-row items-center justify-between bg-white rounded-lg p-3 border border-gray-200 shadow-lg"
+          >
+            <View>
+              <Text className="font-bold font-[RobotoRegular]">
+                {user.name}
+              </Text>
+              <Text className="text-sm text-slate-500 font-[RobotoRegular]">
+                {user.role}
+              </Text>
+            </View>
+
+            <Pressable className="bg-orange-600 px-3 py-1 rounded-lg">
+              <Text className="text-white font-bold font-[RobotoRegular]">
+                Message
+              </Text>
+            </Pressable>
+          </View>
+        ))}
+      </View>
+    </ScrollView>
+  );
+
+  return (
+    <View className="flex-1 bg-white">
+      {/* Tabs */}
+      <View className="flex-row justify-around bg-white border-b border-slate-200">
+        {["Posts", "Messages", "Friends"].map((tab) => (
+          <Pressable
+            key={tab}
+            onPress={() => setActiveTab(tab)}
+            className="p-4"
+          >
+            <Text
+              className={`font-bold font-[RobotoRegular] ${activeTab === tab ? "text-blue-600" : "text-slate-600"}`}
+            >
+              {tab}
+            </Text>
+          </Pressable>
+        ))}
+      </View>
+
+      {/* Tab Content */}
+      {activeTab === "Posts" && renderPosts()}
+      {activeTab === "Messages" && <ChatScreen />}
+      {activeTab === "Friends" && renderFriends()}
+    </View>
+  );
+};
+
+export default CommunityTabs;

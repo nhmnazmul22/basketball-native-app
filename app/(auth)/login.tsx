@@ -61,28 +61,38 @@ export default function LoginPage() {
         return;
       }
 
-      // Save token
       await saveData({ token: data.data });
       const decodedData = decodeToken(data.data);
       setSession(decodedData as Session);
 
-      router.replace("/loading");
       Toast.show({
         type: "success",
         text1: data.message,
       });
+
+      router.replace("/loading"); // or redirect logic can go here safely
     } catch (err: any) {
       console.log(err);
       Toast.show({
         type: "error",
         text1: "Login Failed",
-        text2: err.message && err.message,
+        text2: err.message,
       });
     } finally {
       setLoading(false);
     }
   };
 
+  // ✅ Safe redirect handling INSIDE useEffect (or return side-effect-free)
+  if (session) {
+    if (session.role === "admin" || session.role === "pelatih") {
+      return <Redirect href="/admin/dashboard" />;
+    } else {
+      return <Redirect href="/" />;
+    }
+  }
+
+  // ✅ No hooks conditionally skipped — now safe
   return (
     <KeyboardAvoidingView
       style={{ flex: 1 }}
@@ -91,84 +101,76 @@ export default function LoginPage() {
     >
       <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
         <SafeAreaView className="flex-1 items-start justify-start">
-          {session ? (
-            session.role === "admin" || session.role === "pelatih" ? (
-              <Redirect href="/admin/dashboard" />
-            ) : (
-              <Redirect href="/" />
-            )
-          ) : (
-            <ScrollView
-              className="flex-1 p-5 bg-white"
-              showsVerticalScrollIndicator={false}
-              contentContainerStyle={{
-                minHeight: "100%",
-                paddingBottom: 50,
-              }}
+          <ScrollView
+            className="flex-1 p-5 bg-white"
+            showsVerticalScrollIndicator={false}
+            contentContainerStyle={{
+              minHeight: "100%",
+              paddingBottom: 50,
+            }}
+          >
+            <View
+              style={{ width: width * 0.9 }}
+              className="p-5 w-full mt-24 mx-auto"
             >
-              <View
-                style={{ width: width * 0.9 }}
-                className="p-5 w-full mt-24 mx-auto"
-              >
-                <View className="w-36 h-36">
-                  <Image
-                    source={logo}
-                    resizeMode="cover"
-                    className="w-full h-full"
+              <View className="w-36 h-36">
+                <Image
+                  source={logo}
+                  resizeMode="cover"
+                  className="w-full h-full"
+                />
+              </View>
+
+              <View className="mt-5">
+                <Text className="text-4xl font-[BebasNeue] text-orange-600">
+                  Selamat Datang kembali,
+                </Text>
+                <Text className="text-xl font-[RobotoRegular] text-gray-500">
+                  Akun login untuk melanjutkan
+                </Text>
+              </View>
+
+              <View className="flex-col gap-3 mt-5 w-full">
+                <View className="flex-col gap-1">
+                  <Text className="text-lg font-[RobotoRegular] text-black">
+                    E-mail: <Text className="text-orange-600">*</Text>
+                  </Text>
+                  <Input
+                    placeholder="Masukkan email Anda"
+                    value={email}
+                    onChangeText={setEmail}
+                  />
+                </View>
+
+                <View className="flex-col gap-1">
+                  <Text className="text-lg font-[RobotoRegular] text-black">
+                    Password: <Text className="text-orange-600">*</Text>
+                  </Text>
+                  <Input
+                    secureTextEntry
+                    placeholder="Masukkan kata sandi baru"
+                    value={password}
+                    onChangeText={setPassword}
                   />
                 </View>
 
                 <View className="mt-5">
-                  <Text className="text-4xl font-[BebasNeue] text-orange-600">
-                    Selamat Datang kembali,
-                  </Text>
-                  <Text className="text-xl font-[RobotoRegular] text-gray-500">
-                    Akun login untuk melanjutkan
-                  </Text>
-                </View>
-
-                <View className="flex-col gap-3 mt-5 w-full">
-                  <View className="flex-col gap-1">
-                    <Text className="text-lg font-[RobotoRegular] text-black">
-                      E-mail: <Text className="text-orange-600">*</Text>
-                    </Text>
-                    <Input
-                      placeholder="Masukkan email Anda"
-                      value={email}
-                      onChangeText={setEmail}
-                    />
-                  </View>
-
-                  <View className="flex-col gap-1">
-                    <Text className="text-lg font-[RobotoRegular] text-black">
-                      Password: <Text className="text-orange-600">*</Text>
-                    </Text>
-                    <Input
-                      secureTextEntry
-                      placeholder="Masukkan kata sandi baru"
-                      value={password}
-                      onChangeText={setPassword}
-                    />
-                  </View>
-
-                  <View className="mt-5">
-                    <Pressable
-                      className="bg-orange-600 px-2 py-3 rounded-lg"
-                      onPress={handleLogin}
-                    >
-                      {loading ? (
-                        <ActivityIndicator size={24} color="white" />
-                      ) : (
-                        <Text className="text-lg font-[RobotoRegular] text-white text-center">
-                          Login
-                        </Text>
-                      )}
-                    </Pressable>
-                  </View>
+                  <Pressable
+                    className="bg-orange-600 px-2 py-3 rounded-lg"
+                    onPress={handleLogin}
+                  >
+                    {loading ? (
+                      <ActivityIndicator size={24} color="white" />
+                    ) : (
+                      <Text className="text-lg font-[RobotoRegular] text-white text-center">
+                        Login
+                      </Text>
+                    )}
+                  </Pressable>
                 </View>
               </View>
-            </ScrollView>
-          )}
+            </View>
+          </ScrollView>
         </SafeAreaView>
       </TouchableWithoutFeedback>
     </KeyboardAvoidingView>

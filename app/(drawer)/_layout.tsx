@@ -10,6 +10,7 @@ import {
   LayoutDashboard,
   LogOut,
   Megaphone,
+  MessageCircle,
   Settings,
   User,
   Users,
@@ -165,6 +166,17 @@ export default function RootLayout() {
             }}
           />
           <Drawer.Screen
+            name="admin/community"
+            options={{
+              title: "Community",
+              drawerLabel: "Community",
+              drawerIcon: (color) => <MessageCircle color={color.color} />,
+              drawerItemStyle: {
+                display: session?.role === "admin" ? "flex" : "none",
+              },
+            }}
+          />
+          <Drawer.Screen
             name="admin/reports"
             options={{
               title: "Laporan & Statistik",
@@ -175,6 +187,7 @@ export default function RootLayout() {
               },
             }}
           />
+           
           <Drawer.Screen
             name="admin/profile"
             options={{

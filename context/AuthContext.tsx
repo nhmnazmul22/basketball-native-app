@@ -33,7 +33,6 @@ const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         text1: "Authentication Failed",
         text2: err.message && err.message,
       });
-      return;
     }
   };
 

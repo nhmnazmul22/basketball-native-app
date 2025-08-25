@@ -1,4 +1,5 @@
-import { Tabs, usePathname, useRouter } from "expo-router";
+import { useAuth } from "@/context/AuthContext";
+import { Redirect, Tabs, usePathname, useRouter } from "expo-router";
 import {
   BookUser,
   CreditCard,
@@ -41,7 +42,14 @@ const HeaderRight = () => {
 };
 
 const Layout = () => {
+  const {session} = useAuth()
   const pathname = usePathname();
+
+
+     if (!session) {
+  return <Redirect href="/login" />;
+}
+
 
   return (
     <SafeAreaView className="flex-1">
