@@ -1,19 +1,11 @@
 import ChatScreen from "@/components/ChatScreen";
+import CreateGroup from "@/components/CreateGroup";
+import GroupScreen from "@/components/GroupScreen";
 import { Plus } from "lucide-react-native";
 import React, { useState } from "react";
 import { Pressable, ScrollView, Text, View } from "react-native";
 
-// Dummy data
-const users = [
-  { id: 1, name: "Coach Rahim", role: "Coach" },
-  { id: 2, name: "Student A", role: "Student" },
-  { id: 3, name: "Student B", role: "Student" },
-];
-
-const CommunityTabs = () => {
-  const [activeTab, setActiveTab] = useState("Posts");
-
-  const renderPosts = () => (
+const renderPosts = () => (
     <ScrollView className="p-4">
       <View className="flex-row gap-3 justify-between items-center mb-5">
         <Text className="text-xl font-bold mb-3 font-[RobotoRegular]">
@@ -36,40 +28,14 @@ const CommunityTabs = () => {
     </ScrollView>
   );
 
-  const renderFriends = () => (
-    <ScrollView className="p-4">
-      <Text className="text-xl font-bold mb-3">Friends</Text>
-      <View className="flex-col gap-4">
-        {users.map((user) => (
-          <View
-            key={user.id}
-            className="flex-row items-center justify-between bg-white rounded-lg p-3 border border-gray-200 shadow-lg"
-          >
-            <View>
-              <Text className="font-bold font-[RobotoRegular]">
-                {user.name}
-              </Text>
-              <Text className="text-sm text-slate-500 font-[RobotoRegular]">
-                {user.role}
-              </Text>
-            </View>
-
-            <Pressable className="bg-orange-600 px-3 py-1 rounded-lg">
-              <Text className="text-white font-bold font-[RobotoRegular]">
-                Message
-              </Text>
-            </Pressable>
-          </View>
-        ))}
-      </View>
-    </ScrollView>
-  );
+const CommunityTabs = () => {
+  const [activeTab, setActiveTab] = useState("Posts");
 
   return (
     <View className="flex-1 bg-white">
       {/* Tabs */}
       <View className="flex-row justify-around bg-white border-b border-slate-200">
-        {["Posts", "Messages", "Friends"].map((tab) => (
+        {["Posts", "Messages", "Groups",].map((tab) => (
           <Pressable
             key={tab}
             onPress={() => setActiveTab(tab)}
@@ -87,7 +53,8 @@ const CommunityTabs = () => {
       {/* Tab Content */}
       {activeTab === "Posts" && renderPosts()}
       {activeTab === "Messages" && <ChatScreen />}
-      {activeTab === "Friends" && renderFriends()}
+      {activeTab === "Groups" && <GroupScreen setTab={setActiveTab}/>}
+      {activeTab === "Create Group" && <CreateGroup/>}
     </View>
   );
 };

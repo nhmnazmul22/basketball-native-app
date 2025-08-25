@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   FlatList,
   KeyboardAvoidingView,
@@ -7,6 +7,7 @@ import {
   TextInput,
   View,
 } from "react-native";
+import io from "socket.io-client";
 
 const ChatScreen = () => {
   const [newMessage, setNewMessage] = useState("");
@@ -24,6 +25,26 @@ const ChatScreen = () => {
     ]);
     setNewMessage("");
   };
+
+
+  useEffect(() => {
+      // Replace with your backend server address
+      const socket = io("http://192.168.1.110:3001", {
+        transports: ["websocket"], // Important for RN
+      });
+  
+      socket.on("connect", () => {
+        console.log("Connected to backend socket:", socket.id);
+      });
+  
+      socket.on("disconnect", () => {
+        console.log("Disconnected from backend socket");
+      });
+  
+      return () => {
+        socket.disconnect();
+      };
+    }, [])
 
   return (
     <KeyboardAvoidingView
