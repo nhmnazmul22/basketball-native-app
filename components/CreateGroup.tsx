@@ -1,21 +1,21 @@
 import SimpleSelectOption from "@/components/SimpleSelectOption";
 import { teamStatus } from "@/constants";
-import TeamApi from "@/lib/apis/teamApi";
+import GroupApi from "@/lib/apis/groupApi";
 import { generateFileName } from "@/lib/utils";
 import * as ImagePicker from "expo-image-picker";
 import { useRouter } from "expo-router";
 import React, { useState } from "react";
 import {
-    ActivityIndicator,
-    Dimensions,
-    Image,
-    Keyboard,
-    KeyboardAvoidingView,
-    Pressable,
-    ScrollView,
-    Text,
-    TouchableWithoutFeedback,
-    View,
+  ActivityIndicator,
+  Dimensions,
+  Image,
+  Keyboard,
+  KeyboardAvoidingView,
+  Pressable,
+  ScrollView,
+  Text,
+  TouchableWithoutFeedback,
+  View,
 } from "react-native";
 import Toast from "react-native-toast-message";
 import { Input, TextArea } from "tamagui";
@@ -51,7 +51,7 @@ const CreateTeam = () => {
     }
   };
 
-  const handleCreateTeam = async () => {
+  const handleCreateGroup = async () => {
     try {
       setLoading(true);
 
@@ -66,7 +66,7 @@ const CreateTeam = () => {
           type: photo.mimeType || "image/jpeg",
         } as any);
       }
-      const response = await TeamApi.createTeam(formData);
+      const response = await GroupApi.createGroup(formData);
 
       if (response?.success) {
         Toast.show({
@@ -74,7 +74,7 @@ const CreateTeam = () => {
           text1: response.message,
         });
         resetForm();
-        router.push("/admin/team-management");
+        router.reload()
       } else {
         Toast.show({
           type: "error",
@@ -149,7 +149,7 @@ const CreateTeam = () => {
               <View className="mt-5">
                 <Pressable
                   className="bg-orange-600 px-2 py-3 rounded-lg"
-                  onPress={handleCreateTeam}
+                  onPress={handleCreateGroup}
                 >
                   {loading && <ActivityIndicator size={24} color="white" />}
                   {!loading && (

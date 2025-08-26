@@ -110,3 +110,14 @@ export interface Post{
   createdAt: string;
   updatedAt: string; 
 }
+
+export interface Group {
+  _id: string;
+  logo?: string;
+  groupName: string;
+  description: string;
+  status: string;
+  membersIds: [string];
+  createdAt: string;
+  updatedAt: string;
+}

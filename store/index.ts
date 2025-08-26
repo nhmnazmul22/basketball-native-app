@@ -1,6 +1,7 @@
 import announcementReducer from "@/store/AnnouncementSlice";
 import attendanceReducer from "@/store/AttendanceSlice";
 import dashboardSummaryReducer from "@/store/DashboardSlice";
+import groupReducer from "@/store/groupSlice";
 import postReducer from "@/store/postSlice";
 import reportReducer from "@/store/ReportSlice";
 import teamsReducer from "@/store/teamsSlice";
@@ -19,7 +20,8 @@ export const store = configureStore({
     dashboardSummary: dashboardSummaryReducer,
     transactions: transactionReducer,
     report: reportReducer,
-    posts: postReducer
+    posts: postReducer,
+    groups: groupReducer
   },
 });
 

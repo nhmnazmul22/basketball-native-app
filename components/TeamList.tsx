@@ -6,26 +6,6 @@ import { useDispatch, useSelector } from "react-redux";
 import TableError from "./TableError";
 import TableLoading from "./TableLoading";
 import TeamItem from "./TeamItem";
-const userData = [
-  {
-    teamId: "T01",
-    name: "U12",
-    description:
-      "Lorem ipsum dolor sit amet consectetur adipisicing elit. Odio, ducimus?",
-  },
-  {
-    teamId: "T02",
-    name: "U15",
-    description:
-      "Lorem ipsum dolor sit amet consectetur adipisicing elit. Odio, ducimus?",
-  },
-  {
-    teamId: "T03",
-    name: "U30",
-    description:
-      "Lorem ipsum dolor sit amet consectetur adipisicing elit. Odio, ducimus?",
-  },
-];
 
 const TeamList = () => {
   const dispatch = useDispatch<AppDispatch>();

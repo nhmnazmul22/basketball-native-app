@@ -35,7 +35,7 @@ const CommunityTabs = () => {
     <View className="flex-1 bg-white">
       {/* Tabs */}
       <View className="flex-row justify-around bg-white border-b border-slate-200">
-        {["Posts", "Messages", "Groups",].map((tab) => (
+        {["Posts", "Groups",].map((tab) => (
           <Pressable
             key={tab}
             onPress={() => setActiveTab(tab)}
