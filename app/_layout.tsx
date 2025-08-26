@@ -1,5 +1,6 @@
 import Splash from "@/components/Splash";
 import AuthProvider from "@/context/AuthContext";
+import GroupProvider from "@/context/GroupContext";
 import { store } from "@/store";
 import { useFonts } from "expo-font";
 import { Slot } from "expo-router";
@@ -25,11 +26,13 @@ export default function RootLayout() {
   return (
     <Provider store={store}>
       <AuthProvider>
-        <TamaguiProvider config={tamaguiConfig}>
+        <GroupProvider>
+          <TamaguiProvider config={tamaguiConfig}>
           <Slot />
           <StatusBar style="auto" />
           <Toast />
         </TamaguiProvider>
+        </GroupProvider>
       </AuthProvider>
     </Provider>
   );

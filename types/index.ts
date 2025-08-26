@@ -121,3 +121,13 @@ export interface Group {
   createdAt: string;
   updatedAt: string;
 }
+
+export interface Message {
+  _id: string;
+  message: string;
+  senderId: string;
+  groupId: string;
+  senderDetails: User;
+  createdAt: string;
+  updatedAt: string;
+}

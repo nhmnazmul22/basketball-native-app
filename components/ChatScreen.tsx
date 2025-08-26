@@ -1,3 +1,7 @@
+import { useAuth } from "@/context/AuthContext";
+import { useGroup } from "@/context/GroupContext";
+import { AppDispatch, RootState } from "@/store";
+import { fetchMessages } from "@/store/messagesSlice";
 import React, { useEffect, useState } from "react";
 import {
   FlatList,
@@ -5,46 +9,99 @@ import {
   Pressable,
   Text,
   TextInput,
-  View,
+  View
 } from "react-native";
+import { useDispatch, useSelector } from "react-redux";
 import io from "socket.io-client";
+import TableError from "./TableError";
+import TableLoading from "./TableLoading";
+
+interface MessageObj {
+  _id: any;
+  senderId: string;
+  groupId: string;
+  message: string;
+  me: boolean;
+}
+
+
 
 const ChatScreen = () => {
+  const { groupId } = useGroup();
+  const { session } = useAuth();
+  const [socket, setSocket] = useState<any>(null);
+
   const [newMessage, setNewMessage] = useState("");
-  const [messages, setMessages] = useState([
-    { id: 1, text: "Hello!", me: false },
-    { id: 2, text: "Hi, how are you?", me: true },
-    { id: 3, text: "I’m good, thanks!", me: false },
-  ]);
+  const [messages, setMessages] = useState<MessageObj[]>([]);
+  const dispatch = useDispatch<AppDispatch>();
+  const { items, error, loading } = useSelector(
+    (state: RootState) => state.message
+  );
 
   const sendMessage = () => {
     if (newMessage.trim() === "") return;
-    setMessages((prev) => [
-      ...prev,
-      { id: Date.now(), text: newMessage, me: true },
-    ]);
+
+    const messageObj = {
+      senderId: session.user_id,
+      groupId,
+      message: newMessage,
+      me: true,
+    };
+
+    // Emit only
+    socket.emit("group message", messageObj);
+
     setNewMessage("");
   };
 
+  useEffect(() => {
+    const socket = io("http://192.168.1.110:3001", {
+     transports: ["websocket"], // Important for RN
+     });
+     setSocket(socket)
+
+    // socket connection logs
+    socket.on("connect", () => {
+      console.log("Connected to backend socket:", socket.id);
+    });
+
+    socket.on("disconnect", () => {
+      console.log("Disconnected from backend socket");
+    });
+
+    // listen for incoming messages
+    socket.on("group message", (messageObj) => {
+      setMessages((prev) => [
+        ...prev,
+        {_id: Date.now(), ...messageObj },
+      ]);
+    });
+
+    return () => {
+      socket.off("group message"); // cleanup listener
+      socket.disconnect();
+    };
+  }, []);
 
   useEffect(() => {
-      // Replace with your backend server address
-      const socket = io("http://192.168.1.110:3001", {
-        transports: ["websocket"], // Important for RN
-      });
-  
-      socket.on("connect", () => {
-        console.log("Connected to backend socket:", socket.id);
-      });
-  
-      socket.on("disconnect", () => {
-        console.log("Disconnected from backend socket");
-      });
-  
-      return () => {
-        socket.disconnect();
-      };
-    }, [])
+    if (groupId) {
+      dispatch(fetchMessages(groupId));
+    }
+  }, [groupId]);
+
+  // merge redux fetched messages with socket messages
+  const allMessages =
+    items?.data && items.data.length > 0
+      ? [...items.data, ...messages]
+      : messages;
+
+  if (loading) {
+    return <TableLoading />;
+  }
+
+  if (error) {
+    return <TableError error={error} />;
+  }
 
   return (
     <KeyboardAvoidingView
@@ -53,22 +110,33 @@ const ChatScreen = () => {
       keyboardVerticalOffset={120}
     >
       <FlatList
-        data={messages}
+        data={allMessages}
         scrollEnabled
-        keyExtractor={(item) => item.id.toString()}
+        keyExtractor={(item) => `${item._id}-${item.senderId}`}
         renderItem={({ item }) => (
           <View
-            className={`my-2 ${item.me ? "items-end" : "items-start"} font-[RobotoRegular]`}
+            className={`my-2 ${
+              item.senderId === session.user_id
+                ? "items-end"
+                : "items-start"
+            } font-[RobotoRegular]`}
           >
+           
             <View
               className={`px-4 py-2 rounded-xl max-w-[70%] font-[RobotoRegular] ${
-                item.me ? "bg-blue-500" : "bg-gray-300"
+                item.senderId === session.user_id
+                  ? "bg-blue-500"
+                  : "bg-gray-300"
               }`}
             >
               <Text
-                className={`${item.me ? "text-white" : "text-black"} font-[RobotoRegular]`}
+                className={`${
+                  item.senderId === session.user_id
+                    ? "text-white"
+                    : "text-black"
+                } font-[RobotoRegular]`}
               >
-                {item.text}
+                {item.message}
               </Text>
             </View>
           </View>

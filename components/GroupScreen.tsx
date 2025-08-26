@@ -1,4 +1,5 @@
 import { useAuth } from '@/context/AuthContext';
+import { useGroup } from '@/context/GroupContext';
 import GroupApi from '@/lib/apis/groupApi';
 import { AppDispatch, RootState } from '@/store';
 import { fetchGroup } from '@/store/groupSlice';
@@ -25,10 +26,10 @@ const users = [
 
 const GroupScreen = ({setTab}: Props) => {
   const {session } = useAuth();
+  const {setGroupId} = useGroup();
   const dispatch = useDispatch<AppDispatch>();
   const [loading, setLoading] = useState(false);
-    const [refreshing, setRefreshing] = useState(false);
-  
+  const [refreshing, setRefreshing] = useState(false);
   const {items, loading: groupLoading, error} = useSelector((state: RootState)=> state.groups)
   const router = useRouter();
 
@@ -136,7 +137,10 @@ const GroupScreen = ({setTab}: Props) => {
    
                <View className='flex-row gap-2 items-center'>
                 {isMeJoin ? (
-                <Pressable onPress={()=> setTab("Messages")} className="bg-orange-600 px-3 py-1 rounded-lg">
+                <Pressable onPress={()=> {
+                  setGroupId(group._id)
+                  setTab("Messages")
+                }} className="bg-orange-600 px-3 py-1 rounded-lg">
                  <Text className="text-white font-bold font-[RobotoRegular]">
                    Message
                  </Text>
