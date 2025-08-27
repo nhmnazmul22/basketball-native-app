@@ -7,9 +7,10 @@ interface Props {
   label?: string;
   value: string;
   setValue: Dispatch<SetStateAction<string>>;
+  valueIsId?: boolean;
 }
 
-const SimpleSelectOption = ({ data, label, value, setValue }: Props) => {
+const SimpleSelectOption = ({ data, label, value, setValue, valueIsId }: Props) => {
   const [open, setOpen] = useState(false);
 
   return (
@@ -46,7 +47,7 @@ const SimpleSelectOption = ({ data, label, value, setValue }: Props) => {
                       <Select.Item
                         key={item.id || item._id}
                         index={index}
-                        value={item.name}
+                        value={valueIsId ? item.id : item.name}
                       >
                         <Select.ItemText>{item.name}</Select.ItemText>
                       </Select.Item>

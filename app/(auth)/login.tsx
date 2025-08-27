@@ -95,9 +95,9 @@ export default function LoginPage() {
   // ✅ No hooks conditionally skipped — now safe
   return (
     <KeyboardAvoidingView
-      style={{ flex: 1 }}
+      style={{ flex: 1, backgroundColor: "#ffffff"}}
       behavior={"padding"}
-      keyboardVerticalOffset={40}
+      keyboardVerticalOffset={0}
     >
       <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
         <SafeAreaView className="flex-1 items-start justify-start">
@@ -106,7 +106,7 @@ export default function LoginPage() {
             showsVerticalScrollIndicator={false}
             contentContainerStyle={{
               minHeight: "100%",
-              paddingBottom: 50,
+              paddingBottom: 20,
             }}
           >
             <View
