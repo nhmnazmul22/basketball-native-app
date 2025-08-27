@@ -3,7 +3,6 @@ import { useGroup } from '@/context/GroupContext';
 import GroupApi from '@/lib/apis/groupApi';
 import { AppDispatch, RootState } from '@/store';
 import { fetchGroup } from '@/store/groupSlice';
-import { useRouter } from 'expo-router';
 import { Plus, Trash } from 'lucide-react-native';
 import { Dispatch, SetStateAction, useCallback, useEffect, useState } from 'react';
 import { ActivityIndicator, Pressable, RefreshControl, ScrollView, Text, View } from 'react-native';
@@ -31,7 +30,6 @@ const GroupScreen = ({setTab}: Props) => {
   const [loading, setLoading] = useState(false);
   const [refreshing, setRefreshing] = useState(false);
   const {items, loading: groupLoading, error} = useSelector((state: RootState)=> state.groups)
-  const router = useRouter();
 
 
   const onRefresh = useCallback(() => {
