@@ -34,7 +34,7 @@ const CommunityTabs = () => {
   return (
     <View className="flex-1 bg-white">
       {/* Tabs */}
-      {/* <View className="flex-row justify-around bg-white border-b border-slate-200">
+     <View className="flex-row justify-around bg-white border-b border-slate-200">
         {["Posts", "Groups",].map((tab) => (
           <Pressable
             key={tab}
@@ -48,7 +48,7 @@ const CommunityTabs = () => {
             </Text>
           </Pressable>
         ))}
-      </View> */}
+      </View> 
 
       {/* Tab Content */}
       {activeTab === "Posts" && renderPosts()}
