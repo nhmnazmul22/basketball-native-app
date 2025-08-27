@@ -127,6 +127,7 @@ export interface Message {
   message: string;
   senderId: string;
   groupId: string;
+  avater: string;
   senderDetails: User;
   createdAt: string;
   updatedAt: string;

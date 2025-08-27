@@ -2,14 +2,16 @@ import { useAuth } from "@/context/AuthContext";
 import { useGroup } from "@/context/GroupContext";
 import { AppDispatch, RootState } from "@/store";
 import { fetchMessages } from "@/store/messagesSlice";
+import { Message } from "@/types";
 import React, { useEffect, useState } from "react";
 import {
   FlatList,
+  Image,
   KeyboardAvoidingView,
   Pressable,
   Text,
   TextInput,
-  View
+  View,
 } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
 import io from "socket.io-client";
@@ -21,10 +23,9 @@ interface MessageObj {
   senderId: string;
   groupId: string;
   message: string;
+  avater: string;
   me: boolean;
 }
-
-
 
 const ChatScreen = () => {
   const { groupId } = useGroup();
@@ -32,7 +33,7 @@ const ChatScreen = () => {
   const [socket, setSocket] = useState<any>(null);
 
   const [newMessage, setNewMessage] = useState("");
-  const [messages, setMessages] = useState<MessageObj[]>([]);
+  const [messages, setMessages] = useState<Message[]>([]);
   const dispatch = useDispatch<AppDispatch>();
   const { items, error, loading } = useSelector(
     (state: RootState) => state.message
@@ -48,7 +49,6 @@ const ChatScreen = () => {
       me: true,
     };
 
-    // Emit only
     socket.emit("group message", messageObj);
 
     setNewMessage("");
@@ -56,11 +56,10 @@ const ChatScreen = () => {
 
   useEffect(() => {
     const socket = io("http://192.168.1.110:3001", {
-     transports: ["websocket"], // Important for RN
-     });
-     setSocket(socket)
+      transports: ["websocket"],
+    });
+    setSocket(socket);
 
-    // socket connection logs
     socket.on("connect", () => {
       console.log("Connected to backend socket:", socket.id);
     });
@@ -69,16 +68,16 @@ const ChatScreen = () => {
       console.log("Disconnected from backend socket");
     });
 
-    // listen for incoming messages
     socket.on("group message", (messageObj) => {
+      console.log(messageObj);
       setMessages((prev) => [
         ...prev,
-        {_id: Date.now(), ...messageObj },
+        { _id: Date.now(), ...messageObj },
       ]);
     });
 
     return () => {
-      socket.off("group message"); // cleanup listener
+      socket.off("group message");
       socket.disconnect();
     };
   }, []);
@@ -89,7 +88,6 @@ const ChatScreen = () => {
     }
   }, [groupId]);
 
-  // merge redux fetched messages with socket messages
   const allMessages =
     items?.data && items.data.length > 0
       ? [...items.data, ...messages]
@@ -102,7 +100,6 @@ const ChatScreen = () => {
   if (error) {
     return <TableError error={error} />;
   }
-
   return (
     <KeyboardAvoidingView
       className="flex-1 bg-white"
@@ -113,34 +110,35 @@ const ChatScreen = () => {
         data={allMessages}
         scrollEnabled
         keyExtractor={(item) => `${item._id}-${item.senderId}`}
-        renderItem={({ item }) => (
-          <View
-            className={`my-2 ${
-              item.senderId === session.user_id
-                ? "items-end"
-                : "items-start"
-            } font-[RobotoRegular]`}
-          >
-           
+        renderItem={({ item }) => {
+          const isMe = item.senderId === session.user_id;
+
+          return (
             <View
-              className={`px-4 py-2 rounded-xl max-w-[70%] font-[RobotoRegular] ${
-                item.senderId === session.user_id
-                  ? "bg-blue-500"
-                  : "bg-gray-300"
+              className={`flex-row my-2 items-end ${
+                isMe ? "justify-end" : "justify-start"
               }`}
             >
-              <Text
-                className={`${
-                  item.senderId === session.user_id
-                    ? "text-white"
-                    : "text-black"
-                } font-[RobotoRegular]`}
+              {/* Avatar (placeholder) */}
+              {!isMe && item.senderDetails && (
+                <Image
+                  source={item.senderDetails.profilePicture? { uri: item.senderDetails.profilePicture }: {uri: item.avater}}
+                  className="w-8 h-8 rounded-full mr-2"
+                />
+              )}
+
+              <View
+                className={`px-4 py-2 rounded-xl max-w-[70%] ${
+                  isMe ? "bg-blue-500" : "bg-gray-300"
+                }`}
               >
-                {item.message}
-              </Text>
+                <Text className={`${isMe ? "text-white" : "text-black"}`}>
+                  {item.message}
+                </Text>
+              </View>
             </View>
-          </View>
-        )}
+          );
+        }}
         contentContainerStyle={{
           padding: 12,
           paddingBottom: 80,

@@ -92,12 +92,6 @@ const GroupScreen = ({setTab}: Props) => {
       dispatch(fetchGroup());
     },[dispatch])
 
-   const isMeJoin = items?.data && items?.data.find((group)=> {
-    if(group.membersIds && group.membersIds.length > 0){
-      return group.membersIds.includes(session.user_id)
-    }
-   });
-
 
   if (groupLoading) {
     return <TableLoading />;
@@ -121,8 +115,10 @@ const GroupScreen = ({setTab}: Props) => {
             )}
        </View>
          <View className="flex-col gap-4">
-           {items?.data ? items?.data.map((group) => (
-             <View
+           {items?.data ? items?.data.map((group) => {
+             const joined = group.membersIds.includes(session.user_id);
+           return (
+              <View
                key={group._id}
                className="flex-row items-center justify-between bg-white rounded-lg p-3 border border-gray-200 shadow-lg"
              >
@@ -134,9 +130,9 @@ const GroupScreen = ({setTab}: Props) => {
                   Members: {group.membersIds.length}
                  </Text>
                </View>
-   
+              
                <View className='flex-row gap-2 items-center'>
-                {isMeJoin ? (
+                {joined ? (
                 <Pressable onPress={()=> {
                   setGroupId(group._id)
                   setTab("Messages")
@@ -153,7 +149,7 @@ const GroupScreen = ({setTab}: Props) => {
                  )}
                </Pressable> }
                   
-              {session.role === "admin" && isMeJoin && (
+              {session.role === "admin" && (
                 <Pressable onPress={()=> handelDelete(group._id)} className="px-3 py-1 rounded-lg">
                  {loading ? <ActivityIndicator size="small" className='text-white'/> : (
                   <Trash size={24} className='text-red-500'/>
@@ -163,7 +159,8 @@ const GroupScreen = ({setTab}: Props) => {
 
                </View>
              </View>
-           )): (
+            )
+           }): (
             <Text className='text-center text-gray-600 my-5 italic text-lg'>No group found!!</Text>
            )}
          </View>
