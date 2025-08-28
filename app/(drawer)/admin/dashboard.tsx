@@ -28,23 +28,26 @@ export default function Dashboard() {
     (state: RootState) => state.announcements
   );
 
+  // Redirect checks
   if (!session) {
     return <Redirect href="/login" />;
   }
-
-  if (session.role === "murid") {
+  if (session?.role === "murid") {
     return <Redirect href="/" />;
   }
 
   // Page Refresh Function
-  const onRefresh = useCallback(() => {
-    setRefreshing(true);
-    dispatch(fetchAnnouncement());
-    dispatch(fetchDashboardSummary());
-    setTimeout(() => {
+  const onRefresh = useCallback(async () => {
+    try {
+      setRefreshing(true);
+      await dispatch(fetchAnnouncement());
+      await dispatch(fetchDashboardSummary());
+    } catch (err) {
+      console.error("Refresh error:", err);
+    } finally {
       setRefreshing(false);
-    }, 1500);
-  }, []);
+    }
+  }, [dispatch]);
 
   useEffect(() => {
     dispatch(fetchDashboardSummary());
@@ -60,15 +63,14 @@ export default function Dashboard() {
       showsVerticalScrollIndicator={false}
       contentContainerStyle={{ minHeight: "100%", paddingBottom: 60 }}
     >
-      {session.role === "admin" && (
-        <View className="flex-row flex-wrap gap-4  mt-10">
+      {session?.role === "admin" && (
+        <View className="flex-row flex-wrap gap-4 mt-10">
           <View className="bg-orange-600 flex-1 min-w-[150px] p-4 rounded-lg">
             <Text className="text-lg text-white font-[RobotoRegular]">
               Total siswa
             </Text>
             <Text className="text-3xl text-white font-[BebasNeue]">
-              {(reports?.data.summary && reports?.data.summary.totalStudent) ||
-                0}
+              {reports?.data?.summary?.totalStudent ?? 0}
             </Text>
           </View>
           <View className="bg-indigo-600 flex-1 min-w-[150px] p-4 rounded-lg">
@@ -76,7 +78,7 @@ export default function Dashboard() {
               Pelatih total
             </Text>
             <Text className="text-3xl text-white font-[BebasNeue]">
-              {(reports?.data.summary && reports?.data.summary.totalCoach) || 0}
+              {reports?.data?.summary?.totalCoach ?? 0}
             </Text>
           </View>
           <View className="bg-amber-500 flex-1 min-w-[150px] p-4 rounded-lg">
@@ -84,9 +86,7 @@ export default function Dashboard() {
               Pembayaran tertunda
             </Text>
             <Text className="text-3xl text-white font-[BebasNeue]">
-              {(reports?.data.summary &&
-                formatCurrency(reports?.data.summary.paymentPending)) ||
-                "Rp 0"}
+              {formatCurrency(reports?.data?.summary?.paymentPending ?? 0)}
             </Text>
           </View>
           <View className="bg-green-600 flex-1 min-w-[150px] p-4 rounded-lg">
@@ -94,9 +94,7 @@ export default function Dashboard() {
               Pendapatan bersih
             </Text>
             <Text className="text-3xl text-white font-[BebasNeue]">
-              {(reports?.data.summary &&
-                formatCurrency(reports?.data.summary.netIncome)) ||
-                "Rp 0"}
+              {formatCurrency(reports?.data?.summary?.netIncome ?? 0)}
             </Text>
           </View>
         </View>
@@ -105,7 +103,7 @@ export default function Dashboard() {
       <View className="flex-row gap-3 items-center justify-between my-10">
         <Pressable className="flex-row gap-1 bg-orange-600 p-2 rounded-lg">
           <Plus size={20} color="#ffffff" />
-          <Text className="text-base font-[RobotoRegular]  text-white">
+          <Text className="text-base font-[RobotoRegular] text-white">
             New Post
           </Text>
         </Pressable>
@@ -114,64 +112,55 @@ export default function Dashboard() {
           onPress={() => router.push("/admin/createAttendance")}
         >
           <Plus size={20} color="#ffffff" />
-          <Text className="text-base font-[RobotoRegular]  text-white">
+          <Text className="text-base font-[RobotoRegular] text-white">
             New Attendance
           </Text>
         </Pressable>
-        {session.role === "admin" && (
+        {session?.role === "admin" && (
           <Pressable
             className="flex-row gap-1 bg-indigo-600 p-2 rounded-lg"
             onPress={() => router.push("/admin/createUsers")}
           >
             <Plus size={20} color="#ffffff" />
-            <Text className="text-base font-[RobotoRegular]  text-white">
+            <Text className="text-base font-[RobotoRegular] text-white">
               Add User
             </Text>
           </Pressable>
         )}
       </View>
 
-      {session.role === "admin" && (
+      {session?.role === "admin" && (
         <View>
           <Text className="text-2xl font-[BebasNeue] mb-3 tracking-wider">
             Attendance Overview
           </Text>
           <View className="bg-white rounded-lg p-5 border border-slate-200 items-center">
             <Text className="text-5xl font-[BebasNeue] text-green-600">
-              {(reports?.data.attendanceReport &&
-                Math.round(reports?.data.attendanceReport.averageAttendance)) ||
-                0}
-              %
+              {Math.round(reports?.data?.attendanceReport?.averageAttendance ?? 0)}%
             </Text>
             <Text className="text-gray-500 font-[RobotoRegular] mt-1">
               Daily Report
             </Text>
             <View className="flex-row justify-between w-full mt-5">
               <View className="items-center flex-1">
-                <Text className="text-lg font-bold font-[RobotoRegular] ">
-                  {(reports?.data.attendanceReport &&
-                    Math.round(reports?.data.attendanceReport.totalPresent)) ||
-                    0}
+                <Text className="text-lg font-bold font-[RobotoRegular]">
+                  {Math.round(reports?.data?.attendanceReport?.totalPresent ?? 0)}
                 </Text>
                 <Text className="text-gray-500 font-[RobotoRegular] ">
                   Present
                 </Text>
               </View>
               <View className="items-center flex-1">
-                <Text className="text-lg font-bold font-[RobotoRegular] ">
-                  {(reports?.data.attendanceReport &&
-                    Math.round(reports?.data.attendanceReport.totalAbsent)) ||
-                    0}
+                <Text className="text-lg font-bold font-[RobotoRegular]">
+                  {Math.round(reports?.data?.attendanceReport?.totalAbsent ?? 0)}
                 </Text>
                 <Text className="text-gray-500 font-[RobotoRegular] ">
                   Absent
                 </Text>
               </View>
               <View className="items-center flex-1">
-                <Text className="text-lg font-bold font-[RobotoRegular] ">
-                  {(reports?.data.attendanceReport &&
-                    Math.round(reports?.data.attendanceReport.late)) ||
-                    0}
+                <Text className="text-lg font-bold font-[RobotoRegular]">
+                  {Math.round(reports?.data?.attendanceReport?.late ?? 0)}
                 </Text>
                 <Text className="text-gray-500 font-[RobotoRegular] ">
                   Late
@@ -187,24 +176,19 @@ export default function Dashboard() {
           Latest Announcement
         </Text>
         <View className="flex-col gap-5 mt-5">
-          {announcements?.data.length === 0 && (
+          {!announcements?.data || announcements.data.length === 0 ? (
             <Text className="text-lg font-[RobotoRegular] text-gray-500 text-center">
               No announcements found.
             </Text>
-          )}
-          {announcements?.data.map((item, index) => {
-            if (index === 0) {
-              return <AnnounceMentItem key={item._id} item={item} />;
-            } else {
-              if (index < 6) {
-                return (
-                  session.role !== "admin" && (
-                    <AnnounceMentItem key={item._id} item={item} />
-                  )
-                );
+          ) : (
+            announcements.data.map((item, index) => {
+              if (index === 0) {
+                return <AnnounceMentItem key={item._id} item={item} />;
+              } else if (index < 6 && session?.role !== "admin") {
+                return <AnnounceMentItem key={item._id} item={item} />;
               }
-            }
-          })}
+            })
+          )}
         </View>
       </View>
     </ScrollView>
