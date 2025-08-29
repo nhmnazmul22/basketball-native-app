@@ -25,8 +25,9 @@ const filterData = [
 
 export default function AnnouncementPage() {
   const [refreshing, setRefreshing] = useState(false);
-  const [filterType, setFilterType] = useState("active");
+  const [filterType, setFilterType] = useState("aktif"); // ✅ default matches data
   const [visibleModal, setVisibleModal] = useState(false);
+
   const dispatch = useDispatch<AppDispatch>();
   const { items, error, loading } = useSelector(
     (state: RootState) => state.announcements
@@ -35,23 +36,21 @@ export default function AnnouncementPage() {
   // Page Refresh Function
   const onRefresh = useCallback(() => {
     setRefreshing(true);
-    dispatch(fetchAnnouncement());
-    setTimeout(() => {
+    dispatch(fetchAnnouncement()).finally(() => {
       setRefreshing(false);
-    }, 1500);
+    });
   }, [dispatch]);
 
   useEffect(() => {
     dispatch(fetchAnnouncement());
   }, [dispatch]);
 
-  const filteredAnnouncement = items?.data.filter((item) => {
-    if (filterType) {
-      return item.status.toLowerCase() === filterType.toLowerCase();
-    } else {
-      return item.status.toLowerCase() === "active";
-    }
-  });
+  const filteredAnnouncement =
+    items?.data?.filter((item) =>
+      filterType
+        ? item.status.toLowerCase() === filterType.toLowerCase()
+        : item.status.toLowerCase() === "aktif"
+    ) || [];
 
   if (loading) {
     return <TableLoading />;
@@ -87,13 +86,20 @@ export default function AnnouncementPage() {
             />
           </View>
           <View className="flex-col gap-5 mt-5">
-            {filteredAnnouncement &&
-              filteredAnnouncement.map((item, index) => (
+            {filteredAnnouncement.length > 0 ? (
+              filteredAnnouncement.map((item) => (
                 <AnnounceMentItem key={item._id} item={item} />
-              ))}
+              ))
+            ) : (
+              <Text className="text-center text-gray-500 mt-10">
+                No announcements found
+              </Text>
+            )}
           </View>
         </View>
       </ScrollView>
+
+      {/* Floating Button */}
       <View className="absolute bottom-[3%] right-[7%] ">
         <Pressable
           className="bg-orange-600 px-4 py-3 rounded-full flex-row gap-1 items-center "
@@ -105,15 +111,13 @@ export default function AnnouncementPage() {
           </Text>
         </Pressable>
       </View>
-      {/* New Announcement Modal */}
 
+      {/* New Announcement Modal */}
       <Modal
         animationType="slide"
         transparent={true}
         visible={visibleModal}
-        onRequestClose={() => {
-          setVisibleModal(!visibleModal);
-        }}
+        onRequestClose={() => setVisibleModal(false)}
       >
         <NewAnnouncement setVisibleModal={setVisibleModal} />
       </Modal>
