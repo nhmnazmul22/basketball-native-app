@@ -11,14 +11,14 @@ interface Props {
 }
 
 const AnnounceMentItem = ({ item }: Props) => {
-  const [visibleModal, seVisibleModal] = useState(false);
-  const [visibleEditModal, seVisibleEditModal] = useState(false);
+  const [visibleModal, setVisibleModal] = useState(false);
+  const [visibleEditModal, setVisibleEditModal] = useState(false);
 
   return (
     <View className="mb-4">
       <View className="bg-white p-5 rounded-xl shadow-lg elevation-md">
         {/* Pin Badge */}
-        {item.isPinned && (
+        {item?.isPinned && (
           <View className="-rotate-45 w-7 h-7 absolute left-[-8px] top-[-8px] bg-orange-600 justify-center items-center rounded-full shadow-md">
             <Pin size={16} color="white" />
           </View>
@@ -26,12 +26,12 @@ const AnnounceMentItem = ({ item }: Props) => {
 
         {/* Title */}
         <Text className="text-xl text-blue-900 font-bold font-[RobotoRegular] mb-2">
-          {item.title}
+          {item?.title ?? "Untitled"}
         </Text>
 
         {/* Message Preview */}
         <Text className="text-base text-slate-700 font-[RobotoRegular] leading-5">
-          {shortText(item.message, 140)}
+          {shortText(item?.message ?? "", 140)}
         </Text>
 
         {/* Info Section */}
@@ -39,17 +39,12 @@ const AnnounceMentItem = ({ item }: Props) => {
           <View className="flex-row gap-2 items-center mb-2">
             <Calendar size={20} />
             <Text className="text-base text-slate-800">
-              {formateDateTime(item.date)}
+              {item?.date ? formateDateTime(item.date) : "No date"}
             </Text>
           </View>
 
-          {/* <View className="flex-row gap-2 items-center mb-2">
-            <User size={20} />
-            <Text className="text-base text-slate-800">{item.createdBy}</Text>
-          </View> */}
-
           <Pressable
-            onPress={() => seVisibleModal(true)}
+            onPress={() => setVisibleModal(true)}
             className="px-3 py-1 bg-blue-100 rounded-md"
           >
             <Text className="text-sm font-semibold text-blue-700">
@@ -64,14 +59,12 @@ const AnnounceMentItem = ({ item }: Props) => {
         animationType="slide"
         transparent={true}
         visible={visibleModal}
-        onRequestClose={() => {
-          seVisibleModal(!visibleModal);
-        }}
+        onRequestClose={() => setVisibleModal(false)}
       >
         <AnnouncementDetails
           item={item}
-          setVisibleModal={seVisibleModal}
-          setVisibleEditModal={seVisibleEditModal}
+          setVisibleModal={setVisibleModal}
+          setVisibleEditModal={setVisibleEditModal}
         />
       </Modal>
 
@@ -80,13 +73,11 @@ const AnnounceMentItem = ({ item }: Props) => {
         animationType="slide"
         transparent={true}
         visible={visibleEditModal}
-        onRequestClose={() => {
-          seVisibleEditModal(!visibleEditModal);
-        }}
+        onRequestClose={() => setVisibleEditModal(false)}
       >
         <AnnouncementEditModal
           item={item}
-          setVisibleEditModal={seVisibleEditModal}
+          setVisibleEditModal={setVisibleEditModal}
         />
       </Modal>
     </View>
