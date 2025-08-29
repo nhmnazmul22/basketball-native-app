@@ -5,7 +5,12 @@ import TableLoading from "@/components/TableLoading";
 import { AppDispatch, RootState } from "@/store";
 import { fetchAnnouncement } from "@/store/AnnouncementSlice";
 import React, { useCallback, useEffect, useState } from "react";
-import { RefreshControl, ScrollView, View } from "react-native";
+import {
+  RefreshControl,
+  ScrollView,
+  View,
+  Text,
+} from "react-native";
 import { useDispatch, useSelector } from "react-redux";
 import { Label } from "tamagui";
 
@@ -17,31 +22,25 @@ const filterData = [
 export default function AnnouncementPage() {
   const [refreshing, setRefreshing] = useState(false);
   const [filterType, setFilterType] = useState("aktif");
-  const [visibleModal, setVisibleModal] = useState(false);
   const dispatch = useDispatch<AppDispatch>();
   const { items, error, loading } = useSelector(
     (state: RootState) => state.announcements
   );
 
   // Page Refresh Function
-  const onRefresh = useCallback(() => {
+  const onRefresh = useCallback(async () => {
     setRefreshing(true);
-    setTimeout(() => {
-      setRefreshing(false);
-    }, 1500);
-  }, []);
+    await dispatch(fetchAnnouncement());
+    setRefreshing(false);
+  }, [dispatch]);
 
   useEffect(() => {
     dispatch(fetchAnnouncement());
-  }, []);
+  }, [dispatch]);
 
-  const filteredAnnouncement = items?.data.filter((item) => {
-    if (filterType) {
-      return item.status.toLowerCase() === filterType.toLowerCase();
-    } else {
-      return item.status.toLowerCase() === "aktif";
-    }
-  });
+  const filteredAnnouncement = items?.data?.filter((item) =>
+    (filterType || "aktif").toLowerCase() === item.status.toLowerCase()
+  );
 
   if (loading) {
     return <TableLoading />;
@@ -64,6 +63,7 @@ export default function AnnouncementPage() {
       }}
     >
       <View className="mt-3 flex-1">
+        {/* Filter Section */}
         <View className="flex-col gap-2 justify-center">
           <Label unstyled className="font-[RobotoRegular]">
             Select Filter Type:
@@ -75,10 +75,21 @@ export default function AnnouncementPage() {
             setValue={setFilterType}
           />
         </View>
+
+        {/* Announcements List */}
         <View className="flex-col gap-5 mt-5">
-          {filteredAnnouncement?.map((item, index) => (
-            <AnnounceMentItem key={item._id} item={item} />
-          ))}
+          {filteredAnnouncement && filteredAnnouncement.length > 0 ? (
+            filteredAnnouncement.map((item) => (
+              <AnnounceMentItem
+                key={item._id}
+                item={item}
+              />
+            ))
+          ) : (
+            <Text className="text-center text-slate-500 mt-10">
+              No announcements found.
+            </Text>
+          )}
         </View>
       </View>
     </ScrollView>
