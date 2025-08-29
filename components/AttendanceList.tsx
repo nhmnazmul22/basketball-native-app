@@ -4,7 +4,15 @@ import { fetchAttendance } from "@/store/AttendanceSlice";
 import { fetchUsers } from "@/store/usersSlice";
 import { CircleX, Save } from "lucide-react-native";
 import React, { useEffect, useState } from "react";
-import { ActivityIndicator, FlatList, Modal, Pressable, ScrollView, Text, View } from "react-native";
+import {
+  ActivityIndicator,
+  FlatList,
+  Modal,
+  Pressable,
+  ScrollView,
+  Text,
+  View,
+} from "react-native";
 import Toast from "react-native-toast-message";
 import { useDispatch, useSelector } from "react-redux";
 import { Input } from "tamagui";
@@ -16,155 +24,132 @@ const AttendanceList = () => {
   const [visiableModal, setVisiableModal] = useState(false);
   const [loading, setLoading] = useState(false);
   const [studentId, setStudentId] = useState<string>("");
+
   const dispatch = useDispatch<AppDispatch>();
-  const { items, error, loading: attendanceLoading } = useSelector(
-    (state: RootState) => state.attendances
-  );
-  const {items: users} = useSelector((state: RootState)=>state.users)
+  const { items, error } = useSelector((state: RootState) => state.attendances);
+  const { items: users } = useSelector((state: RootState) => state.users);
 
+  const handelAbsens = async () => {
+    try {
+      setLoading(true);
+      if (!studentId) return;
 
-
-   const handelAbsens = async ()=> {
-    try{
-      setLoading(true)
-      if(!studentId) return; 
-       
       const response = await fetch(`${BASE_URL}/create-absen`, {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({studentId}),
-       })
-       
-      if(response.ok){
-        Toast.show({
-          type: "success",
-          text1: "Absen Create successful"
-        })
-        dispatch(fetchAttendance())
-      }else{
-        Toast.show({
-          type: "error",
-          text1: "Absen create failed"
-        })
-      }
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ studentId }),
+      });
 
-    }catch(err){
+      if (response.ok) {
+        Toast.show({ type: "success", text1: "Absen created successfully" });
+        dispatch(fetchAttendance());
+        setVisiableModal(false);
+        setStudentId("");
+      } else {
+        Toast.show({ type: "error", text1: "Absen create failed" });
+      }
+    } catch (err) {
       console.error(err);
       Toast.show({
         type: "error",
-        text1: "Absen create failed, try again."
-      })
-    }finally{
-      setLoading(false)
-      setVisiableModal(false)
-      setStudentId("")
+        text1: "Absen create failed, try again.",
+      });
+    } finally {
+      setLoading(false);
     }
-   }
-
+  };
 
   useEffect(() => {
     dispatch(fetchAttendance());
-    dispatch(fetchUsers())
-  }, []);
+    dispatch(fetchUsers());
+  }, [dispatch]);
 
+  const filteredAttendance = items?.data
+    ? items.data.filter((attendance) => {
+        const search = searchParams.toLowerCase();
+        if (searchParams) {
+          return (
+            attendance?._id?.toLowerCase().includes(search) ||
+            attendance?.studentName?.toLowerCase().includes(search) ||
+            attendance?.teamName?.toLowerCase().includes(search) ||
+            attendance?.status?.toLowerCase().includes(search)
+          );
+        }
+        return true;
+      })
+    : [];
 
-  const filteredAttendance = items?.data.filter((attendance) => {
-    const search = searchParams.toLowerCase();
-
-    if (searchParams) {
-      return (
-        //@ts-ignore
-        attendance._id.toLowerCase().includes(search) ||
-        attendance.studentName.toLowerCase().includes(search) ||
-        attendance.teamName.toLowerCase().includes(search) ||
-        attendance.status?.toLowerCase().includes(search)
-      );
-    } else {
-      return true;
-    }
-  });
-
-  const students = users?.data
-  ?.filter((user) => user.role === "murid")
-  ?.map((user) => ({
-    id: user._id,
-    name: user.fullName,
-    email: user.email,
-  }));
-
+  const students =
+    users?.data
+      ?.filter((user) => user.role === "murid")
+      ?.map((user) => ({
+        id: user._id,
+        name: user.fullName,
+        email: user.email,
+      })) ?? [];
 
   return (
     <>
       <View className="my-5 flex-col gap-2 items-center justify-between">
-        <View className="w-full  flex-row gap-2 items-center justify-between">
+        <View className="w-full flex-row gap-2 items-center justify-between">
           <Input
-           className="flex-1"
+            className="flex-1"
             placeholder="Nama atau tim atau status"
             value={searchParams}
             onChangeText={setSearchParams}
           />
-          <Pressable onPress={()=> setVisiableModal(true)} className="bg-orange-600 px-3 py-2 rounded-lg">
+          <Pressable
+            onPress={() => setVisiableModal(true)}
+            className="bg-orange-600 px-3 py-2 rounded-lg"
+          >
             <Text className="text-lg font-[RobotoRegular] text-white text-center">
-                Membuat Absen
-            </Text>                 
-         </Pressable>
+              Membuat Absen
+            </Text>
+          </Pressable>
         </View>
       </View>
+
       <ScrollView horizontal className="pb-4">
         <View>
           {/* Table Header */}
           <View className="flex-row gap-2 bg-gray-100 p-2 rounded-t">
-            <Text className="w-36 font-bold text-lg text-center font-[RobotoRegular]">
-              Nama
-            </Text>
-            <Text className="w-28 font-bold text-lg text-center font-[RobotoRegular]">
-              Tim
-            </Text>
-            <Text className="w-28 font-bold text-lg text-center font-[RobotoRegular]">
-              Waktu
-            </Text>
-            <Text className="w-28 font-bold text-lg text-center font-[RobotoRegular]">
-              Status
-            </Text>
-            <Text className="w-28 font-bold text-lg text-center font-[RobotoRegular]">
-              Gps
-            </Text>
-            <Text className="w-28 font-bold text-lg text-center font-[RobotoRegular]">
-              Match wajah
-            </Text>
-            <Text className="w-24 font-bold text-lg text-center font-[RobotoRegular]">
-              Tindakan
-            </Text>
+            {["Nama", "Tim", "Waktu", "Status", "Gps", "Match wajah", "Tindakan"].map(
+              (header, i) => (
+                <Text
+                  key={i}
+                  className={`${
+                    i === 0 ? "w-36" : "w-28"
+                  } font-bold text-lg text-center font-[RobotoRegular]`}
+                >
+                  {header}
+                </Text>
+              )
+            )}
           </View>
           {/* Table Rows */}
           <FlatList
             data={filteredAttendance}
-            keyExtractor={(item, index) => index.toString()}
+            keyExtractor={(item) => item._id}
             renderItem={({ item }) => <AttendanceItem item={item} />}
           />
         </View>
       </ScrollView>
 
+      {/* Modal */}
       <Modal
         animationType="slide"
         transparent={true}
         visible={visiableModal}
-        onRequestClose={() => {
-          setVisiableModal(!visiableModal);
-        }}
+        onRequestClose={() => setVisiableModal(false)}
       >
-       <View className="flex-1 justify-center items-center bg-[#000000d2]">
-      <View className="w-[90%] bg-white p-5 rounded-lg">
-        <Text className="text-center text-2xl font-bold font-[BebasNeue] text-orange-600">
-           Create Absense
-        </Text>
-        <View className="mt-5 flex flex-col gap-2">
-          <View className="flex-col gap-2">
+        <View className="flex-1 justify-center items-center bg-[#000000d2]">
+          <View className="w-[90%] bg-white p-5 rounded-lg">
+            <Text className="text-center text-2xl font-bold font-[BebasNeue] text-orange-600">
+              Create Absense
+            </Text>
 
-            <View className="flex-col gap-1">
-              <Text className="text-lg  font-[RobotoRegular]">Select Student:</Text>
+            <View className="mt-5 flex flex-col gap-2">
+              <Text className="text-lg font-[RobotoRegular]">Select Student:</Text>
               <SimpleSelectOption
                 data={students}
                 label="Choose the status"
@@ -173,36 +158,36 @@ const AttendanceList = () => {
                 setValue={setStudentId}
               />
             </View>
-          
-        </View>
-        <View className="flex-row gap-5 justify-end items-center">
-          <Pressable
-            className="bg-orange-600 py-2 px-3 rounded-lg mt-5 flex-row gap-2 items-center justify-center "
-            onPress={() => handelAbsens()}
-          >
-            {loading && <ActivityIndicator size="small" color="white" />}
-            {!loading && (
-              <>
-                <Save size={18} color="#ffffff" />
-                <Text className="text-white font-[RobotoRegular]text-base font-bold text-center">
-                  Memperbarui
+
+            <View className="flex-row gap-5 justify-end items-center mt-5">
+              <Pressable
+                className="bg-orange-600 py-2 px-3 rounded-lg flex-row gap-2 items-center justify-center"
+                onPress={handelAbsens}
+              >
+                {loading ? (
+                  <ActivityIndicator size="small" color="white" />
+                ) : (
+                  <>
+                    <Save size={18} color="#ffffff" />
+                    <Text className="text-white font-[RobotoRegular] text-base font-bold text-center">
+                      Memperbarui
+                    </Text>
+                  </>
+                )}
+              </Pressable>
+
+              <Pressable
+                className="bg-red-600 py-2 px-3 rounded-lg flex-row gap-1 items-center justify-center"
+                onPress={() => setVisiableModal(false)}
+              >
+                <CircleX size={18} color="#ffffff" />
+                <Text className="text-white font-[RobotoRegular] text-base font-bold text-center">
+                  Menutup
                 </Text>
-              </>
-            )}
-          </Pressable>
-          <Pressable
-            className="bg-red-600 py-2 px-3 rounded-lg mt-5 flex-row gap-1 items-center justify-center "
-            onPress={() => setVisiableModal(false)}
-          >
-            <CircleX size={18} color="#ffffff" />
-            <Text className="text-white font-[RobotoRegular]text-base font-bold text-center">
-              Menutup
-            </Text>
-          </Pressable>
+              </Pressable>
+            </View>
+          </View>
         </View>
-      </View>
-    </View>
-    </View>
       </Modal>
     </>
   );
